@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../src",
+    "module": "esnext",
+    "target": "es5",
+    "moduleResolution": "node",
+    "outDir": "../build/ts", // 输出目录
+    "sourceMap": true, //把 ts 文件编译成 js 文件的时候，同时生成对应的 map 文件
+    "removeComments": true, //编译 js 的时候，删除掉注释
+    "noImplicitAny": true, //当noImplicitAny为false(默认值)时，如果编译器无法根据变量的用途推断出变量的类型，它会把变量类型默认为any。当noImplicitAny为true并且TypeScript编译器无法推断出类型时，它仍然会生成JavaScript文件。但是它也会报告一个错误（严谨）。
+    "suppressImplicitAnyIndexErrors": true, // 如果把noImplicitAny设置为了true ，可能会得到隐式索引错,这种错误是个烦恼而不是助力。可以使用 "suppressImplicitAnyIndexErrors": true禁止它们
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "lib": ["dom", "es2017"],
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "downlevelIteration": true
+  },
+  "include": ["../src"], // 包含编译路径
+  "exclude": ["node_modules"] // 不包含的编译目录
+}
