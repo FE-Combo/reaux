@@ -30,7 +30,7 @@ export function errorAction(error: any): Action<Exception> {
 
 export function rootReducer(): Reducer<State> {
     return (state: State = initialState, action): State => {
-        //Dispatch & yield put triggers every time.
+        // Dispatch & yield put triggers every time.
         if (action.name === SET_STATE_ACTION) {
             const nextState: State = {...state};
             nextState.app = {...nextState.app, [action.payload.module]: action.payload.state};

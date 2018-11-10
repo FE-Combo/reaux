@@ -58,7 +58,9 @@ export function render(component: ComponentType<any>, onInitialized: null | (() 
         rootElement,
         () => {
             console.timeEnd("[framework] initialized");
-            onInitialized();
+            if (typeof onInitialized === "function") {
+                onInitialized();
+            }
         }
     );
 }
