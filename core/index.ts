@@ -4,9 +4,9 @@ export {render, register};
 export {async} from "./component/async";
 export {PickOptional} from "./util/ts";
 
-const dodoing = {
+const Do = {
     render,
     register,
 };
 
-export default dodoing;
+export default Do;
