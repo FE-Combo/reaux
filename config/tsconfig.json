@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "../src",
+    "baseUrl": "../core",
     "module": "esnext",
     "target": "es5",
     "moduleResolution": "node",
@@ -22,6 +22,6 @@
     "noImplicitThis": true,
     "downlevelIteration": true
   },
-  "include": ["../src"], // 包含编译路径
+  "include": ["../core"], // 包含编译路径
   "exclude": ["node_modules"] // 不包含的编译目录
 }

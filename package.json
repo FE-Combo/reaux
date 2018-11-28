@@ -7,7 +7,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "node config/build.js",
-    "format": "prettier --config config/prettier.json --write \"{src}/**/*.{ts,tsx}\""
+    "format": "prettier --config config/prettier.json --write \"{core}/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",

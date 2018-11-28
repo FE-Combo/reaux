@@ -34,6 +34,6 @@
     ]
   },
   "linterOptions": {
-    "exclude": ["../src/**/*.json"]
+    "exclude": ["../core/**/*.json"]
   }
 }
