@@ -9,7 +9,7 @@ const DevServer = require("webpack-dev-server");
 
 const webpackConfig = env => ({
     mode: "development", // development or production
-    entry: [`webpack-dev-server/client?https://0.0.0.0:${env.port}`, "webpack/hot/dev-server", `${env.src}/index.tsx`], // 需要打包文件"./src/index.tsx" 默认文件名为 main (公共js,如 react),"webpack-dev-server/client?https://0.0.0.0:3000"为按需加载js模块
+    entry: [`webpack-dev-server/client?https://0.0.0.0:${env.port}`, "webpack/hot/dev-server", `${env.demo ? env.demo : env.src}/index.tsx`], // 需要打包文件"./src/index.tsx" 默认文件名为 main (公共js,如 react),"webpack-dev-server/client?https://0.0.0.0:3000"为按需加载js模块
     output: {
         path: env.dist, // production 输出目录前缀
         filename: "static/js/[name].js", // development、production 输出文件
@@ -24,7 +24,7 @@ const webpackConfig = env => ({
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".sass", ".less"], // require、import时这些后缀不需要添加
-        modules: [env.src, "node_modules"], // 导入文件默认在src、node_modules下查找
+        modules: [env.demo ? env.demo : env.src, "node_modules"], // 导入文件默认在src、node_modules下查找
     },
     module: {
         rules: [
@@ -38,7 +38,7 @@ const webpackConfig = env => ({
             },
             {
                 test: /\.(ts|tsx)$/,
-                include: env.core ? [env.src, env.core, env.demo] : [env.src],
+                include: env.demo ? [env.src, env.core, env.demo] : [env.src],
                 loader: "ts-loader",
                 exclude: /node_modules/,
                 options: {
@@ -77,7 +77,7 @@ const webpackConfig = env => ({
     plugins: [
         new StylelintPlugin({
             configFile: env.stylelintConfig,
-            context: env.src,
+            context: env.demo ? env.demo : env.src,
             files: "**/*.less",
             syntax: "less",
         }),
@@ -87,7 +87,7 @@ const webpackConfig = env => ({
             workers: ForkTSCheckerPlugin.TWO_CPUS_FREE,
         }),
         new HTMLPlugin({
-            template: path.resolve(__dirname, `${env.src}/index.html`), // 自动在该模板中导入 output 中的filename文件
+            template: path.resolve(__dirname, `${env.demo ? env.demo : env.src}/index.html`), // 自动在该模板中导入 output 中的filename文件
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.ProgressPlugin(), // 控制台显示加载进度
