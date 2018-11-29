@@ -46,7 +46,19 @@ function distribute() {
     fs.mkdirsSync("build/dist/lib");
     fs.copySync("build/out/src", "build/dist/lib/", {dereference: true});
     fs.copySync("package.json", "build/dist/package.json", {dereference: true});
-    fs.copySync("core/webpack", "build/dist/lib/webpack", {dereference: true});
+    const removeComment = /\/\*(.*?)\*\//g;
+    const webpackConfigDev = fs
+        .readFileSync("core/webpack/webpack.config.dev.js")
+        .toString()
+        .replace(removeComment, "");
+    fs.writeFileSync("build/out/src/webpack/webpack.config.dev.js", webpackConfigDev);
+    const webpackConfigBuild = fs
+        .readFileSync("core/webpack/webpack.config.build.js")
+        .toString()
+        .replace(removeComment, "");
+    fs.writeFileSync("build/out/src/webpack/webpack.config.build.js", webpackConfigBuild);
+    fs.copySync("build/out/src/webpack/webpack.config.dev.js", "build/dist/lib/webpack/webpack.config.dev.js", {dereference: true});
+    fs.copySync("build/out/src/webpack/webpack.config.build.js", "build/dist/lib/webpack/webpack.config.build.js", {dereference: true});
 }
 
 function build() {
