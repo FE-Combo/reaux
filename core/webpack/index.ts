@@ -1,3 +1,3 @@
-import {start} from "./webpack.config.dev";
-import {build} from "./webpack.config.build";
+const start = require("./webpack.config.dev.js");
+const build = require("./webpack.config.build.js");
 export {start, build};

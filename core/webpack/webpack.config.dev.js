@@ -1,6 +1,5 @@
 const path = require("path");
 const webpack = require("webpack");
-const env = require("../config/env");
 const HTMLPlugin = require("html-webpack-plugin");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 const ForkTSCheckerPlugin = require("fork-ts-checker-webpack-plugin");
@@ -8,7 +7,7 @@ const TSImportPlugin = require("ts-import-plugin");
 const chalk = require("chalk");
 const DevServer = require("webpack-dev-server");
 
-const webpackConfig = (env: any) => ({
+const webpackConfig = env => ({
     mode: "development", // development or production
     entry: [`webpack-dev-server/client?https://0.0.0.0:${env.port}`, "webpack/hot/dev-server", `${env.src}/index.tsx`], // 需要打包文件"./src/index.tsx" 默认文件名为 main (公共js,如 react),"webpack-dev-server/client?https://0.0.0.0:3000"为按需加载js模块
     output: {
@@ -39,7 +38,7 @@ const webpackConfig = (env: any) => ({
             },
             {
                 test: /\.(ts|tsx)$/,
-                include: env.src,
+                include: env.core ? [env.src, env.core, env.demo] : [env.src],
                 loader: "ts-loader",
                 exclude: /node_modules/,
                 options: {
@@ -95,7 +94,7 @@ const webpackConfig = (env: any) => ({
     ],
 });
 
-function devServer(compiler: any) {
+const devServer = (compiler, env) => {
     return new DevServer(compiler, {
         contentBase: env.static, // 静态资源目录
         watchContentBase: true, // contentBase目录下变更数据时自动刷新
@@ -109,13 +108,13 @@ function devServer(compiler: any) {
             errors: true,
         },
     });
-}
+};
 
-export const start = (env: any) => {
+module.exports = start = env => {
     const config = webpackConfig(env);
     const compiler = webpack(config);
-    const server = devServer(compiler);
-    server.listen(env.port, env.host, (error: any) => {
+    const server = devServer(compiler, env);
+    server.listen(env.port, env.host, error => {
         if (error) {
             console.error(error);
             process.exit(1);

@@ -11,7 +11,7 @@ const chalk = require("chalk");
 const childProcess = require("child_process");
 const fs = require("fs-extra");
 
-const webpackConfig = (env: any) => ({
+const webpackConfig = env => ({
     mode: "production",
     entry: `${env.src}/index.tsx`,
     output: {
@@ -159,7 +159,7 @@ const webpackConfig = (env: any) => ({
     ],
 });
 
-function spawn(command: any, params: any, errorMessage: any) {
+const spawn = (command, params, errorMessage) => {
     const isWindows = process.platform === "win32"; // spawn with {shell: true} can solve .cmd resolving, but prettier doesn't run correctly on mac/linux
     const result = childProcess.spawnSync(isWindows ? command + ".cmd" : command, params, {stdio: "inherit"});
     if (result.error) {
@@ -171,9 +171,9 @@ function spawn(command: any, params: any, errorMessage: any) {
         console.error(`non-zero exit code returned, code=${result.status}, command=${command} ${params.join(" ")}`);
         process.exit(1);
     }
-}
+};
 
-export const build = (env: any) => {
+module.exports = build = env => {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
     spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{src,test}/**/*.{ts,tsx,less}"], "check code style failed, please format above files");
 
@@ -186,7 +186,7 @@ export const build = (env: any) => {
     console.info(chalk`{green.bold [task]} {white.bold webpack}`);
     const config = webpackConfig(env);
     const compiler = webpack(config);
-    compiler.run((error: any, stats: any) => {
+    compiler.run((error, stats) => {
         if (error) {
             console.error(error.stack || error);
             if (error.details) {
@@ -206,7 +206,7 @@ export const build = (env: any) => {
                 process.exit(1);
             } else if (statsJSON.warnings.length) {
                 // Ignore "Conflicting order between" warning, produced by "mini-css-extract-plugin"
-                const warnings = statsJSON.warnings.filter((_: any) => _.indexOf("[mini-css-extract-plugin]\nConflicting order between") < 0);
+                const warnings = statsJSON.warnings.filter(_ => _.indexOf("[mini-css-extract-plugin]\nConflicting order between") < 0);
                 if (warnings.length > 0) {
                     console.error(chalk`{red.bold \n${warnings.length} Warning(s) Occurred:}\n`);
                     console.error(chalk`{red.bold ${warnings.join("\n\n")}}`);

@@ -7,6 +7,8 @@ function resolve(relativePath) {
 module.exports = {
     dist: resolve("build/dist"),
     src: resolve("src"),
+    core: resolve("core"),
+    demo: resolve("demo"),
     static: resolve("static"),
     lib: resolve("lib"),
     conf: resolve("src/conf"),

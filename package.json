@@ -6,8 +6,7 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "start": "node webpack/start.js",
-    "build": "node webpack/build.js",
+    "start": "node start.js",
     "output": "node config/output.js",
     "format": "prettier --config config/prettier.json --write \"{core}/**/*.{ts,tsx}\""
   },
