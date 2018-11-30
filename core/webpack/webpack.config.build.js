@@ -13,14 +13,14 @@ const fs = require("fs-extra");
 
 const webpackConfig = env => ({
     mode: "production",
-    entry: `${env.src}/index.tsx`,
+    entry: `${env.entry}/index.tsx`,
     output: {
-        path: env.dist,
-        filename: "static/js/[name].[chunkhash:8].js",
+        path: env.output,
+        filename: `${env.static}/js/[name].[chunkhash:8].js`,
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".less"],
-        modules: [env.src, "node_modules"],
+        modules: [env.entry, "node_modules"],
     },
     devtool: "nosources-source-map",
     bail: true,
@@ -60,7 +60,7 @@ const webpackConfig = env => ({
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                include: env.src,
+                include: env.core ? [env.core, env.entry] : [env.entry],
                 loader: "ts-loader",
                 options: {
                     configFile: env.tsConfig,
@@ -103,21 +103,21 @@ const webpackConfig = env => ({
                 loader: "url-loader",
                 query: {
                     limit: 1024,
-                    name: "static/img/[name].[hash:8].[ext]",
+                    name: `${env.static}/img/[name].[hash:8].[ext]`,
                 },
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 loader: "file-loader",
                 options: {
-                    name: "static/font/[name].[hash:8].[ext]",
+                    name: `${env.static}/font/[name].[hash:8].[ext]`,
                 },
             },
         ],
     },
     plugins: [
         new MiniCSSExtractPlugin({
-            filename: "static/css/[name].[contenthash:8].css",
+            filename: `${env.static}/css/[name].[contenthash:8].css`,
         }),
         new ForkTSCheckerPlugin({
             tsconfig: env.tsConfig,
@@ -126,12 +126,12 @@ const webpackConfig = env => ({
         }),
         new StylelintPlugin({
             configFile: env.stylelintConfig,
-            context: env.src,
+            context: env.entry,
             files: "**/*.less",
             syntax: "less",
         }),
         new HTMLPlugin({
-            template: `${env.src}/index.html`,
+            template: `${env.entry}/index.html`,
             minify: {
                 collapseBooleanAttributes: true,
                 collapseInlineTagWhitespace: true,
@@ -171,13 +171,13 @@ const spawn = (command, params, errorMessage) => {
 
 module.exports = build = env => {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{src,test}/**/*.{ts,tsx,less}"], "check code style failed, please format above files");
+    spawn("prettier", ["--config", "config/prettier.json", "--list-different", `{${env.entry},test}/**/*.{ts,tsx,less}`], "check code style failed, please format above files");
 
-    console.info(chalk`{green.bold [task]} {white.bold cleanup build/dist}`);
-    fs.emptyDirSync(env.dist);
+    console.info(chalk`{green.bold [task]} {white.bold cleanup ${env.output}}`);
+    fs.emptyDirSync(env.output);
 
-    console.info(chalk`{green.bold [task]} {white.bold copy static folder to dist}`);
-    fs.copySync(env.static, env.dist, {dereference: true});
+    console.info(chalk`{green.bold [task]} {white.bold copy ${env.contentBase} folder to ${env.output}}`);
+    fs.copySync(env.contentBase, env.output, {dereference: true});
 
     console.info(chalk`{green.bold [task]} {white.bold webpack}`);
     const config = webpackConfig(env);

@@ -33,7 +33,7 @@ function lint() {
 
 function cleanup() {
     console.info(chalk`{green.bold [task]} {white.bold cleanup}`);
-    fs.emptyDirSync("build");
+    fs.emptyDirSync("output");
 }
 
 function compile() {
@@ -43,25 +43,25 @@ function compile() {
 
 function distribute() {
     console.info(chalk`{green.bold [task]} {white.bold distribute}`);
-    fs.mkdirsSync("build/dist/lib");
-    fs.copySync("build/out/src", "build/dist/lib/", {dereference: true});
-    fs.copySync("package.json", "build/dist/package.json", {dereference: true});
+    fs.mkdirsSync("output/dist/lib");
+    fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
+    fs.copySync("package.json", "output/dist/package.json", {dereference: true});
     const removeComment = /\/\*(.*?)\*\//g;
     const webpackConfigDev = fs
         .readFileSync("core/webpack/webpack.config.dev.js")
         .toString()
         .replace(removeComment, "");
-    fs.writeFileSync("build/out/src/webpack/webpack.config.dev.js", webpackConfigDev);
+    fs.writeFileSync("output/out/src/webpack/webpack.config.dev.js", webpackConfigDev);
     const webpackConfigBuild = fs
         .readFileSync("core/webpack/webpack.config.build.js")
         .toString()
         .replace(removeComment, "");
-    fs.writeFileSync("build/out/src/webpack/webpack.config.build.js", webpackConfigBuild);
-    fs.copySync("build/out/src/webpack/webpack.config.dev.js", "build/dist/lib/webpack/webpack.config.dev.js", {dereference: true});
-    fs.copySync("build/out/src/webpack/webpack.config.build.js", "build/dist/lib/webpack/webpack.config.build.js", {dereference: true});
+    fs.writeFileSync("output/out/src/webpack/webpack.config.build.js", webpackConfigBuild);
+    fs.copySync("output/out/src/webpack/webpack.config.dev.js", "output/dist/lib/webpack/webpack.config.dev.js", {dereference: true});
+    fs.copySync("output/out/src/webpack/webpack.config.build.js", "output/dist/lib/webpack/webpack.config.build.js", {dereference: true});
 }
 
-function build() {
+function output() {
     cleanup();
     checkCodeStyle();
     // test();
@@ -70,4 +70,4 @@ function build() {
     distribute();
 }
 
-build();
+output();

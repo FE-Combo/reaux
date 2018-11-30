@@ -6,9 +6,10 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "start": "node start.js",
-    "output": "node config/output.js",
-    "format": "prettier --config config/prettier.json --write \"{core}/**/*.{ts,tsx}\""
+    "start": "node node/start.js",
+    "build": "node node/build.js",
+    "output": "node node/output.js",
+    "format": "prettier --config config/prettier.json --write \"{core,demo}/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
