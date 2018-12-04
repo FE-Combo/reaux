@@ -13,6 +13,7 @@ module.exports = {
     tsConfig: resolve("config/tsconfig.json"),
     tslintConfig: resolve("config/tslint.json"),
     stylelintConfig: resolve("config/stylelint.json"),
+    prettierConfig: resolve("config/prettier.json"),
     port: 3000,
     host: "0.0.0.0",
     alias: {

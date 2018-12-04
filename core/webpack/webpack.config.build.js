@@ -171,7 +171,7 @@ const spawn = (command, params, errorMessage) => {
 
 module.exports = build = env => {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    spawn("prettier", ["--config", "config/prettier.json", "--list-different", `{${env.entry},test}/**/*.{ts,tsx,less}`], "check code style failed, please format above files");
+    spawn("prettier", ["--config", `${env.prettierConfig}`, "--list-different", `{${env.entry},test}/**/*.{ts,tsx,less}`], "check code style failed, please format above files");
 
     console.info(chalk`{green.bold [task]} {white.bold cleanup ${env.output}}`);
     fs.emptyDirSync(env.output);

@@ -46,7 +46,7 @@ function distribute() {
     fs.mkdirsSync("output/dist/lib");
     fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
-    const removeComment = /\/\*(.*?)\*\//g;
+    const removeComment = /\/\*(.+)\*\//g;
     const webpackConfigDev = fs
         .readFileSync("core/webpack/webpack.config.dev.js")
         .toString()
