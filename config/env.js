@@ -5,11 +5,11 @@ function resolve(relativePath) {
 }
 
 module.exports = {
-    entry: resolve("demo"),
+    entry: resolve("src"),
     output: resolve("build/dist"),
     core: resolve("core"),
     static: "static",
-    contentBase: resolve("demo/static"),
+    contentBase: resolve("src/static"),
     tsConfig: resolve("config/tsconfig.json"),
     tslintConfig: resolve("config/tslint.json"),
     stylelintConfig: resolve("config/stylelint.json"),
