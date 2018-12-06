@@ -1,4 +1,5 @@
 const path = require("path");
+// All path must be represented by path. resolve, and string invalid in Win32.
 
 function resolve(relativePath) {
     return path.resolve(__dirname, `../${relativePath}`);
