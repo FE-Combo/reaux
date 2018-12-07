@@ -38,7 +38,7 @@ function cleanup() {
 
 function compile() {
     console.info(chalk`{green.bold [task]} {white.bold compile}`);
-    return spawn("tsc", ["-p", "config/tsconfig.json"], "compile failed, please fix");
+    return spawn("tsc", ["-p", "config/tsconfig.output.json"], "compile failed, please fix");
 }
 
 function distribute() {

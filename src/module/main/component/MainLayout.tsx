@@ -2,16 +2,19 @@
 // Ref: https://github.com/airbnb/babel-plugin-dynamic-import-webpack/issues/34
 
 import React from "react";
-import {Route, Switch} from "react-router-dom";
+import {Switch} from "react-router-dom";
 import Notfound from "./Notfound";
+import Route from "../../../../core/component/Route";
 
 class Component extends React.PureComponent {
     render() {
         return (
-            <Switch>
-                <Route exact path="/" />
-                <Route exact component={Notfound} />
-            </Switch>
+            <div>
+                <Switch>
+                    <Route path="/" />
+                    <Route component={Notfound} />
+                </Switch>
+            </div>
         );
     }
 }

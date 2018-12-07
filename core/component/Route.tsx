@@ -20,8 +20,8 @@ export default class RouteComponent extends React.PureComponent<Props> {
 
     render() {
         const {component, withErrorBoundary, accessCondition, unauthorizedRedirectTo, ...restProps} = this.props;
-        const TargetComponent = component!;
-        const routeNode = <Route {...restProps} render={props => (accessCondition ? <TargetComponent {...props} /> : <Redirect to={{pathname: unauthorizedRedirectTo}} />)} />;
+        const TargetComponent = component ? component! : null;
+        const routeNode = <Route {...restProps} render={props => TargetComponent && (accessCondition ? <TargetComponent {...props} /> : <Redirect to={{pathname: unauthorizedRedirectTo}} />)} />;
         return withErrorBoundary ? <ErrorBoundary>{routeNode}</ErrorBoundary> : routeNode;
     }
 }
