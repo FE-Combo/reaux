@@ -4,12 +4,17 @@ import {State} from "./type";
 import {SagaIterator} from "redux-saga";
 
 const initialState: State = {
-    name: "",
+    name: "string",
+    showWelcome: true,
 };
 
 class ActionHandler extends Handler<State> {
     *test(): SagaIterator {
         yield* this.setState({name: "voco"});
+    }
+
+    *toggleWelcome(showWelcome: boolean): SagaIterator {
+        yield* this.setState({showWelcome});
     }
 }
 const actions = register(new ActionHandler("main", initialState));

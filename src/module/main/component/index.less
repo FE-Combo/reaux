@@ -1,4 +1,17 @@
 svg {
-  width: 65px;
-  height: 65px;
+  width: 345px;
+  height: 130px;
+
+  path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 3s linear 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
 }

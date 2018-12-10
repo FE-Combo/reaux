@@ -1,4 +1,4 @@
-import {State as MainState} from "../module/main/type";
+import {State as MainState} from "module/main/type";
 export interface RootState {
     app: {
         main: MainState;
