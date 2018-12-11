@@ -19,9 +19,7 @@ class Component extends React.PureComponent<Props> {
     render() {
         const {dispatch, showWelcome} = this.props;
         return showWelcome ? (
-            <div className="g-full-screen g-flex-center">
-                <Welcome />
-            </div>
+            <Welcome />
         ) : (
             <div className="main-container">
                 <Switch>
