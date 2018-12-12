@@ -42,7 +42,7 @@ export class Handler<S extends object> {
     }
 }
 
-type ActionHandler = (...args: any[]) => SagaIterator;
+export type ActionHandler = (...args: any[]) => SagaIterator;
 export class Actor {
     // Storage primitive logic
     readonly effects: {[actionType: string]: ActionHandler} = {};

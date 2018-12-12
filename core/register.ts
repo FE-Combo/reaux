@@ -50,6 +50,6 @@ function* initializeListener(handler: Handler<any>, app: App): SagaIterator {
     app.modules[handler.module] = true;
 }
 
-type ActionCreator<H> = H extends <P>(...args: infer P) => SagaIterator ? ((...args: P) => Action<P>) : never;
+type ActionCreator<H> = H extends (...args: infer P) => SagaIterator ? ((...args: P) => Action<P>) : never;
 type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => SagaIterator ? K : never}[Exclude<keyof H, keyof Listener>];
 export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};

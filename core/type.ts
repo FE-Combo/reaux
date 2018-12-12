@@ -16,3 +16,7 @@ export interface App {
     readonly actor: Actor;
     readonly modules: {[module: string]: boolean};
 }
+
+export interface LoadingState {
+    [loading: string]: number; // there may be multiple effects listen to it, hide loading component when status === 0
+}
