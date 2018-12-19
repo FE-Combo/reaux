@@ -1,5 +1,5 @@
 const path = require("path");
-// All path must be represented by path. resolve, and string invalid in Win32.
+// All path must be represented by path.resolve, direct use string invalid in Win32.
 
 function resolve(relativePath) {
     return path.resolve(__dirname, `../${relativePath}`);
@@ -18,9 +18,10 @@ module.exports = {
     port: 3000,
     host: "0.0.0.0",
     alias: {
-        co: resolve("src/component"),
-        mo: resolve("src/module"),
-        m: resolve("mock/"),
+        comp: resolve("src/component"),
+        mod: resolve("src/module"),
+        mock: resolve("/mock"),
+        core: resolve("/core"),
     },
     imgLimit: 1024,
     performance: {

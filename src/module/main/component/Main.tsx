@@ -1,7 +1,7 @@
 import "asset/css/global.less";
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
-import {RootState} from "../../../type/state";
+import {RootState} from "type/state";
 import {actions} from "../index";
 import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
@@ -27,10 +27,12 @@ class Component extends React.PureComponent<Props> {
                     <Route component={MainLayout} />
                 </Switch>
                 <div className="container">
-                    <div className="">博客</div>
-                    <div className="">游戏</div>
-                    <div className="">项目</div>
-                    <div className="">关于</div>
+                    <h1>vocoWone</h1>
+                    <div className="g-flex-between">
+                        <div className="item">博客</div>
+                        <div className="item">jl</div>
+                        <div className="item">关于</div>
+                    </div>
                 </div>
             </div>
         );

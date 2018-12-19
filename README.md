@@ -1,2 +1,3 @@
 # dodoing
-own framework core library.
+
+Front-End core framework library.

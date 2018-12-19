@@ -1,7 +1,7 @@
 {
   "name": "dodoing",
   "version": "0.0.4",
-  "description": "own framework core library",
+  "description": "Front-End core framework library",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
