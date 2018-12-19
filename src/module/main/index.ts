@@ -6,7 +6,7 @@ import {call, put} from "redux-saga/effects";
 
 const initialState: State = {
     name: "string",
-    showWelcome: true,
+    showWelcome: false,
 };
 
 class ActionHandler extends Handler<State> implements Listener {

@@ -21,12 +21,17 @@ class Component extends React.PureComponent<Props> {
         return showWelcome ? (
             <Welcome />
         ) : (
-            <div className="main-container">
+            <div className="main-container g-full-screen g-flex-center g-no-scroll">
                 <Switch>
                     <Route path="/register" />
                     <Route component={MainLayout} />
                 </Switch>
-                <button onClick={() => dispatch(actions.test())}>Button</button>
+                <div className="container">
+                    <div className="">博客</div>
+                    <div className="">游戏</div>
+                    <div className="">项目</div>
+                    <div className="">关于</div>
+                </div>
             </div>
         );
     }
