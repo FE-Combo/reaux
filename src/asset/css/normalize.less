@@ -4,7 +4,13 @@
   font-family: @main-font-family;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* width and height are not affected by their borders or padding. */
+
+  &::before,
+  &::after {
+    content: ""; /* allows the pseudo-element to affect layout. */
+    box-sizing: inherit; /* makes an element respect its parent's box-sizing rule. */
+  }
 }
 
 html {
