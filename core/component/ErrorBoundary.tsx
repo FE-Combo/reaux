@@ -13,7 +13,7 @@ class ErrorBoundary extends React.PureComponent<Props, State> {
     }
 
     static getDerivedStateFromError(error: Error) {
-        // render a fallback UI after an error has been thrown.
+        // invoked after an error has been thrown by a descendant component.
         return {hasError: true};
     }
 

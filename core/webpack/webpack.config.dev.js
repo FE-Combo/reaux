@@ -55,6 +55,9 @@ const webpackConfig = env => ({
                     "css-loader",
                     {
                         loader: "less-loader",
+                        options: {
+                            javascriptEnabled: true /* Inline-javascript, enabled can use Mixins */,
+                        },
                     },
                 ],
             },
