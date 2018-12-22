@@ -99,7 +99,7 @@ const webpackConfig = env => ({
                 ],
             },
             {
-                test: /\.(png|jpe?g|gif)$/,
+                test: /\.(png|jpe?g|gif|webp)$/,
                 loader: "url-loader",
                 query: {
                     limit: 1024,
