@@ -188,7 +188,7 @@ module.exports = build = env => {
     const compiler = webpack(config);
     compiler.run((error, stats) => {
         if (env.buildError) {
-            buildError();
+            env.buildError(error, stats);
             return;
         }
         if (error) {
