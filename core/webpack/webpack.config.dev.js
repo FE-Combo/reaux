@@ -76,6 +76,10 @@ const webpackConfig = env => ({
                     name: `${env.static}/font/[name].[hash:8].[ext]`,
                 },
             },
+            {
+                test: /\.mp4$/,
+                loader: "file-loader",
+            },
         ],
     },
     plugins: [
