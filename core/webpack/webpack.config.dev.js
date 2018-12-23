@@ -65,7 +65,7 @@ const webpackConfig = env => ({
                 test: /\.(png|jpe?g|gif|webp)$/,
                 loader: "url-loader",
                 query: {
-                    limit: env.imgLimit || 1024,
+                    limit: env.imgLimit || 1024 /* Generate separate images beyond limit otherwise use picture stream format. */,
                     name: `${env.static}/img/[name].[hash:8].[ext]`,
                 },
             },
