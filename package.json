@@ -1,6 +1,6 @@
 {
   "name": "dodoing",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Front-End core framework library",
   "main": "lib/index.js",
   "module": "lib/index.js",

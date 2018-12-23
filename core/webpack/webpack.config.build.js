@@ -102,7 +102,7 @@ const webpackConfig = env => ({
                 test: /\.(png|jpe?g|gif|webp)$/,
                 loader: "url-loader",
                 query: {
-                    limit: 1024,
+                    limit: env.imgLimit || 1024,
                     name: `${env.static}/img/[name].[hash:8].[ext]`,
                 },
             },
@@ -116,6 +116,9 @@ const webpackConfig = env => ({
             {
                 test: /\.mp4$/,
                 loader: "file-loader",
+                options: {
+                    name: `${env.static}/mp4/[name].[hash:8].[ext]`,
+                },
             },
         ],
     },
