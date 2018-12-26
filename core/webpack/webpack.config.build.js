@@ -52,8 +52,7 @@ const webpackConfig = env => ({
         ],
     },
     performance: env.performance || {
-        /* Current bundled entry is less than 700KB */
-        maxEntrypointSize: 720000,
+        maxEntrypointSize: 720000 /* 实际大小700kb（单位换算后），module大小包含 html/css/js/图片流，不包括独立生成的图片，导入的异步模块会单独生成一个新的module（ import() ） */,
         maxAssetSize: 1000000,
     },
     module: {
@@ -177,6 +176,8 @@ const spawn = (command, params, errorMessage) => {
 };
 
 module.exports = build = env => {
+    /* clear console */
+    process.stdout.write(process.platform === "win32" ? "\x1B[2J\x1B[0f" : "\x1B[2J\x1B[3J\x1B[H");
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
     spawn("prettier", ["--config", `${env.prettierConfig}`, "--list-different", `{${env.entry},test}/**/*.{ts,tsx,less}`], "check code style failed, please format above files");
 

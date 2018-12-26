@@ -17,6 +17,7 @@ module.exports = {
     prettierConfig: resolve("config/prettier.json"),
     port: 3000,
     host: "0.0.0.0",
+    ssr: true,
     alias: {
         comp: resolve("src/component"),
         mod: resolve("src/module"),
