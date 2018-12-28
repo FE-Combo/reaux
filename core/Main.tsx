@@ -47,7 +47,7 @@ export function render(component: ComponentType<any>, onInitialized: null | (() 
     rootElement.id = "framework-app-root";
     document.body.appendChild(rootElement);
     const WithRouterComponent = withRouter(component);
-    ReactDOM.render(
+    ReactDOM.hydrate(
         <Provider store={app.store}>
             <ErrorBoundary>
                 <ConnectedRouter history={app.history}>

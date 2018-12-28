@@ -116,14 +116,6 @@ const devServer = (compiler, env) => {
             errors: true,
         },
     });
-
-    /* [中断进程, 软件终止信号]监听 ref：https://blog.csdn.net/sufwei/article/details/51610676 */
-    ["SIGINT", "SIGTERM"].forEach(signal => {
-        process.on(signal, () => {
-            server.close();
-            process.exit();
-        });
-    });
 };
 
 module.exports = start = env => {
@@ -137,5 +129,13 @@ module.exports = start = env => {
         }
         console.info(chalk`starting dev server on {green https://localhost:${env.port}/} \n`);
         return null;
+    });
+
+    /* [中断进程, 软件终止信号]监听 ref：https://blog.csdn.net/sufwei/article/details/51610676 */
+    ["SIGINT", "SIGTERM"].forEach(signal => {
+        process.on(signal, () => {
+            server.close();
+            process.exit();
+        });
     });
 };
