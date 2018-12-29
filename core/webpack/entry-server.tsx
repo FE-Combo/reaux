@@ -1,6 +1,15 @@
 import React from "react";
-import App from "./App";
 import {createStore} from "redux";
+
+class App extends React.Component {
+    render() {
+        return (
+            <div className="outer">
+                <div className="inner">server</div>
+            </div>
+        );
+    }
+}
 
 const reducer = () => {
     return (state: any) => {
@@ -14,4 +23,7 @@ const createStores = (store: any) => {
 };
 const router: any[] = [];
 
-export {createApp};
+export default function render(path: any): Promise<any> {
+    const promise = import(/* webpackChunkName: "test" */ "./App");
+    return promise;
+}

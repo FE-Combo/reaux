@@ -11,7 +11,7 @@ const clientConfig = {
     entry: ["./core/webpack/entry-client.tsx"],
     output: {
         pathinfo: true, // 输入代码添加额外的路径注释，提高代码可读性
-        filename: `${env.static}/client/js/[name].js` /* development、production 输出文件 */,
+        filename: `client/[name].js` /* development、production 输出文件 */,
         publicPath: "/" /* development 输入目录前缀 */,
     },
     resolve: {
@@ -101,7 +101,7 @@ const serverConfig = {
     entry: ["./core/webpack/entry-server.tsx"],
     output: {
         chunkFilename: `${env.static}/js/[name].chunk.js`,
-        filename: `${env.static}/server/js/[name].js` /* development、production 输出文件 */,
+        filename: `server/[name].js` /* development、production 输出文件 */,
         publicPath: "/" /* development 输入目录前缀 */,
     },
     resolve: {

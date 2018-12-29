@@ -5,26 +5,41 @@ const complier = webpack(webpackConfig);
 const WebpackDevServer = require("webpack-dev-server");
 const env = require("../config/env");
 const {renderToString} = "react-dom/server";
+const axios = require("axios");
+const Agent = require("https").Agent;
 const htmlTpl = fs.readFileSync("./src/index.html", "utf8");
 
 const devServer = new WebpackDevServer(complier, {
     contentBase: env.contentBase,
     watchContentBase: true,
     host: env.host,
-    https: true,
     historyApiFallback: true,
     hot: true,
     compress: true,
+    quiet: true,
     overlay: {
         warnings: true,
         errors: true,
     },
     before: function(app) {
-        app.get("/", function(req, res) {
-            const Module = module.constructor;
-            const a = new Module();
-            console.log(a);
-            res.end(htmlTpl);
+        // 开启https时 需要使用http Agent代理获取数据
+        app.use((req, res, next) => {
+            if (/^\/client/.test(req.path) || /^\/index.html/.test(req.path)) {
+                next();
+            } else {
+                try {
+                    Promise.all([axios.get(`http://localhost:3000/client/main.js`, {httpsAgent: new Agent({rejectUnauthorized: false})}), axios.get(`http://localhost:3000/index.html`, {httpsAgent: new Agent({rejectUnauthorized: false})})]).then(([main, tpl]) => {
+                        const Module = module.constructor;
+                        const mainModule = new Module();
+                        console.log(mainModule._compile(main.data, "main.js"));
+                        res.end(tpl.data);
+                    });
+                } catch (e) {
+                    next();
+                }
+            }
+
+            // next();
         });
     },
 });
