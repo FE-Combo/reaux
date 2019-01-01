@@ -29,9 +29,9 @@ const devServer = new WebpackDevServer(complier, {
             } else {
                 try {
                     Promise.all([axios.get(`http://localhost:3000/client/main.js`, {httpsAgent: new Agent({rejectUnauthorized: false})}), axios.get(`http://localhost:3000/index.html`, {httpsAgent: new Agent({rejectUnauthorized: false})})]).then(([main, tpl]) => {
-                        const Module = module.constructor;
-                        const mainModule = new Module();
-                        console.log(mainModule._compile(main.data, "main.js"));
+                        // const Module = module.constructor;
+                        // const mainModule = new Module();
+                        // console.log(mainModule._compile(main.data, "main.js"));
                         res.end(tpl.data);
                     });
                 } catch (e) {

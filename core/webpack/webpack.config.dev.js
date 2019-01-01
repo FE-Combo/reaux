@@ -109,6 +109,7 @@ const devServer = (compiler, env) => {
         host: env.host /* 使用localhost会导致报错 [WDS] Disconnected! */,
         https: true /* 必须使用https访问 */,
         historyApiFallback: true /* 所有路由不经过服务端,用于SPA单页应用 */,
+        disableHostCheck: true,
         hot: true,
         compress: true,
         overlay: {
