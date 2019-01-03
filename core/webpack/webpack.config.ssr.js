@@ -3,12 +3,15 @@ const webpack = require("webpack");
 const HTMLPlugin = require("html-webpack-plugin");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 const ForkTSCheckerPlugin = require("fork-ts-checker-webpack-plugin");
-const env = require("../../config/env");
+const axios = require("axios");
+const Agent = require("https").Agent;
+const chalk = require("chalk");
+const DevServer = require("webpack-dev-server");
 
-const clientConfig = {
+const clientConfig = env => ({
     mode: "development",
     target: "web",
-    entry: ["./core/webpack/entry-client.tsx"],
+    entry: ["./core/server-side-render/entry-client.tsx"],
     output: {
         pathinfo: true, // 输入代码添加额外的路径注释，提高代码可读性
         filename: `client/[name].js` /* development、production 输出文件 */,
@@ -91,14 +94,14 @@ const clientConfig = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.ProgressPlugin() /* 控制台显示加载进度 */,
     ],
-};
+});
 
-const serverConfig = {
+const serverConfig = env => ({
     mode: "production",
     target: "node",
     bail: true,
     devtool: false,
-    entry: ["./core/webpack/entry-server.tsx"],
+    entry: ["./core/server-side-render/entry-server.tsx"],
     output: {
         libraryTarget: "commonjs2" /* 用于module.constructor */,
         chunkFilename: `${env.static}/js/[name].chunk.js`,
@@ -174,6 +177,61 @@ const serverConfig = {
         ],
     },
     plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), new webpack.ProgressPlugin()],
+});
+
+const devServer = (compiler, env) => {
+    return new DevServer(compiler, {
+        contentBase: env.contentBase,
+        watchContentBase: true,
+        host: env.host,
+        historyApiFallback: true,
+        hot: true,
+        compress: true,
+        quiet: true,
+        overlay: {
+            warnings: true,
+            errors: true,
+        },
+        before: function(app) {
+            // 开启https时 需要使用http Agent代理获取数据
+            app.use((req, res, next) => {
+                if (/^\/client/.test(req.path) || /^\/server/.test(req.path) || /^\/index.html/.test(req.path) || /^\/favicon.ico/.test(req.path) || /^\/static/.test(req.path)) {
+                    next();
+                } else {
+                    try {
+                        Promise.all([axios.get(`http://localhost:3000/server/main.js`, {httpsAgent: new Agent({rejectUnauthorized: false})}), axios.get(`http://localhost:3000/index.html`, {httpsAgent: new Agent({rejectUnauthorized: false})})]).then(([main, tpl]) => {
+                            const Module = module.constructor;
+                            const mainModule = new Module();
+                            mainModule._compile(main.data, "serverJS");
+                            const result = mainModule.exports.default(req.path);
+                            res.end(tpl.data.replace("<!--container-->", result.html));
+                        });
+                    } catch (e) {
+                        res.end(e);
+                    }
+                }
+            });
+        },
+    });
 };
 
-module.exports = [clientConfig, serverConfig];
+module.exports = start = env => {
+    const webpackConfig = [clientConfig(env), serverConfig(env)];
+    const compiler = webpack(webpackConfig);
+    const server = devServer(compiler, env);
+    server.listen(env.port, env.host, error => {
+        if (error) {
+            console.error(error);
+            process.exit(1);
+        }
+        console.info(chalk`starting dev server on {green https://localhost:${env.port}/} \n`);
+        return null;
+    });
+
+    ["SIGINT", "SIGTERM"].forEach(signal => {
+        process.on(signal, () => {
+            server.close();
+            process.exit();
+        });
+    });
+};
