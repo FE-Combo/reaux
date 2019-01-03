@@ -24,22 +24,21 @@ const devServer = new WebpackDevServer(complier, {
     before: function(app) {
         // 开启https时 需要使用http Agent代理获取数据
         app.use((req, res, next) => {
-            if (/^\/client/.test(req.path) || /^\/index.html/.test(req.path)) {
+            if (/^\/client/.test(req.path) || /^\/server/.test(req.path) || /^\/index.html/.test(req.path) || /^\/favicon.ico/.test(req.path)) {
                 next();
             } else {
                 try {
-                    Promise.all([axios.get(`http://localhost:3000/client/main.js`, {httpsAgent: new Agent({rejectUnauthorized: false})}), axios.get(`http://localhost:3000/index.html`, {httpsAgent: new Agent({rejectUnauthorized: false})})]).then(([main, tpl]) => {
-                        // const Module = module.constructor;
-                        // const mainModule = new Module();
-                        // console.log(mainModule._compile(main.data, "main.js"));
-                        res.end(tpl.data);
+                    Promise.all([axios.get(`http://localhost:3000/server/main.js`, {httpsAgent: new Agent({rejectUnauthorized: false})}), axios.get(`http://localhost:3000/index.html`, {httpsAgent: new Agent({rejectUnauthorized: false})})]).then(([main, tpl]) => {
+                        const Module = module.constructor;
+                        const mainModule = new Module();
+                        mainModule._compile(main.data, "serverJS");
+                        const result = mainModule.exports.default(req.path);
+                        res.end(result.html);
                     });
                 } catch (e) {
-                    next();
+                    res.end(e);
                 }
             }
-
-            // next();
         });
     },
 });

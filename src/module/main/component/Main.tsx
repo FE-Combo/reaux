@@ -7,6 +7,7 @@ import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Route from "../../../../core/component/Route";
 import Welcome from "./Welcome";
+import {push} from "connected-react-router";
 import "./index.less";
 
 interface StateProps {
@@ -29,9 +30,15 @@ class Component extends React.PureComponent<Props> {
                 <div className="container">
                     <h1>vocoWone</h1>
                     <div className="g-flex-between">
-                        <div className="item">博客</div>
-                        <div className="item">jl</div>
-                        <div className="item">关于</div>
+                        <div className="item" onClick={() => dispatch(push("/"))}>
+                            博客
+                        </div>
+                        <div className="item" onClick={() => dispatch(push("/resume"))}>
+                            jl
+                        </div>
+                        <div className="item" onClick={() => dispatch(push("/about"))}>
+                            关于
+                        </div>
                     </div>
                 </div>
             </div>

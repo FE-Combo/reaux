@@ -100,6 +100,7 @@ const serverConfig = {
     devtool: false,
     entry: ["./core/webpack/entry-server.tsx"],
     output: {
+        libraryTarget: "commonjs2" /* 用于module.constructor */,
         chunkFilename: `${env.static}/js/[name].chunk.js`,
         filename: `server/[name].js` /* development、production 输出文件 */,
         publicPath: "/" /* development 输入目录前缀 */,
