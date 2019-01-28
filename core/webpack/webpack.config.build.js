@@ -77,7 +77,6 @@ const webpackConfig = env => ({
                         loader: "css-loader",
                         options: {
                             sourceMap: true,
-                            minimize: {safe: true},
                             importLoaders: 2,
                         },
                     },

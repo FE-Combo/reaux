@@ -30,14 +30,6 @@ const webpackConfig = env => ({
     module: {
         rules: [
             {
-                test: /(\.jsx|\.js)$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                query: {
-                    presets: ["es2015", "react"],
-                },
-            },
-            {
                 test: /\.(ts|tsx)$/,
                 include: env.core ? [env.entry, env.core] : [env.entry],
                 loader: "ts-loader",
