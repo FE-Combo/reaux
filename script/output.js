@@ -18,7 +18,7 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{core,test}/**/*.{ts,tsx}"], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{src/framework,test}/**/*.{ts,tsx}"], "check code style failed, please format above files");
 }
 
 function test() {
@@ -28,7 +28,7 @@ function test() {
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
-    return spawn("tslint", ["-c", "config/tslint.json", "{core,test}/**/*.{ts,tsx}"], "lint failed, please fix");
+    return spawn("tslint", ["-c", "config/tslint.json", "{src/framework,test}/**/*.{ts,tsx}"], "lint failed, please fix");
 }
 
 function cleanup() {
@@ -47,18 +47,23 @@ function distribute() {
     fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
     const removeComment = /\/\*(.+)\*\//g;
+    fs.mkdirsSync("output/out/src/webpack");
     const webpackConfigDev = fs
-        .readFileSync("core/webpack/webpack.config.dev.js")
+        .readFileSync("src/framework/webpack/webpack.config.dev.js")
         .toString()
         .replace(removeComment, "");
     fs.writeFileSync("output/out/src/webpack/webpack.config.dev.js", webpackConfigDev);
     const webpackConfigBuild = fs
-        .readFileSync("core/webpack/webpack.config.build.js")
+        .readFileSync("src/framework/webpack/webpack.config.build.js")
         .toString()
         .replace(removeComment, "");
     fs.writeFileSync("output/out/src/webpack/webpack.config.build.js", webpackConfigBuild);
+    const webpackIndex = fs.readFileSync("src/framework/webpack/index.js").toString();
+    fs.writeFileSync("output/out/src/webpack/index.js", webpackIndex);
+
     fs.copySync("output/out/src/webpack/webpack.config.dev.js", "output/dist/lib/webpack/webpack.config.dev.js", {dereference: true});
     fs.copySync("output/out/src/webpack/webpack.config.build.js", "output/dist/lib/webpack/webpack.config.build.js", {dereference: true});
+    fs.copySync("output/out/src/webpack/index.js", "output/dist/lib/webpack/index.js", {dereference: true});
 }
 
 function output() {

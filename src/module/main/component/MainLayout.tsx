@@ -4,8 +4,8 @@
 import React from "react";
 import {Switch} from "react-router-dom";
 import Notfound from "./Notfound";
-import Route from "../../../../core/component/Route";
-import {async} from "../../../../core/component/async";
+import Route from "framework/components/Route";
+import {async} from "framework/components/async";
 const About = async(() => import(/* webpackChunkName: "about" */ "module/about"), "Main");
 const Resume = async(() => import(/* webpackChunkName: "resume" */ "module/resume"), "Main");
 

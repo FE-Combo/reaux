@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import {register, Handler, Listener} from "../../../core";
+import {register, Handler, Listener} from "framework";
 import {State} from "./type";
 import {delay, SagaIterator} from "redux-saga";
 import {call, put} from "redux-saga/effects";

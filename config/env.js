@@ -6,10 +6,8 @@ function resolve(relativePath) {
 }
 
 module.exports = {
-    entry: resolve("src"),
+    src: resolve("src"),
     output: resolve("build/dist"),
-    core: resolve("core"),
-    static: "static",
     contentBase: resolve("src/static"),
     tsConfig: resolve("config/tsconfig.json"),
     tslintConfig: resolve("config/tslint.json"),
@@ -21,8 +19,6 @@ module.exports = {
     alias: {
         comp: resolve("src/component"),
         mod: resolve("src/module"),
-        mock: resolve("/mock"),
-        core: resolve("/core"),
     },
     imgLimit: 1024,
     performance: {

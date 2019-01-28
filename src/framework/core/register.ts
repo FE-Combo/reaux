@@ -3,7 +3,7 @@ import {App, Action} from "./type";
 import {SagaIterator} from "redux-saga";
 import {call} from "redux-saga/effects";
 import {setStateAction, ERROR_ACTION_TYPE, LOCATION_CHANGE} from "./reducer";
-import {getPrototypeOfExceptConstructor} from "./util/object";
+import {getPrototypeOfExceptConstructor} from "../utils/object";
 
 export function registerHandler(handler: Handler<any>, app: App) {
     getPrototypeOfExceptConstructor(handler).forEach(actionType => {

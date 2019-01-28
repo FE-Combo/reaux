@@ -5,23 +5,19 @@ import {RootState} from "type/state";
 import {actions} from "../index";
 import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
-import Route from "../../../../core/component/Route";
-import Welcome from "./Welcome";
+import Route from "framework/components/Route";
 import {push} from "connected-react-router";
 import "./index.less";
 
 interface StateProps {
     name: string;
-    showWelcome: boolean;
 }
 
 interface Props extends StateProps, DispatchProp {}
 class Component extends React.PureComponent<Props> {
     render() {
-        const {dispatch, showWelcome} = this.props;
-        return showWelcome ? (
-            <Welcome />
-        ) : (
+        const {dispatch} = this.props;
+        return (
             <div className="main-container g-full-screen g-flex-center g-no-scroll">
                 <Switch>
                     <Route path="/register" />
@@ -49,7 +45,6 @@ class Component extends React.PureComponent<Props> {
 const mapStateToProps = (state: RootState): StateProps => {
     return {
         name: state.app.main.name,
-        showWelcome: state.app.main.showWelcome,
     };
 };
 

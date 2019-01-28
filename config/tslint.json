@@ -32,8 +32,5 @@
         "esSpecCompliant": true
       }
     ]
-  },
-  "linterOptions": {
-    "exclude": ["../core/**/*.json"]
   }
 }

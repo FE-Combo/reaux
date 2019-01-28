@@ -1,9 +1,9 @@
-import {render, register} from "./Main";
-import {Listener, LocationChangedEvent, Handler, Exception} from "./handler";
+import {render, register} from "./core/Main";
+import {Listener, LocationChangedEvent, Handler, Exception} from "./core/handler";
 
 export {render, register};
-export {async} from "./component/async";
-export {PickOptional} from "./util/ts";
+export {async} from "./components/async";
+export {PickOptional} from "./utils/ts";
 
 export type Listener = Listener;
 export type LocationChangedEvent = LocationChangedEvent;
