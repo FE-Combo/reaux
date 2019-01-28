@@ -9,8 +9,7 @@
     "start": "node script/start.js",
     "build": "node script/build.js",
     "output": "node script/output.js",
-    "format": "prettier --config config/prettier.json --write \"{core,src}/**/*.{ts,tsx}\"",
-    "ssr": "node script/ssr.js"
+    "format": "prettier --config config/prettier.json --write \"{core,src}/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
