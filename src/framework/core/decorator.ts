@@ -1,8 +1,7 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {loadingAction} from "./reducer";
-import {ActionHandler} from "./handler";
-import {StateView} from "./type";
+import {setLoadingAction} from "./redux";
+import {StateView, ActionHandler} from "./type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
@@ -25,10 +24,10 @@ function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerI
 export function loading(identifier: string) {
     return handlerDecorator(function*(handler) {
         try {
-            yield put(loadingAction(identifier, true));
+            yield put(setLoadingAction(identifier, true));
             yield* handler();
         } finally {
-            yield put(loadingAction(identifier, false));
+            yield put(setLoadingAction(identifier, false));
         }
     });
 }

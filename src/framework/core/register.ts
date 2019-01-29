@@ -1,8 +1,7 @@
-import {Handler, run, Listener, LocationChangedEvent} from "./handler";
-import {AppView, ActionView} from "./type";
+import {Handler, run, setStateAction, ERROR_ACTION_TYPE, LOCATION_CHANGE} from "./redux";
+import {AppView, ActionView, LocationChangedEvent, Listener, ActionCreators} from "./type";
 import {SagaIterator} from "redux-saga";
 import {call} from "redux-saga/effects";
-import {setStateAction, ERROR_ACTION_TYPE, LOCATION_CHANGE} from "./reducer";
 import {getPrototypeOfExceptConstructor} from "../utils/object";
 
 export function registerHandler(handler: Handler<any>, app: AppView) {
@@ -49,7 +48,3 @@ function* initializeListener(handler: Handler<any>, app: AppView): SagaIterator 
     }
     app.modules[handler.module] = true;
 }
-
-type ActionCreator<H> = H extends (...args: infer P) => SagaIterator ? ((...args: P) => ActionView<P>) : never;
-type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => SagaIterator ? K : never}[Exclude<keyof H, keyof Listener>];
-export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};

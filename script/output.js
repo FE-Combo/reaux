@@ -46,24 +46,8 @@ function distribute() {
     fs.mkdirsSync("output/dist/lib");
     fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
-    const removeComment = /\/\*(.+)\*\//g;
-    fs.mkdirsSync("output/out/src/webpack");
-    const webpackConfigDev = fs
-        .readFileSync("src/framework/webpack/webpack.config.dev.js")
-        .toString()
-        .replace(removeComment, "");
-    fs.writeFileSync("output/out/src/webpack/webpack.config.dev.js", webpackConfigDev);
-    const webpackConfigBuild = fs
-        .readFileSync("src/framework/webpack/webpack.config.build.js")
-        .toString()
-        .replace(removeComment, "");
-    fs.writeFileSync("output/out/src/webpack/webpack.config.build.js", webpackConfigBuild);
-    const webpackIndex = fs.readFileSync("src/framework/webpack/index.js").toString();
-    fs.writeFileSync("output/out/src/webpack/index.js", webpackIndex);
-
-    fs.copySync("output/out/src/webpack/webpack.config.dev.js", "output/dist/lib/webpack/webpack.config.dev.js", {dereference: true});
-    fs.copySync("output/out/src/webpack/webpack.config.build.js", "output/dist/lib/webpack/webpack.config.build.js", {dereference: true});
-    fs.copySync("output/out/src/webpack/index.js", "output/dist/lib/webpack/index.js", {dereference: true});
+    fs.copySync("src/framework/webpack", "output/out/src/webpack");
+    fs.copySync("output/out/src/webpack", "output/dist/lib/webpack", {dereference: true});
 }
 
 function output() {

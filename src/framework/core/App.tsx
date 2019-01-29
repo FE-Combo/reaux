@@ -8,10 +8,9 @@ import {applyMiddleware, createStore, Reducer, Store} from "redux";
 import createSagaMiddleware from "redux-saga";
 import ErrorBoundary from "../components/ErrorBoundary";
 import {devtools} from "./devtools";
-import {Actor, Handler, saga, storeListener} from "./handler";
-import {rootReducer, errorAction} from "./reducer";
-import {registerActions, registerHandler, registerListener, ActionCreators} from "./register";
-import {AppView, StateView} from "./type";
+import {Actor, Handler, saga, storeListener, rootReducer, setErrorAction} from "./redux";
+import {registerActions, registerHandler, registerListener} from "./register";
+import {AppView, StateView, ActionCreators} from "./type";
 
 console.time("[framework] initialized");
 
@@ -35,7 +34,7 @@ function createApp(): AppView {
         if (!error) {
             error = new Error(message.toString());
         }
-        store.dispatch(errorAction(error));
+        store.dispatch(setErrorAction(error));
     };
     return {history, store, sagaMiddleware, actor, modules: {}};
 }
