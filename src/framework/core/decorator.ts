@@ -2,12 +2,12 @@ import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
 import {loadingAction} from "./reducer";
 import {ActionHandler} from "./handler";
-import {State} from "./state";
+import {StateView} from "./type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
 
-function handlerDecorator<S extends State = State>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
+function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
     return (target, name, descriptor) => {
         const handler = descriptor.value!;
         descriptor.value = function*(...args: any[]): SagaIterator {

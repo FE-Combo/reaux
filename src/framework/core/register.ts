@@ -1,11 +1,11 @@
 import {Handler, run, Listener, LocationChangedEvent} from "./handler";
-import {App, Action} from "./type";
+import {AppView, ActionView} from "./type";
 import {SagaIterator} from "redux-saga";
 import {call} from "redux-saga/effects";
 import {setStateAction, ERROR_ACTION_TYPE, LOCATION_CHANGE} from "./reducer";
 import {getPrototypeOfExceptConstructor} from "../utils/object";
 
-export function registerHandler(handler: Handler<any>, app: App) {
+export function registerHandler(handler: Handler<any>, app: AppView) {
     getPrototypeOfExceptConstructor(handler).forEach(actionType => {
         const method = handler[actionType];
         const qualifiedActionType = `${handler.module}/${actionType}`;
@@ -16,7 +16,7 @@ export function registerHandler(handler: Handler<any>, app: App) {
     app.store.dispatch(setStateAction(handler.module, initialState, `@@${handler.module}/initState`));
 }
 
-export function registerListener(handler: Handler<any>, app: App) {
+export function registerListener(handler: Handler<any>, app: AppView) {
     const listener = handler as Listener;
     if (listener.onLocationChanged) {
         app.actor.listeners[LOCATION_CHANGE].push(listener.onLocationChanged.bind(handler));
@@ -32,12 +32,12 @@ export function registerActions<H extends Handler<any>>(handler: H): ActionCreat
     const actions = {};
     getPrototypeOfExceptConstructor(handler).forEach(actionType => {
         const qualifiedActionType = `${handler.module}/${actionType}`;
-        actions[actionType] = (...payload: any[]): Action<any[]> => ({type: qualifiedActionType, payload});
+        actions[actionType] = (...payload: any[]): ActionView<any[]> => ({type: qualifiedActionType, payload});
     });
     return actions as ActionCreators<H>;
 }
 
-function* initializeListener(handler: Handler<any>, app: App): SagaIterator {
+function* initializeListener(handler: Handler<any>, app: AppView): SagaIterator {
     // Only manually modify the URL trigger, Several modules are loaded several times during initialization.
     const listener = handler as Listener;
     if (listener.onInitialized) {
@@ -50,6 +50,6 @@ function* initializeListener(handler: Handler<any>, app: App): SagaIterator {
     app.modules[handler.module] = true;
 }
 
-type ActionCreator<H> = H extends (...args: infer P) => SagaIterator ? ((...args: P) => Action<P>) : never;
+type ActionCreator<H> = H extends (...args: infer P) => SagaIterator ? ((...args: P) => ActionView<P>) : never;
 type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => SagaIterator ? K : never}[Exclude<keyof H, keyof Listener>];
 export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};

@@ -1,14 +1,11 @@
 import {render, register} from "./core/Main";
 import {Listener, LocationChangedEvent, Handler, Exception} from "./core/handler";
-
-export {render, register};
-export {async} from "./components/async";
-export {PickOptional} from "./utils/ts";
+import {async} from "./components/async";
+import {PickOptional} from "./utils/ts";
 
 export type Listener = Listener;
 export type LocationChangedEvent = LocationChangedEvent;
-export {Handler};
-export {Exception};
+export {render, register, async, PickOptional, Handler, Exception};
 
 const Do = {
     render,

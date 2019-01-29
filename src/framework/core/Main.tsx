@@ -1,5 +1,5 @@
 import {ConnectedRouter, connectRouter, routerMiddleware} from "connected-react-router";
-import createHistory from "history/createBrowserHistory";
+import {createBrowserHistory} from "history";
 import React, {ComponentType} from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
@@ -11,17 +11,16 @@ import {devtools} from "./devtools";
 import {Actor, Handler, saga, storeListener} from "./handler";
 import {rootReducer, errorAction} from "./reducer";
 import {registerActions, registerHandler, registerListener, ActionCreators} from "./register";
-import {State} from "./state";
-import {App} from "./type";
+import {AppView, StateView} from "./type";
 
 console.time("[framework] initialized");
 
-function createApp(): App {
-    const history = createHistory();
+function createApp(): AppView {
+    const history = createBrowserHistory();
     const actor = new Actor();
     const sagaMiddleware = createSagaMiddleware();
-    const reducer: Reducer<State> = connectRouter(history)(rootReducer());
-    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
+    const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
+    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
     store.subscribe(storeListener(store));
     sagaMiddleware.run(saga, actor);
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {

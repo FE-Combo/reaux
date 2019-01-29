@@ -4,8 +4,9 @@ import {Store} from "redux";
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
 import {setStateAction, ERROR_ACTION_TYPE, errorAction} from "./reducer";
-import {initialState, State} from "./state";
-import {Action} from "./type";
+import {ActionView, StateView} from "./type";
+
+let state: StateView = {app: {}, loading: {}, router: {} as any};
 
 export interface LocationChangedEvent {
     location: Location;
@@ -21,8 +22,6 @@ export interface Listener {
     onLocationChanged?(event: LocationChangedEvent): SagaIterator;
     onError?(error: Exception): SagaIterator;
 }
-
-let state = initialState;
 
 export class Handler<S extends object> {
     readonly module: string;
@@ -52,7 +51,7 @@ export class Actor {
     };
 }
 
-export const storeListener = (store: Store<State>) => () => {
+export const storeListener = (store: Store<StateView>) => () => {
     state = store.getState();
 };
 
@@ -68,7 +67,7 @@ export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
 
 export function* saga(handlers: Actor): SagaIterator {
     // trigger one time, in order to mount all actions.
-    yield takeEvery("*", function*(action: Action<any>): SagaIterator {
+    yield takeEvery("*", function*(action: ActionView<any>): SagaIterator {
         // Mounted on the program, Dispatch & yield put triggers every time.
         const listeners = handlers.listeners[action.type];
         if (listeners) {
