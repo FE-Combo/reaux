@@ -1,5 +1,5 @@
 {
-  "name": "dodoing",
+  "name": "react-bone",
   "version": "0.0.8",
   "description": "Front-End core framework library, base on react and redux.",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vocoWone/dodoing.git"
+    "url": "git+https://github.com/vocoWone/react-bone.git"
   },
   "keywords": [
     "javascript",
@@ -22,9 +22,9 @@
   "author": "vocoWone",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vocoWone/dodoing/issues"
+    "url": "https://github.com/vocoWone/react-bone/issues"
   },
-  "homepage": "https://github.com/vocoWone/dodoing#readme",
+  "homepage": "https://github.com/vocoWone/react-bone#readme",
   "devDependencies": {
     "css-loader": "2.1.0",
     "file-loader": "3.0.1",
