@@ -2,7 +2,6 @@ import "asset/css/global.less";
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
-import {actions} from "../index";
 import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Route from "framework/components/Route";

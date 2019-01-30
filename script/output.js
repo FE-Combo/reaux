@@ -21,10 +21,10 @@ function checkCodeStyle() {
     return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{src/framework,test}/**/*.{ts,tsx}"], "check code style failed, please format above files");
 }
 
-function test() {
-    console.info(chalk`{green.bold [task]} {white.bold test}`);
-    return spawn("jest", ["--config", "config/jest.json"], "test failed, please fix");
-}
+// function test() {
+//     console.info(chalk`{green.bold [task]} {white.bold test}`);
+//     return spawn("jest", ["--config", "config/jest.json"], "test failed, please fix");
+// }
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
