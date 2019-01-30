@@ -4,30 +4,8 @@ import {SagaIterator} from "redux-saga";
 import {call} from "redux-saga/effects";
 import {getPrototypeOfExceptConstructor} from "../utils/object";
 
-export function registerHandler(handler: Handler<any>, app: AppView) {
-    getPrototypeOfExceptConstructor(handler).forEach(actionType => {
-        const method = handler[actionType];
-        const qualifiedActionType = `${handler.module}/${actionType}`;
-        app.actor.effects[qualifiedActionType] = method.bind(handler);
-    });
-    // "as any" to get private-readonly initialState
-    const initialState = (handler as any).initialState;
-    app.store.dispatch(setStateAction(handler.module, initialState, `@@${handler.module}/initState`));
-}
-
-export function registerListener(handler: Handler<any>, app: AppView) {
-    const listener = handler as Listener;
-    if (listener.onLocationChanged) {
-        app.actor.listeners[LOCATION_CHANGE].push(listener.onLocationChanged.bind(handler));
-    }
-    if (listener.onError) {
-        app.actor.listeners[ERROR_ACTION_TYPE].push(listener.onError.bind(handler));
-    }
-    app.sagaMiddleware.run(initializeListener, handler, app);
-}
-
 export function registerActions<H extends Handler<any>>(handler: H): ActionCreators<H> {
-    // obtain type & params
+    // Generate action(type, payload)
     const actions = {};
     getPrototypeOfExceptConstructor(handler).forEach(actionType => {
         const qualifiedActionType = `${handler.module}/${actionType}`;
@@ -36,8 +14,30 @@ export function registerActions<H extends Handler<any>>(handler: H): ActionCreat
     return actions as ActionCreators<H>;
 }
 
+export function registerHandler(handler: Handler<any>, app: AppView) {
+    // Store action.payload( expect onLocationChanged and onError ) and initial module redux state.
+    getPrototypeOfExceptConstructor(handler).forEach(actionType => {
+        const method = handler[actionType];
+        const qualifiedActionType = `${handler.module}/${actionType}`;
+        app.actionPayloadStore.effects[qualifiedActionType] = method.bind(handler);
+    });
+    app.store.dispatch(setStateAction(handler.module, (handler as any) /* "as any" to get private-readonly initialState */.initialState, `@@${handler.module}/initState`));
+}
+
+export function registerListener(handler: Handler<any>, app: AppView) {
+    // Store action.payload( onLocationChanged and onError )
+    const listener = handler as Listener;
+    if (listener.onLocationChanged) {
+        app.actionPayloadStore.listeners[LOCATION_CHANGE].push(listener.onLocationChanged.bind(handler));
+    }
+    if (listener.onError) {
+        app.actionPayloadStore.listeners[ERROR_ACTION_TYPE].push(listener.onError.bind(handler));
+    }
+    app.sagaMiddleware.run(initializeListener, handler, app);
+}
+
 function* initializeListener(handler: Handler<any>, app: AppView): SagaIterator {
-    // Only manually modify the URL trigger, Several modules are loaded several times during initialization.
+    // When module register trigger, one module trigger once time.
     const listener = handler as Listener;
     if (listener.onInitialized) {
         yield call(run, listener.onInitialized.bind(handler), []);

@@ -8,7 +8,7 @@ import {applyMiddleware, createStore, Reducer, Store} from "redux";
 import createSagaMiddleware from "redux-saga";
 import ErrorBoundary from "../components/ErrorBoundary";
 import {devtools} from "./devtools";
-import {Actor, Handler, saga, storeListener, rootReducer, setErrorAction} from "./redux";
+import {ActionPayloadStore, Handler, saga, storeListener, rootReducer, setErrorAction} from "./redux";
 import {registerActions, registerHandler, registerListener} from "./register";
 import {AppView, StateView, ActionCreators} from "./type";
 
@@ -16,12 +16,12 @@ console.time("[framework] initialized");
 
 function createApp(): AppView {
     const history = createBrowserHistory();
-    const actor = new Actor();
+    const actionPayloadStore = new ActionPayloadStore();
     const sagaMiddleware = createSagaMiddleware();
     const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
     store.subscribe(storeListener(store));
-    sagaMiddleware.run(saga, actor);
+    sagaMiddleware.run(saga, actionPayloadStore);
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
         console.error(`Message: ${message.toString()}`);
@@ -36,7 +36,7 @@ function createApp(): AppView {
         }
         store.dispatch(setErrorAction(error));
     };
-    return {history, store, sagaMiddleware, actor, modules: {}};
+    return {history, store, sagaMiddleware, actionPayloadStore, modules: {}};
 }
 const app = createApp();
 

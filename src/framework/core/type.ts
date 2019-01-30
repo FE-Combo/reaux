@@ -1,7 +1,7 @@
 import {History} from "history";
 import {Action, Store} from "redux";
 import {SagaMiddleware} from "redux-saga";
-import {Actor} from "./redux";
+import {ActionPayloadStore} from "./redux";
 import {RouterState} from "connected-react-router";
 import {LoadingStateView} from "./type";
 import {Exception} from "./Exception";
@@ -23,7 +23,7 @@ export interface AppView {
     readonly store: Store<StateView>;
     readonly history: History;
     readonly sagaMiddleware: SagaMiddleware<any>;
-    readonly actor: Actor;
+    readonly actionPayloadStore: ActionPayloadStore;
     readonly modules: {[module: string]: boolean};
 }
 

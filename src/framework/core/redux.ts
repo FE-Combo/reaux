@@ -75,7 +75,7 @@ export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
         yield put(setErrorAction(error));
     }
 }
-export function* saga(handlers: Actor): SagaIterator {
+export function* saga(handlers: ActionPayloadStore): SagaIterator {
     // trigger one time, in order to mount all actions.
     yield takeEvery("*", function*(action: ActionView<any>): SagaIterator {
         // Mounted on the program, Dispatch & yield put triggers every time.
@@ -93,8 +93,8 @@ export function* saga(handlers: Actor): SagaIterator {
     });
 }
 
-export class Actor {
-    // Storage primitive logic
+export class ActionPayloadStore {
+    // Store action.payload
     readonly effects: {[actionType: string]: ActionHandler} = {};
     readonly listeners: {[actionType: string]: ActionHandler[]} = {
         [LOCATION_CHANGE]: [],
