@@ -1,6 +1,6 @@
 {
   "name": "react-bone",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Front-End core framework library, base on react and redux.",
   "main": "lib/index.js",
   "module": "lib/index.js",
