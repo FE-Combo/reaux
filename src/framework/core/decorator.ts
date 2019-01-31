@@ -6,7 +6,7 @@ import {StateView, ActionHandler} from "./type";
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
 
-function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
+export function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
     return (target, name, descriptor) => {
         const handler = descriptor.value!;
         descriptor.value = function*(...args: any[]): SagaIterator {
