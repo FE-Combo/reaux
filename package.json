@@ -1,6 +1,6 @@
 {
-  "name": "react-bone",
-  "version": "0.1.0",
+  "name": "doreact",
+  "version": "0.0.1",
   "description": "Front-End core framework library, base on react and redux.",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vocoWone/react-bone.git"
+    "url": "git+https://github.com/vocoWone/doreact.git"
   },
   "keywords": [
     "javascript",
@@ -22,9 +22,9 @@
   "author": "vocoWone",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vocoWone/react-bone/issues"
+    "url": "https://github.com/vocoWone/doreact/issues"
   },
-  "homepage": "https://github.com/vocoWone/react-bone#readme",
+  "homepage": "https://github.com/vocoWone/doreact#readme",
   "devDependencies": {
     "css-loader": "2.1.0",
     "file-loader": "3.0.1",
