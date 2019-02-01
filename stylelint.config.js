@@ -1,1 +1,1 @@
-module.exports = require("./config/stylelint.json");
+module.exports = require("./config/stylelint.json")
