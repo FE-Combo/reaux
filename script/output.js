@@ -18,7 +18,7 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "{src/framework,test}/**/*.{ts,tsx}"], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "src/framework/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
 }
 
 // function test() {
