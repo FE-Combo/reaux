@@ -46,8 +46,7 @@ function distribute() {
     fs.mkdirsSync("output/dist/lib");
     fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
-    fs.copySync("src/framework/webpack", "output/out/src/webpack");
-    fs.copySync("output/out/src/webpack", "output/dist/lib/webpack", {dereference: true});
+    fs.copySync("src/framework/webpack", "output/dist/lib/webpack", {dereference: true});
 }
 
 function output() {
