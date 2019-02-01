@@ -1,8 +1,8 @@
 import Main from "./component/Main";
 import {register, Handler, Listener} from "framework";
 import {State} from "./type";
-import {delay, SagaIterator} from "redux-saga";
-import {call} from "redux-saga/effects";
+import {SagaIterator} from "redux-saga";
+import {call, delay} from "redux-saga/effects";
 
 const initialState: State = {
     name: "string",
