@@ -2,7 +2,6 @@ import Main from "./components/Main";
 import {register, Handler, Listener} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
-import {call, delay} from "redux-saga/effects";
 import {NotesType} from "type/api";
 
 const initialState: State = {
