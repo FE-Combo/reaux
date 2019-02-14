@@ -1,3 +1,4 @@
+/** css初始化，可复制到任何网站中使用，可不在此页面添加网站主观元素 */
 @import "variable";
 
 * {
@@ -5,12 +6,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box; /* width and height are not affected by their borders or padding. */
-
-  &::before,
-  &::after {
-    content: ""; /* allows the pseudo-element to affect layout. */
-    box-sizing: inherit; /* makes an element respect its parent's box-sizing rule. */
-  }
 }
 
 html {
@@ -40,6 +35,7 @@ body {
     transition: none;
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
       color: inherit;

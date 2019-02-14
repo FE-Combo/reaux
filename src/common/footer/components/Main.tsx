@@ -1,10 +1,6 @@
-import "asset/css/global.less";
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
-import {Switch} from "react-router-dom";
-import MainLayout from "./MainLayout";
-import Route from "framework/components/Route";
 import "./index.less";
 
 interface StateProps {
@@ -14,14 +10,10 @@ interface StateProps {
 interface Props extends StateProps, DispatchProp {}
 class Component extends React.PureComponent<Props> {
     render() {
-        const {dispatch} = this.props;
         return (
-            <div className="main-container g-full-screen g-no-scroll">
-                <Switch>
-                    <Route path="/register" />
-                    <Route component={MainLayout} />
-                </Switch>
-            </div>
+            <footer className="footer-container">
+                Copyright © <a href="https://www.iwangzh.com">www.iwangzh.com</a> All Rights Reserved. 备案号：xxx
+            </footer>
         );
     }
 }

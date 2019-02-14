@@ -16,5 +16,5 @@ class ActionHandler extends Handler<State> implements Listener {
         yield* this.setState({name: "voco"});
     }
 }
-const actions = register(new ActionHandler("main", initialState));
+const actions = register(new ActionHandler("home", initialState));
 export {actions, Main};

@@ -1,48 +1,20 @@
 .main-container {
-  background: url("./asset/backgound.webp") no-repeat; /* webp image can reduce size and loading fast */
-  background-size: cover;
+  .layout {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 
-  .container {
-    background: linear-gradient(#2196f3 0%, #42a5f5 50%, #64b5f6 100%);
-    border: 12px solid #fff;
-    width: 1000px;
-    height: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
-    padding: 30px 46px;
-
-    > h1 {
-      margin-bottom: 24px;
-      color: #fff;
+    > header {
+      flex: 0;
     }
 
-    .item {
-      width: 250px;
-      height: 330px;
-      background: #fff;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-  }
-}
-
-.welcome-container {
-  background-color: #c3cada;
-
-  svg {
-    width: 345px;
-    height: 130px;
-
-    path {
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: dash 3s linear 1;
-      animation-fill-mode: forwards;
+    > main {
+      flex: 1;
     }
 
-    @keyframes dash {
-      to {
-        stroke-dashoffset: 0;
-      }
+    > footer {
+      flex: 0;
     }
   }
 }

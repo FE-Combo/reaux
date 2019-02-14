@@ -1,7 +1,7 @@
 import {Reducer, combineReducers} from "redux";
 import {ActionView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionPayloadView, ActionHandler} from "./type";
 import {Exception, RuntimeException} from "./Exception";
-import {LocationChangeAction, RouterState, LOCATION_CHANGE} from "connected-react-router";
+import {LocationChangeAction, RouterState, push, LOCATION_CHANGE} from "connected-react-router";
 import {Store} from "redux";
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
@@ -117,5 +117,9 @@ export class Handler<S extends object> {
 
     protected *setState(newState: Partial<S>): SagaIterator {
         yield put(setStateAction(this.module, newState, `@@${this.module}/setState[${Object.keys(newState).join(",")}]`));
+    }
+
+    protected *setHistory(newURL: string): SagaIterator {
+        yield put(push(newURL));
     }
 }

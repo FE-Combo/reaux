@@ -1,11 +1,8 @@
-import "asset/css/global.less";
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
-import {Switch} from "react-router-dom";
-import MainLayout from "./MainLayout";
-import Route from "framework/components/Route";
 import "./index.less";
+import {actions} from "common/header";
 
 interface StateProps {
     name: string;
@@ -14,14 +11,14 @@ interface StateProps {
 interface Props extends StateProps, DispatchProp {}
 class Component extends React.PureComponent<Props> {
     render() {
-        const {dispatch} = this.props;
         return (
-            <div className="main-container g-full-screen g-no-scroll">
-                <Switch>
-                    <Route path="/register" />
-                    <Route component={MainLayout} />
-                </Switch>
-            </div>
+            <header className="header-container">
+                <img src={require("./assets/logo.png")} />
+                <nav>
+                    <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/notes"))}>笔记</a>
+                    <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/demo"))}>示例</a>
+                </nav>
+            </header>
         );
     }
 }

@@ -2,7 +2,6 @@ import Main from "./component/Main";
 import {register, Handler, Listener} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
-import {call, delay} from "redux-saga/effects";
 
 const initialState: State = {
     name: "string",
@@ -10,8 +9,7 @@ const initialState: State = {
 
 class ActionHandler extends Handler<State> implements Listener {
     *onInitialized(): SagaIterator {
-        yield call(delay, 3000);
-        // yield* this.toggleWelcome(false);
+        yield* this.setState({});
     }
 
     *test(): SagaIterator {
