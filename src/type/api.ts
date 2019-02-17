@@ -7,3 +7,15 @@ export enum NotesType {
     ENGLISH = "ENGLISH",
     IMPRESSION = "IMPRESSION",
 }
+
+export interface SearchNotesAJAXResponse {
+    notes: SearchNotesAJAXResponse$Notes[];
+    totalRecord: number;
+    totalPage: number;
+}
+
+export interface SearchNotesAJAXResponse$Notes {
+    imageURL: string;
+    title: string;
+    content: string;
+}

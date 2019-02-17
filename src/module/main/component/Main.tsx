@@ -16,7 +16,7 @@ class Component extends React.PureComponent<Props> {
     render() {
         const {dispatch} = this.props;
         return (
-            <div className="main-container g-full-screen g-no-scroll">
+            <div className="main-container g-full-screen">
                 <Switch>
                     <Route path="/register" />
                     <Route component={MainLayout} />

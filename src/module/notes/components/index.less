@@ -4,6 +4,14 @@
     margin: 12px 0;
     font-size: 30px;
     font-weight: 500;
+    cursor: default;
+
+    &:hover {
+      animation-name: notes-title-horizontal;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: 1;
+    }
   }
 
   .tag {
@@ -50,5 +58,36 @@
   .content {
     width: 1040px;
     margin: 0 auto;
+
+    .multi-card {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  @keyframes notes-title-horizontal {
+    16.65% {
+      transform: translateX(8px);
+    }
+
+    33.3% {
+      transform: translateX(-6px);
+    }
+
+    49.95% {
+      transform: translateX(4px);
+    }
+
+    66.6% {
+      transform: translateX(-2px);
+    }
+
+    83.25% {
+      transform: translateX(1px);
+    }
+
+    100% {
+      transform: translateX(0);
+    }
   }
 }
