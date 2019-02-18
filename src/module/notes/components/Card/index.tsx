@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.less";
-import {NotesType, SearchNotesAJAXResponse$Notes} from "type/api";
-import {getNotesTypeName} from "utils/lang";
+import {SearchNotesAJAXResponse$Notes} from "type/api";
 
 interface Props {
     type: "simple" | "double" | "three";

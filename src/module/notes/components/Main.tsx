@@ -4,8 +4,10 @@ import {actions} from "module/notes";
 import {NotesType, SearchNotesAJAXResponse} from "type/api";
 import {getNotesTypeName} from "utils/lang";
 import {objectToArray} from "framework/utils";
+import {actions as homeActions} from "module/home";
 import {RootState} from "type/state";
 import Card from "./Card";
+import Navigation from "components/navigation";
 import "./index.less";
 
 interface StateProps {
@@ -18,12 +20,17 @@ interface Props extends StateProps, DispatchProp {}
 class Notes extends React.PureComponent<Props> {
     onNotesNavClick = (type: NotesType) => this.props.dispatch(actions.changeNotesNav(type));
 
+    onNavigationChange = (pageIndex: number) => {
+        // TODO: complete logic, 尝试 pageIndex 导出类型自动推导为 number，而不需要人为定义number
+    };
+
     render() {
-        const {data, notesType} = this.props;
+        const {data, notesType, dispatch} = this.props;
         return (
             <div className="notes-container">
                 <h1>知识改变命运</h1>
                 <div className="tag g-flex-center">
+                    <nav onClick={() => dispatch(homeActions.pushHistory("/"))}>首页</nav>
                     {objectToArray(NotesType, (key, value) => (
                         <nav key={key} onClick={() => this.onNotesNavClick(value)}>
                             {getNotesTypeName(value)}
@@ -42,6 +49,7 @@ class Notes extends React.PureComponent<Props> {
                             {data.notes[4] && <Card type="three" data={data.notes[4]} />}
                             {data.notes[5] && <Card type="three" data={data.notes[5]} />}
                         </div>
+                        <Navigation pageIndex={1} totalPage={data.totalPage} onChange={this.onNavigationChange} />
                     </div>
                 )}
             </div>

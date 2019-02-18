@@ -1,4 +1,4 @@
-import Main from "./component/Main";
+import Main from "./components/Main";
 import {register, Handler, Listener} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";

@@ -21,7 +21,6 @@ class Component extends React.PureComponent {
     render() {
         return (
             <div className="layout">
-                <Header />
                 {/* TODO: IE浏览器不支持 <main> */}
                 <main>
                     <Switch>

@@ -12,7 +12,7 @@ interface StateProps {
 }
 
 interface Props extends StateProps, DispatchProp {}
-class Component extends React.PureComponent<Props> {
+class Main extends React.PureComponent<Props> {
     render() {
         const {dispatch} = this.props;
         return (
@@ -32,4 +32,4 @@ const mapStateToProps = (state: RootState): StateProps => {
     };
 };
 
-export default connect(mapStateToProps)(Component);
+export default connect(mapStateToProps)(Main);

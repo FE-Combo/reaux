@@ -1,4 +1,4 @@
-import Main from "./component/Main";
+import Main from "./components/Main";
 import {register, Handler, Listener} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
@@ -10,6 +10,10 @@ const initialState: State = {
 class ActionHandler extends Handler<State> implements Listener {
     *onInitialized(): SagaIterator {
         yield* this.setState({});
+    }
+
+    *pushHistory(url: string): SagaIterator {
+        yield* this.setHistory(url);
     }
 
     *test(): SagaIterator {
