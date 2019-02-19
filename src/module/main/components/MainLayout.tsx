@@ -14,6 +14,7 @@ const Footer = async(() => import(/* webpackChunkName:"footer" */ "common/footer
 /** module */
 const Home = async(() => import(/* webpackChunkName: "home" */ "module/home"), "Main");
 const Notes = async(() => import(/* webpackChunkName:"notes" */ "module/notes"), "Main");
+const Note = async(() => import(/* webpackChunkName: "note" */ "module/note"), "Main");
 const About = async(() => import(/* webpackChunkName: "about" */ "module/about"), "Main");
 const Resume = async(() => import(/* webpackChunkName: "resume" */ "module/resume"), "Main");
 
@@ -26,6 +27,7 @@ class Component extends React.PureComponent {
                     <Switch>
                         <Route path="/" component={Home} />
                         <Route path="/notes" component={Notes} />
+                        <Route path="/note" component={Note} />
                         <Route path="/about" component={About} />
                         <Route path="/resume" component={Resume} />
                         <Route component={Notfound} />

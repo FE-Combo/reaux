@@ -15,7 +15,14 @@ export interface SearchNotesAJAXResponse {
 }
 
 export interface SearchNotesAJAXResponse$Notes {
+    noteId: string;
     imageURL: string;
     title: string;
+    content: string;
+}
+
+export interface SearchNoteAJAXResponse {
+    title: string;
+    date: Date;
     content: string;
 }
