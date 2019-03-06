@@ -120,7 +120,7 @@ module.exports = start = env => {
             console.error(error);
             process.exit(1);
         }
-        console.info(chalk`starting dev server on {green ${https ? "https" : "http"}://localhost:${env.port}/} \n`);
+        console.info(chalk`starting dev server on {green ${env.https ? "https" : "http"}://localhost:${env.port}/} \n`);
         return null;
     });
 

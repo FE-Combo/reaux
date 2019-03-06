@@ -8,7 +8,7 @@ function resolve(relativePath) {
 module.exports = {
     /* dev server */
     port: 3000,
-    https: false,
+    https: true,
     host: "0.0.0.0",
 
     /* webpack */
