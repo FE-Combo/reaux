@@ -9,7 +9,8 @@
     "start": "node script/start.js",
     "build": "node script/build.js",
     "output": "node script/output.js",
-    "format": "prettier --config config/prettier.json --write \"{src,test}/**/*.{ts,tsx,js,less}\""
+    "format": "prettier --config config/prettier.json --write \"{src,test}/**/*.{ts,tsx,js,less}\"",
+    "icon": "node script/icon.js"
   },
   "repository": {
     "type": "git",

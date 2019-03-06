@@ -99,7 +99,7 @@ const devServer = (compiler, env) => {
         contentBase: env.contentBase /* 静态资源目录 */,
         watchContentBase: true /* contentBase目录下变更数据时自动刷新 */,
         host: env.host /* 使用localhost会导致报错 [WDS] Disconnected! */,
-        https: true /* 必须使用https访问 */,
+        https: env.https /* 必须使用https访问 */,
         historyApiFallback: true /* 所有路由不经过服务端,用于SPA单页应用 */,
         disableHostCheck: true,
         hot: true,
@@ -120,7 +120,7 @@ module.exports = start = env => {
             console.error(error);
             process.exit(1);
         }
-        console.info(chalk`starting dev server on {green https://localhost:${env.port}/} \n`);
+        console.info(chalk`starting dev server on {green ${https ? "https" : "http"}://localhost:${env.port}/} \n`);
         return null;
     });
 

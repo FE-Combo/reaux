@@ -6,6 +6,12 @@ function resolve(relativePath) {
 }
 
 module.exports = {
+    /* dev server */
+    port: 3000,
+    https: false,
+    host: "0.0.0.0",
+
+    /* webpack */
     src: resolve("src"),
     output: resolve("build/dist"),
     contentBase: resolve("src/static"),
@@ -13,8 +19,6 @@ module.exports = {
     tslintConfig: resolve("config/tslint.json"),
     stylelintConfig: resolve("config/stylelint.json"),
     prettierConfig: resolve("config/prettier.json"),
-    port: 3000,
-    host: "0.0.0.0",
     ssr: true,
     alias: {
         comp: resolve("src/component"),
@@ -26,4 +30,10 @@ module.exports = {
         maxAssetSize: 1000000,
     },
     // buildError: (error, stats) => {},
+
+    /* generate icon */
+    iconHTMLPath: resolve("src/static/icon.html"),
+    iconCssPath: resolve("src/asset/css/icon.less"),
+    iconFontFilePath: resolve("src/asset/font"),
+    iconComponentPath: resolve("src/components/Icon.tsx"),
 };
