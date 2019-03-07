@@ -98,7 +98,7 @@ const devServer = (compiler, env) => {
     return new DevServer(compiler, {
         contentBase: env.contentBase /* 静态资源目录 */,
         watchContentBase: true /* contentBase目录下变更数据时自动刷新 */,
-        host: env.host /* 使用localhost会导致报错 [WDS] Disconnected! */,
+        host: "0.0.0.0" /* 使用localhost会导致报错 [WDS] Disconnected! */,
         https: env.https /* 必须使用https访问 */,
         historyApiFallback: true /* 所有路由不经过服务端,用于SPA单页应用 */,
         disableHostCheck: true,
@@ -115,7 +115,7 @@ module.exports = start = env => {
     const config = webpackConfig(env);
     const compiler = webpack(config);
     const server = devServer(compiler, env);
-    server.listen(env.port, env.host, error => {
+    server.listen(env.port, "0.0.0.0", error => {
         if (error) {
             console.error(error);
             process.exit(1);
