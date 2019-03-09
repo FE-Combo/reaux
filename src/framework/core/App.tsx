@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {applyMiddleware, createStore, Reducer, Store} from "redux";
 import createSagaMiddleware from "redux-saga";
-import ErrorBoundary from "../components/ErrorBoundary";
+import ErrorBoundary from "../component/ErrorBoundary";
 import {devtools} from "./devtools";
 import {ActionPayloadStore, Handler, saga, storeListener, rootReducer, setErrorAction} from "./redux";
 import {registerActions, registerHandler, registerListener} from "./register";

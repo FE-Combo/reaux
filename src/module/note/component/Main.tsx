@@ -2,7 +2,7 @@ import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import {SearchNoteAJAXResponse} from "type/api";
-import {getDateFormat} from "utils/date";
+import {getDateFormat} from "util/date";
 import "./index.less";
 
 interface StateProps {

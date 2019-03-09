@@ -4,8 +4,8 @@
 import React from "react";
 import {Switch} from "react-router-dom";
 import Notfound from "./Notfound";
-import Route from "framework/components/Route";
-import {async} from "framework/components/async";
+import Route from "framework/component/Route";
+import {async} from "framework/component/async";
 
 /** common */
 const Header = async(() => import(/* webpackChunkName:"header" */ "common/header"), "Main");

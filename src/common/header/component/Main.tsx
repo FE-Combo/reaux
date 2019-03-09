@@ -13,7 +13,7 @@ class Component extends React.PureComponent<Props> {
     render() {
         return (
             <header className="header-container">
-                <img src={require("./assets/logo.png")} />
+                <img src={require("./asset/logo.png")} />
                 <nav>
                     <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/notes"))}>笔记</a>
                     <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/demo"))}>示例</a>

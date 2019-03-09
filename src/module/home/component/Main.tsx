@@ -11,7 +11,7 @@ class Home extends React.PureComponent<Props> {
     render() {
         return (
             <div className="home-container g-flex-center-column">
-                <img src={require("./assets/head.jpeg")} />
+                <img src={require("./asset/head.jpeg")} />
                 <h1>王志怀·vocoWone</h1>
                 <h3>执着于当下，放眼于未来。</h3>
                 <nav>

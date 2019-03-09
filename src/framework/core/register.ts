@@ -2,7 +2,7 @@ import {Handler, run, setStateAction, ERROR_ACTION_TYPE, LOCATION_CHANGE} from "
 import {AppView, ActionView, LocationChangedEvent, Listener, ActionCreators} from "./type";
 import {SagaIterator} from "redux-saga";
 import {call} from "redux-saga/effects";
-import {getPrototypeOfExceptConstructor} from "../utils/object";
+import {getPrototypeOfExceptConstructor} from "../util/object";
 
 export function registerActions<H extends Handler<any>>(handler: H): ActionCreators<H> {
     // Generate action(type, payload)

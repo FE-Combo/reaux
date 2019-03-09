@@ -2,12 +2,12 @@ import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {actions} from "module/notes";
 import {NotesType, SearchNotesAJAXResponse} from "type/api";
-import {getNotesTypeName} from "utils/lang";
-import {objectToArray} from "framework/utils";
+import {getNotesTypeName} from "util/lang";
+import {objectToArray} from "framework/util";
 import {actions as homeActions} from "module/home";
 import {RootState} from "type/state";
 import Card from "./Card";
-import Navigation from "components/navigation";
+import Navigation from "component/navigation";
 import "./index.less";
 
 interface StateProps {

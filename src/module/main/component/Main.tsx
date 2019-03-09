@@ -4,7 +4,7 @@ import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
-import Route from "framework/components/Route";
+import Route from "framework/component/Route";
 import "./index.less";
 
 interface StateProps {
