@@ -3,7 +3,7 @@ import {ActionView, LoadingStateView, StateView, StateActionPayloadView, Loading
 import {Exception, RuntimeException} from "./Exception";
 import {LocationChangeAction, RouterState, push, LOCATION_CHANGE} from "connected-react-router";
 import {Store} from "redux";
-import {SagaIterator} from "redux-saga";
+import {SagaIterator, Saga} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
 
 /** store */
@@ -79,14 +79,7 @@ export function* saga(handlers: ActionPayloadStore): SagaIterator {
     // trigger one time, in order to mount all actions.
     yield takeEvery("*", function*(action: ActionView<any>): SagaIterator {
         // Mounted on the program, Dispatch & yield put triggers every time.
-        const listeners = handlers.listeners[action.type];
-        if (listeners) {
-            for (const listener of listeners) {
-                yield call(run, listener, action.payload);
-            }
-            return;
-        }
-        const handler = handlers.effects[action.type];
+        const handler = handlers[action.type];
         if (handler) {
             yield call(run, handler, action.payload);
         }
@@ -102,13 +95,41 @@ export class ActionPayloadStore {
     };
 }
 
-export class Handler<S extends object> {
+abstract class LifeCycle {
+    abstract onReady(): SagaIterator;
+    abstract onLoad(): SagaIterator;
+    abstract onUnload(): SagaIterator;
+    abstract onHide(): SagaIterator;
+    abstract onError(): SagaIterator;
+}
+
+export class Handler<S extends object> implements LifeCycle {
     readonly module: string;
     private readonly initialState: S;
 
     public constructor(module: string, initialState: S) {
         this.module = module;
         this.initialState = initialState;
+    }
+
+    *onReady(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onLoad(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onUnload(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onHide(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onError(): SagaIterator {
+        // extends to be overrode
     }
 
     protected get state(): Readonly<S> {

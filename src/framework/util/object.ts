@@ -1,5 +1,5 @@
 export function getPrototypeOfExceptConstructor(object: object): string[] {
-    return Object.keys(Object.getPrototypeOf(object)).filter(key => key !== "constructor");
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter(key => key !== "constructor");
 }
 
 export function isEmptyObject(object: object) {

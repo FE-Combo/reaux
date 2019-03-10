@@ -1,5 +1,5 @@
-import Main from "./component/Main";
-import {register, Handler, Listener} from "framework";
+import Component from "./component/Main";
+import {register, Handler} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
 import {NotesType} from "type/api";
@@ -10,8 +10,12 @@ const initialState: State = {
     data: null,
 };
 
-class ActionHandler extends Handler<State> implements Listener {
-    *onInitialized(): SagaIterator {
+class ActionHandler extends Handler<State> {
+    *notes(): SagaIterator {
+        //
+    }
+
+    *onReady(): SagaIterator {
         // TODO: wait for API
         yield* this.setState({
             data: {
@@ -74,5 +78,4 @@ class ActionHandler extends Handler<State> implements Listener {
         yield* this.setHistory("/note");
     }
 }
-const actions = register(new ActionHandler("notes", initialState));
-export {actions, Main};
+export const {actions, Main} = register(new ActionHandler("notes", initialState), Component);

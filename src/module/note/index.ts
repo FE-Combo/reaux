@@ -1,5 +1,5 @@
-import Main from "./component/Main";
-import {register, Handler, Listener} from "framework";
+import Component from "./component/Main";
+import {register, Handler} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
 
@@ -8,7 +8,11 @@ const initialState: State = {
     data: null,
 };
 
-class ActionHandler extends Handler<State> implements Listener {
+class ActionHandler extends Handler<State> {
+    *note(): SagaIterator {
+        //
+    }
+
     *onInitialized(): SagaIterator {
         // TODO: mock response
         const response = {
@@ -29,5 +33,4 @@ class ActionHandler extends Handler<State> implements Listener {
         yield* this.setState({data: response});
     }
 }
-const actions = register(new ActionHandler("note", initialState));
-export {actions, Main};
+export const {actions, Main} = register(new ActionHandler("note", initialState), Component);

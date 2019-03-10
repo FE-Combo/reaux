@@ -1,18 +1,24 @@
 import React from "react";
 import {actions} from "module/home";
 import {connect, DispatchProp} from "react-redux";
+import {RootState} from "type/state";
 import "./index.less";
 
-interface Props extends DispatchProp {}
+interface StateProps {
+    name: string;
+}
+
+interface Props extends StateProps, DispatchProp {}
 
 class Home extends React.PureComponent<Props> {
     pushHistory = (url: string) => this.props.dispatch(actions.pushHistory(url));
 
     render() {
+        const {name} = this.props;
         return (
             <div className="home-container g-flex-center-column">
                 <img src={require("./asset/head.jpeg")} />
-                <h1>王志怀·vocoWone</h1>
+                <h1>王志怀·vocoWone {name}</h1>
                 <h3>执着于当下，放眼于未来。</h3>
                 <nav>
                     <button onClick={() => this.pushHistory("/notes")}>博客</button>
@@ -31,4 +37,10 @@ class Home extends React.PureComponent<Props> {
     }
 }
 
-export default connect()(Home);
+const mapStateToProps = (state: RootState): StateProps => {
+    return {
+        name: state.app.home.name,
+    };
+};
+
+export default connect(mapStateToProps)(Home);
