@@ -8,20 +8,20 @@ import {applyMiddleware, createStore, Reducer, Store} from "redux";
 import createSagaMiddleware from "redux-saga";
 import ErrorBoundary from "../component/ErrorBoundary";
 import {devtools} from "../util/devtools";
-import {Handler, ActionPayloadStore, setStateAction, saga, storeListener, rootReducer, setErrorAction} from "./redux";
+import {Model, ActionStore, setStateAction, saga, storeListener, rootReducer, setErrorAction} from "./redux";
 import {getPrototypeOfExceptConstructor} from "../util/object";
-import {AppView, StateView, ActionView} from "./type";
+import {AppView, StateView, ActionTypeView} from "./type";
 
 console.time("[framework] initialized");
 
 function createApp(): AppView {
     const history = createBrowserHistory();
-    const actionPayloadStore = new ActionPayloadStore();
+    const actionStore = new ActionStore();
     const sagaMiddleware = createSagaMiddleware();
     const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
     store.subscribe(storeListener(store));
-    sagaMiddleware.run(saga, actionPayloadStore);
+    sagaMiddleware.run(saga, actionStore);
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
         console.error(`Message: ${message.toString()}`);
@@ -37,8 +37,7 @@ function createApp(): AppView {
         store.dispatch(setErrorAction(error));
     };
 
-    // TODO: rename actionPayloadStore to actionHandler
-    return {history, store, sagaMiddleware, actionPayloadStore, modules: {}};
+    return {history, store, sagaMiddleware, actionStore, modules: {}};
 }
 const app = createApp();
 
@@ -65,7 +64,7 @@ export function render(Component: ComponentType<any>, onInitialized: null | (() 
     );
 }
 
-export function register<H extends Handler<any>>(handler: H, Component: ComponentType<any>): any {
+export function register<H extends Model<any>>(handler: H, Component: ComponentType<any>): any {
     // Each module needs to load.
     if (app.modules.hasOwnProperty(handler.module)) {
         throw new Error(`module is already registered, module=${handler.module}`);
@@ -78,37 +77,40 @@ export function register<H extends Handler<any>>(handler: H, Component: Componen
     // 1.存储方法名与参数、2.存储方法对应逻辑
     const moduleName = handler.module;
     const keys = getPrototypeOfExceptConstructor(handler);
-    const actions: any = {};
     keys.forEach(actionType => {
         const method = handler[actionType];
         const qualifiedActionType = `${moduleName}/${actionType}`;
-        actions[actionType] = (...payload: any[]): ActionView<any[]> => ({type: qualifiedActionType, payload});
-        app.actionPayloadStore[qualifiedActionType] = method.bind(handler);
+        app.actionStore.actionType[actionType] = (...payload: any[]): ActionTypeView<any[]> => ({type: qualifiedActionType, payload});
+        app.actionStore.actionHandler[qualifiedActionType] = method.bind(handler);
     });
 
-    class Main<P extends {} = {}> extends React.PureComponent<P> {
+    class ProxyComponent<P extends {} = {}> extends React.PureComponent<P> {
         constructor(props: P) {
             super(props);
-            if (actions.onReady) {
-                app.store.dispatch(actions.onReady());
+            if (app.actionStore.actionType.onReady) {
+                app.store.dispatch(app.actionStore.actionType.onReady());
             }
         }
 
         componentDidMount() {
-            if (actions.onLoad) {
-                app.store.dispatch(actions.onLoad());
+            if (app.actionStore.actionType.onLoad) {
+                app.store.dispatch(app.actionStore.actionType.onLoad());
             }
         }
 
         componentDidUpdate(prevProps: Readonly<P>) {
-            if (actions.onLoad) {
-                app.store.dispatch(actions.onLoad());
+            const prevLocation = (prevProps as any).location;
+            const currentLocation = (this.props as any).location;
+            const currentRouteParams = (this.props as any).match ? (this.props as any).match.params : null;
+            if (currentLocation && currentRouteParams && prevLocation !== currentLocation && app.actionStore.actionType.onLoad) {
+                // Only trigger if current component is connected to <Route> and call Handler's setHistory
+                app.store.dispatch(app.actionStore.actionType.onLoad());
             }
         }
 
         componentWillUnmount() {
-            if (actions.onUnload) {
-                app.store.dispatch(actions.onUnload());
+            if (app.actionStore.actionType.onUnload) {
+                app.store.dispatch(app.actionStore.actionType.onUnload());
             }
         }
 
@@ -117,5 +119,5 @@ export function register<H extends Handler<any>>(handler: H, Component: Componen
         }
     }
 
-    return {Main, actions};
+    return {View: ProxyComponent, Controller: app.actionStore.actionType};
 }

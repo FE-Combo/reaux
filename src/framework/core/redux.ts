@@ -1,9 +1,9 @@
 import {Reducer, combineReducers} from "redux";
-import {ActionView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionPayloadView, ActionHandler} from "./type";
+import {ActionTypeView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionView, ActionHandlerView} from "./type";
 import {Exception, RuntimeException} from "./Exception";
-import {LocationChangeAction, RouterState, push, LOCATION_CHANGE} from "connected-react-router";
+import {LocationChangeAction, RouterState, push} from "connected-react-router";
 import {Store} from "redux";
-import {SagaIterator, Saga} from "redux-saga";
+import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
 
 /** store */
@@ -13,24 +13,23 @@ export const storeListener = (store: Store<StateView>) => () => {
 };
 
 /** action */
-export {LOCATION_CHANGE};
 export const LOADING_ACTION: string = "@@framework/loading";
 export const ERROR_ACTION_TYPE: string = "@@framework/error";
 const SET_STATE_ACTION: string = "@@framework/setState";
-export function setStateAction(module: string, state: object, type: string): ActionView<StateActionPayloadView> {
+export function setStateAction(module: string, state: object, type: string): ActionTypeView<StateActionPayloadView> {
     return {
         type,
         name: SET_STATE_ACTION,
         payload: {module, state},
     };
 }
-export function setLoadingAction(identifier: string, hasShow: boolean): ActionView<LoadingActionPayloadView> {
+export function setLoadingAction(identifier: string, hasShow: boolean): ActionTypeView<LoadingActionView> {
     return {
         type: LOADING_ACTION,
         payload: {identifier, hasShow},
     };
 }
-export function setErrorAction(error: any): ActionView<Exception> {
+export function setErrorAction(error: any): ActionTypeView<Exception> {
     const exception: Exception = error instanceof Exception ? error : new RuntimeException(error && error.message ? error.message : "unknown error");
     return {
         type: ERROR_ACTION_TYPE,
@@ -39,16 +38,16 @@ export function setErrorAction(error: any): ActionView<Exception> {
 }
 
 /** reducer */
-export function appReducer(state: StateView["app"] = {}, action: ActionView<any>): StateView["app"] {
+export function appReducer(state: StateView["app"] = {}, action: ActionTypeView<any>): StateView["app"] {
     if (action.name === SET_STATE_ACTION) {
         const {module, state: moduleState} = action.payload as StateActionPayloadView;
         return {...state, [module]: {...state[module], ...moduleState}};
     }
     return state;
 }
-function loadingReducer(state: LoadingStateView = {}, action: ActionView<any>): LoadingStateView {
+function loadingReducer(state: LoadingStateView = {}, action: ActionTypeView<any>): LoadingStateView {
     if (action.type === LOADING_ACTION) {
-        const payload = action.payload as LoadingActionPayloadView;
+        const payload = action.payload as LoadingActionView;
         const count = state[payload.identifier] || 0;
         return {
             ...state,
@@ -66,7 +65,7 @@ export function rootReducer(routerReducer: Reducer<RouterState, LocationChangeAc
 }
 
 /** saga */
-export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
+export function* run(handler: ActionHandlerView, payload: any[]): SagaIterator {
     try {
         yield* handler(...payload);
     } catch (error) {
@@ -75,9 +74,9 @@ export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
         yield put(setErrorAction(error));
     }
 }
-export function* saga(handlers: ActionPayloadStore): SagaIterator {
+export function* saga(handlers: ActionStore): SagaIterator {
     // trigger one time, in order to mount all actions.
-    yield takeEvery("*", function*(action: ActionView<any>): SagaIterator {
+    yield takeEvery("*", function*(action: ActionTypeView<any>): SagaIterator {
         // Mounted on the program, Dispatch & yield put triggers every time.
         const handler = handlers[action.type];
         if (handler) {
@@ -86,13 +85,11 @@ export function* saga(handlers: ActionPayloadStore): SagaIterator {
     });
 }
 
-export class ActionPayloadStore {
-    // Store action.payload
-    readonly effects: {[actionType: string]: ActionHandler} = {};
-    readonly listeners: {[actionType: string]: ActionHandler[]} = {
-        [LOCATION_CHANGE]: [],
-        [ERROR_ACTION_TYPE]: [],
-    };
+export class ActionStore {
+    // 存储 actions方法名与 action方法的参数
+    readonly actionType: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
+    // 存储action方法体
+    readonly actionHandler: {[type: string]: ActionHandlerView} = {};
 }
 
 abstract class LifeCycle {
@@ -103,7 +100,7 @@ abstract class LifeCycle {
     abstract onError(): SagaIterator;
 }
 
-export class Handler<S extends object> implements LifeCycle {
+export class Model<S extends object> implements LifeCycle {
     readonly module: string;
     private readonly initialState: S;
 

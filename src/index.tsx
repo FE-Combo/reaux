@@ -1,3 +1,3 @@
 import {render} from "framework";
-import {Main} from "./module/main";
-render(Main);
+import {View} from "./module/main";
+render(View);

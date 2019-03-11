@@ -1,10 +1,10 @@
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
-import {actions} from "module/note/list";
+import {Controller} from "module/note/list";
 import {NotesType, SearchNotesAJAXResponse} from "type/api";
 import {getNotesTypeName} from "util/lang";
 import {objectToArray} from "framework/util";
-import {actions as homeActions} from "module/intro/home";
+import {Controller as HomeController} from "module/intro/home";
 import {RootState} from "type/state";
 import Card from "./Card";
 import Navigation from "component/navigation";
@@ -18,9 +18,9 @@ interface StateProps {
 interface Props extends StateProps, DispatchProp {}
 
 class Notes extends React.PureComponent<Props> {
-    onNotesNavClick = (type: NotesType) => this.props.dispatch(actions.changeNotesNav(type));
+    onNotesNavClick = (type: NotesType) => this.props.dispatch(Controller.changeNotesNav(type));
 
-    onCardClick = (noteId: string) => this.props.dispatch(actions.goToViewNote(noteId));
+    onCardClick = (noteId: string) => this.props.dispatch(Controller.goToViewNote(noteId));
 
     onNavigationChange = (pageIndex: number) => {
         /** Q：尝试 pageIndex 导出类型自动推导为 number，而不需要人为定义number?
@@ -35,7 +35,7 @@ class Notes extends React.PureComponent<Props> {
             <div className="notes-container">
                 <h1>知识改变命运</h1>
                 <div className="tag g-flex-center">
-                    <nav onClick={() => dispatch(homeActions.pushHistory("/"))}>首页</nav>
+                    <nav onClick={() => dispatch(HomeController.pushHistory("/"))}>首页</nav>
                     {objectToArray(NotesType, (key, value) => (
                         <nav key={key} onClick={() => this.onNotesNavClick(value)}>
                             {getNotesTypeName(value)}

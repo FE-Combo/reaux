@@ -1,9 +1,9 @@
 import {render, register} from "./core/App";
-import {Handler} from "./core/redux";
+import {Model} from "./core/redux";
 import {Exception} from "./core/Exception";
-import {Async} from "./component/async";
+import {Async} from "./component/Async";
 
-export {render, register, Async, Handler, Exception};
+export {render, register, Async, Model, Exception};
 
 const Do = {
     render,

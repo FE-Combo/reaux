@@ -2,7 +2,7 @@ import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import "./index.less";
-import {actions} from "module/common/header";
+import {Controller} from "module/common/header";
 
 interface StateProps {
     name: string;
@@ -15,8 +15,8 @@ class Component extends React.PureComponent<Props> {
             <header className="header-container">
                 <img src={require("./asset/logo.png")} />
                 <nav>
-                    <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/notes"))}>笔记</a>
-                    <a onClick={() => this.props.dispatch(actions.pushHistoryByNav("/demo"))}>示例</a>
+                    <a onClick={() => this.props.dispatch(Controller.pushHistoryByNav("/notes"))}>笔记</a>
+                    <a onClick={() => this.props.dispatch(Controller.pushHistoryByNav("/demo"))}>示例</a>
                 </nav>
             </header>
         );

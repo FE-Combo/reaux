@@ -1,7 +1,7 @@
 import {History} from "history";
 import {Action, Store} from "redux";
 import {SagaMiddleware} from "redux-saga";
-import {ActionPayloadStore} from "./redux";
+import {ActionStore} from "./redux";
 import {RouterState} from "connected-react-router";
 import {LoadingStateView} from "./type";
 import {SagaIterator} from "redux-saga";
@@ -12,16 +12,18 @@ export interface StateView {
     app: {};
 }
 
-export interface ActionView<P> extends Action {
+export interface ActionTypeView<P> extends Action {
     name?: string;
     payload: P;
 }
+
+export type ActionHandlerView = (...args: any[]) => SagaIterator;
 
 export interface AppView {
     readonly store: Store<StateView>;
     readonly history: History;
     readonly sagaMiddleware: SagaMiddleware<any>;
-    readonly actionPayloadStore: ActionPayloadStore;
+    readonly actionStore: ActionStore;
     readonly modules: {[module: string]: number};
 }
 
@@ -30,7 +32,7 @@ export interface StateActionPayloadView {
     state: any;
 }
 
-export interface LoadingActionPayloadView {
+export interface LoadingActionView {
     identifier: string;
     hasShow: boolean;
 }
@@ -38,9 +40,3 @@ export interface LoadingActionPayloadView {
 export interface LoadingStateView {
     [loading: string]: number; // there may be multiple effects listen to it, hide loading component when status === 0
 }
-
-export type ActionHandler = (...args: any[]) => SagaIterator;
-
-type ActionCreator<H> = H extends (...args: infer P) => SagaIterator ? ((...args: P) => ActionView<P>) : never;
-export type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => SagaIterator ? K : never}[Exclude<keyof H, keyof any>];
-export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};

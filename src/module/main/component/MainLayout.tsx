@@ -3,21 +3,21 @@
 
 import React from "react";
 import {Switch} from "react-router-dom";
-import Notfound from "./Notfound";
+import Notfound from "component/Notfound";
 import Route from "framework/component/Route";
-import {Async} from "framework/component/async";
+import {Async} from "framework/component/Async";
 
 /** common */
-const Header = Async(() => import(/* webpackChunkName:"header" */ "module/common/header"), "Main");
-const Footer = Async(() => import(/* webpackChunkName:"footer" */ "module/common/footer"), "Main");
-const IntroHome = Async(() => import(/* webpackChunkName: "IntroHome" */ "module/intro/home"), "Main");
-const IntroAbout = Async(() => import(/* webpackChunkName: "IntroAbout" */ "module/intro/about"), "Main");
-const IntroResume = Async(() => import(/* webpackChunkName: "IntroResume" */ "module/intro/resume"), "Main");
+const Header = Async(() => import(/* webpackChunkName:"header" */ "module/common/header"), "View");
+const Footer = Async(() => import(/* webpackChunkName:"footer" */ "module/common/footer"), "View");
+const IntroHome = Async(() => import(/* webpackChunkName: "IntroHome" */ "module/intro/home"), "View");
+const IntroAbout = Async(() => import(/* webpackChunkName: "IntroAbout" */ "module/intro/about"), "View");
+const IntroResume = Async(() => import(/* webpackChunkName: "IntroResume" */ "module/intro/resume"), "View");
 
 /** module */
 
-const NoteList = Async(() => import(/* webpackChunkName:"noteList" */ "module/note/list"), "Main");
-const NoteDetail = Async(() => import(/* webpackChunkName: "noteDetail" */ "module/note/detail"), "Main");
+const NoteList = Async(() => import(/* webpackChunkName:"noteList" */ "module/note/list"), "View");
+const NoteDetail = Async(() => import(/* webpackChunkName: "noteDetail" */ "module/note/detail"), "View");
 
 class Component extends React.PureComponent {
     render() {

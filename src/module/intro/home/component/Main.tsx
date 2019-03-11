@@ -1,5 +1,5 @@
 import React from "react";
-import {actions} from "module/intro/home";
+import {Controller} from "module/intro/home";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import "./index.less";
@@ -11,7 +11,7 @@ interface StateProps {
 interface Props extends StateProps, DispatchProp {}
 
 class Home extends React.PureComponent<Props> {
-    pushHistory = (url: string) => this.props.dispatch(actions.pushHistory(url));
+    pushHistory = (url: string) => this.props.dispatch(Controller.pushHistory(url));
 
     render() {
         const {name} = this.props;
