@@ -8,15 +8,16 @@ import Route from "framework/component/Route";
 import {async} from "framework/component/async";
 
 /** common */
-const Header = async(() => import(/* webpackChunkName:"header" */ "common/header"), "Main");
-const Footer = async(() => import(/* webpackChunkName:"footer" */ "common/footer"), "Main");
+const Header = async(() => import(/* webpackChunkName:"header" */ "module/common/header"), "Main");
+const Footer = async(() => import(/* webpackChunkName:"footer" */ "module/common/footer"), "Main");
+const IntroHome = async(() => import(/* webpackChunkName: "IntroHome" */ "module/intro/home"), "Main");
+const IntroAbout = async(() => import(/* webpackChunkName: "IntroAbout" */ "module/intro/about"), "Main");
+const IntroResume = async(() => import(/* webpackChunkName: "IntroResume" */ "module/intro/resume"), "Main");
 
 /** module */
-const Home = async(() => import(/* webpackChunkName: "home" */ "module/home"), "Main");
-const Notes = async(() => import(/* webpackChunkName:"notes" */ "module/notes"), "Main");
-const Note = async(() => import(/* webpackChunkName: "note" */ "module/note"), "Main");
-const About = async(() => import(/* webpackChunkName: "about" */ "module/about"), "Main");
-const Resume = async(() => import(/* webpackChunkName: "resume" */ "module/resume"), "Main");
+
+const NoteList = async(() => import(/* webpackChunkName:"noteList" */ "module/note/list"), "Main");
+const NoteDetail = async(() => import(/* webpackChunkName: "noteDetail" */ "module/note/detail"), "Main");
 
 class Component extends React.PureComponent {
     render() {
@@ -25,11 +26,11 @@ class Component extends React.PureComponent {
                 {/* TODO: IE浏览器不支持 <main> */}
                 <main>
                     <Switch>
-                        <Route path="/" component={Home} />
-                        <Route path="/notes" component={Notes} />
-                        <Route path="/note" component={Note} />
-                        <Route path="/about" component={About} />
-                        <Route path="/resume" component={Resume} />
+                        <Route path="/" component={IntroHome} />
+                        <Route path="/about" component={IntroAbout} />
+                        <Route path="/resume" component={IntroResume} />
+                        <Route path="/note/list" component={NoteList} />
+                        <Route path="/note/detail" component={NoteDetail} />
                         <Route component={Notfound} />
                     </Switch>
                 </main>

@@ -2,7 +2,7 @@ import React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import "./index.less";
-import {actions} from "common/header";
+import {actions} from "module/common/header";
 
 interface StateProps {
     name: string;

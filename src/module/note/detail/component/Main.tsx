@@ -28,7 +28,7 @@ class Note extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): StateProps => {
     return {
-        data: state.app.note.data,
+        data: state.app.noteDetail.data,
     };
 };
 

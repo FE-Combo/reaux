@@ -1,5 +1,5 @@
 import React from "react";
-import {actions} from "module/home";
+import {actions} from "module/intro/home";
 import {connect, DispatchProp} from "react-redux";
 import {RootState} from "type/state";
 import "./index.less";
@@ -21,7 +21,7 @@ class Home extends React.PureComponent<Props> {
                 <h1>王志怀·vocoWone {name}</h1>
                 <h3>执着于当下，放眼于未来。</h3>
                 <nav>
-                    <button onClick={() => this.pushHistory("/notes")}>博客</button>
+                    <button onClick={() => this.pushHistory("/note/list")}>博客</button>
                     <button onClick={() => this.pushHistory("/demo")}>示例</button>
                     <button onClick={() => this.pushHistory("/about")}>关于</button>
                 </nav>

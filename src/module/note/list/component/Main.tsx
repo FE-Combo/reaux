@@ -1,10 +1,10 @@
 import React from "react";
 import {connect, DispatchProp} from "react-redux";
-import {actions} from "module/notes";
+import {actions} from "module/note/list";
 import {NotesType, SearchNotesAJAXResponse} from "type/api";
 import {getNotesTypeName} from "util/lang";
 import {objectToArray} from "framework/util";
-import {actions as homeActions} from "module/home";
+import {actions as homeActions} from "module/intro/home";
 import {RootState} from "type/state";
 import Card from "./Card";
 import Navigation from "component/navigation";
@@ -64,8 +64,8 @@ class Notes extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): StateProps => {
     return {
-        notesType: state.app.notes.notesType,
-        data: state.app.notes.data,
+        notesType: state.app.noteList.notesType,
+        data: state.app.noteList.data,
     };
 };
 
