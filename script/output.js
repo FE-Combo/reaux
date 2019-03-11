@@ -48,6 +48,7 @@ function distribute() {
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
     fs.copySync("webpack", "output/dist/webpack", {dereference: true});
     fs.copySync("icon", "output/dist/icon", {dereference: true});
+    fs.copySync("module", "output/dist/module", {dereference: true});
 }
 
 function output() {

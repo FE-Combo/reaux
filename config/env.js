@@ -35,4 +35,8 @@ module.exports = {
     iconCssPath: resolve("src/asset/css/icon.less"),
     iconFontFilePath: resolve("src/asset/font"),
     iconComponentPath: resolve("src/components/Icon.tsx"),
+
+    /* generate module */
+    targetRootPath: resolve("src/module"), //存放目录
+    rootStatePath: resolve("src/type/state.ts"),
 };
