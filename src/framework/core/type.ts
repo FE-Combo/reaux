@@ -1,7 +1,6 @@
 import {History} from "history";
 import {Action, Store} from "redux";
 import {SagaMiddleware} from "redux-saga";
-import {ActionStore} from "./redux";
 import {RouterState} from "connected-react-router";
 import {LoadingStateView} from "./type";
 import {SagaIterator} from "redux-saga";
@@ -17,13 +16,13 @@ export interface ActionTypeView<P> extends Action {
     payload: P;
 }
 
-export type ActionHandlerView = (...args: any[]) => SagaIterator;
+export type ActionHandler = (...args: any[]) => SagaIterator;
 
 export interface AppView {
     readonly store: Store<StateView>;
     readonly history: History;
     readonly sagaMiddleware: SagaMiddleware<any>;
-    readonly actionStore: ActionStore;
+    readonly actionHandler: {[type: string]: ActionHandler};
     readonly modules: {[module: string]: number};
 }
 

@@ -1,18 +1,12 @@
 import {Reducer, combineReducers} from "redux";
-import {ActionTypeView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionView, ActionHandlerView} from "./type";
-import {Exception, RuntimeException} from "./Exception";
-import {LocationChangeAction, RouterState, push} from "connected-react-router";
-import {Store} from "redux";
+import {ActionTypeView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionView, ActionHandler} from "./type";
+import {Exception, RuntimeException} from "./exception";
+import {LocationChangeAction, RouterState} from "connected-react-router";
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
+import app from "./app";
 
-/** store */
-let state: StateView = {app: {}, loading: {}, router: {} as any};
-export const storeListener = (store: Store<StateView>) => () => {
-    state = store.getState();
-};
-
-/** action */
+/** action (loading setState error)  */
 export const LOADING_ACTION: string = "@@framework/loading";
 export const ERROR_ACTION_TYPE: string = "@@framework/error";
 const SET_STATE_ACTION: string = "@@framework/setState";
@@ -37,7 +31,7 @@ export function setErrorAction(error: any): ActionTypeView<Exception> {
     };
 }
 
-/** reducer */
+/** reducer 处理逻辑 */
 export function appReducer(state: StateView["app"] = {}, action: ActionTypeView<any>): StateView["app"] {
     if (action.name === SET_STATE_ACTION) {
         const {module, state: moduleState} = action.payload as StateActionPayloadView;
@@ -64,8 +58,9 @@ export function rootReducer(routerReducer: Reducer<RouterState, LocationChangeAc
     });
 }
 
-/** saga */
-export function* run(handler: ActionHandlerView, payload: any[]): SagaIterator {
+/* 执行 actionHandler (执行函数) */
+export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
+    // handler: 函数体， payload: 函数参数
     try {
         yield* handler(...payload);
     } catch (error) {
@@ -74,70 +69,15 @@ export function* run(handler: ActionHandlerView, payload: any[]): SagaIterator {
         yield put(setErrorAction(error));
     }
 }
-export function* saga(handlers: ActionStore): SagaIterator {
+
+/* 所有 action 入口 */
+export function* saga(): SagaIterator {
     // trigger one time, in order to mount all actions.
     yield takeEvery("*", function*(action: ActionTypeView<any>): SagaIterator {
         // Mounted on the program, Dispatch & yield put triggers every time.
-        const handler = handlers[action.type];
+        const handler = app.actionHandler[action.type];
         if (handler) {
             yield call(run, handler, action.payload);
         }
     });
-}
-
-export class ActionStore {
-    // 存储 actions方法名与 action方法的参数
-    readonly actionType: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
-    // 存储action方法体
-    readonly actionHandler: {[type: string]: ActionHandlerView} = {};
-}
-
-abstract class LifeCycle {
-    abstract onReady(): SagaIterator;
-    abstract onLoad(): SagaIterator;
-    abstract onUnload(): SagaIterator;
-    abstract onHide(): SagaIterator;
-    abstract onError(): SagaIterator;
-}
-
-export class Model<S extends object> implements LifeCycle {
-    readonly module: string;
-    private readonly initialState: S;
-
-    public constructor(module: string, initialState: S) {
-        this.module = module;
-        this.initialState = initialState;
-    }
-
-    *onReady(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onLoad(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onUnload(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onHide(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onError(): SagaIterator {
-        // extends to be overrode
-    }
-
-    protected get state(): Readonly<S> {
-        return state.app[this.module];
-    }
-
-    protected *setState(newState: Partial<S>): SagaIterator {
-        yield put(setStateAction(this.module, newState, `@@${this.module}/setState[${Object.keys(newState).join(",")}]`));
-    }
-
-    protected *setHistory(newURL: string): SagaIterator {
-        yield put(push(newURL));
-    }
 }

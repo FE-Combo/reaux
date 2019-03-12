@@ -13,7 +13,7 @@ class ActionHandler extends Model<State> {
         //
     }
 
-    *onInitialized(): SagaIterator {
+    *onReady(): SagaIterator {
         // TODO: mock response
         const response = {
             title: "React Native 中的状态值",
@@ -33,4 +33,4 @@ class ActionHandler extends Model<State> {
         yield* this.setState({data: response});
     }
 }
-export const {Controller, View} = register(new ActionHandler("note", initialState), Component);
+export const {Controller, View} = register(new ActionHandler("noteDetail", initialState), Component);

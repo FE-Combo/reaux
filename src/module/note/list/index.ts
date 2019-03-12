@@ -16,6 +16,7 @@ class ActionHandler extends Model<State> {
     }
 
     *onReady(): SagaIterator {
+        alert();
         // TODO: wait for API
         yield* this.setState({
             data: {
@@ -78,4 +79,5 @@ class ActionHandler extends Model<State> {
         yield* this.setHistory("/note");
     }
 }
-export const {Controller, View} = register(new ActionHandler("notes", initialState), Component);
+
+export const {Controller, View} = register(new ActionHandler("noteList", initialState), Component);

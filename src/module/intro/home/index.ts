@@ -16,7 +16,7 @@ class ActionHandler extends Model<State> {
         //
     }
     *pushHistory(url: string): SagaIterator {
-        yield* this.setHistory("/");
+        yield* this.setHistory(url);
     }
 
     *test(): SagaIterator {
