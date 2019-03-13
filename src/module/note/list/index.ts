@@ -1,5 +1,5 @@
 import Component from "./component/Main";
-import {register, Model} from "framework";
+import {register, Model, Lifecycle} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
 import {NotesType} from "type/api";
@@ -15,8 +15,8 @@ class ActionHandler extends Model<State> {
         //
     }
 
+    @Lifecycle()
     *onReady(): SagaIterator {
-        alert();
         // TODO: wait for API
         yield* this.setState({
             data: {
@@ -76,7 +76,7 @@ class ActionHandler extends Model<State> {
 
     *goToViewNote(noteId: string): SagaIterator {
         // TODO: complete logic
-        yield* this.setHistory("/note");
+        yield* this.setHistory("/note/detail");
     }
 }
 

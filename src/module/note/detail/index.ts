@@ -1,5 +1,5 @@
 import Component from "./component/Main";
-import {register, Model} from "framework";
+import {register, Model, Lifecycle} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
 
@@ -13,6 +13,7 @@ class ActionHandler extends Model<State> {
         //
     }
 
+    @Lifecycle()
     *onReady(): SagaIterator {
         // TODO: mock response
         const response = {

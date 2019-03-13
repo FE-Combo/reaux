@@ -7,14 +7,14 @@ import {ActionTypeView, StateView} from "./type";
 import {setStateAction} from "./redux";
 import {getPrototypeOfExceptConstructor} from "../util/object";
 
-abstract class LifeCycle {
+export abstract class LifeCycleListener {
     abstract onReady(): SagaIterator;
     abstract onLoad(): SagaIterator;
     abstract onUnload(): SagaIterator;
     abstract onHide(): SagaIterator;
 }
 
-export class Model<S extends object> implements LifeCycle {
+export class Model<S extends object> implements LifeCycleListener {
     public constructor(public readonly module: string, private readonly initialState: S) {
         // 存储初始化 State 到 redux
         app.store.dispatch(setStateAction(module, initialState, `@@${module}/initState`));
@@ -53,17 +53,18 @@ export class Model<S extends object> implements LifeCycle {
     }
 }
 
-export function createView(Component: React.ComponentType<any>, Controller: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
+export function createView<H extends Model<any>>(handler: H, Component: React.ComponentType<any>, Controller: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
     return class ProxyView<P extends {} = {}> extends React.PureComponent<P> {
         constructor(props: P) {
             super(props);
-            if (Controller.onReady) {
+
+            if ((handler.onReady as any).isLifecycle) {
                 app.store.dispatch(Controller.onReady());
             }
         }
 
         componentDidMount() {
-            if (Controller.onLoad) {
+            if ((handler.onLoad as any).isLifecycle) {
                 app.store.dispatch(Controller.onLoad());
             }
         }
@@ -72,7 +73,7 @@ export function createView(Component: React.ComponentType<any>, Controller: {[ty
             const prevLocation = (prevProps as any).location;
             const currentLocation = (this.props as any).location;
             const currentRouteParams = (this.props as any).match ? (this.props as any).match.params : null;
-            if (currentLocation && currentRouteParams && prevLocation !== currentLocation && Controller.onLoad) {
+            if (currentLocation && currentRouteParams && prevLocation !== currentLocation && (handler.onLoad as any).isLifecycle) {
                 // Only trigger if current component is connected to <Route> and call Handler's setHistory
                 app.store.dispatch(Controller.onLoad());
             }

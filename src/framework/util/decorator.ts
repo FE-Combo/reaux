@@ -2,9 +2,11 @@ import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
 import {setLoadingAction} from "../core/redux";
 import {StateView, ActionHandler} from "../core/type";
+import {LifeCycleListener} from "../core/mvc";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
+type LifeCycleDecorator = (target: object, propertyKey: keyof LifeCycleListener, descriptor: TypedPropertyDescriptor<ActionHandler & {isLifecycle?: boolean}>) => TypedPropertyDescriptor<ActionHandler>;
 
 export function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
     return (target, name, descriptor) => {
@@ -32,7 +34,9 @@ export function Loading(identifier: string) {
     });
 }
 
-export function overwrite(target: object, name: string, descriptor: TypedPropertyDescriptor<{isOverwrite: boolean}>): TypedPropertyDescriptor<{isOverwrite: boolean}> {
-    descriptor.value!.isOverwrite = true;
-    return descriptor;
+export function Lifecycle(): LifeCycleDecorator {
+    return (target, propertyKey, descriptor) => {
+        descriptor.value!.isLifecycle = true;
+        return descriptor;
+    };
 }
