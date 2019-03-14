@@ -72,12 +72,20 @@ export function* run(handler: ActionHandler, payload: any[]): SagaIterator {
 
 /* 所有 action 入口 */
 export function* saga(): SagaIterator {
-    // trigger one time, in order to mount all actions.
+    // Register saga in order to listener all action
     yield takeEvery("*", function*(action: ActionTypeView<any>): SagaIterator {
-        // Mounted on the program, Dispatch & yield put triggers every time.
-        const handler = app.actionHandler[action.type];
-        if (handler) {
-            yield call(run, handler, action.payload);
+        // Listener all action(dispatch | yield put)
+        if (action.type === ERROR_ACTION_TYPE) {
+            if (app.errorHandler) {
+                yield* app.errorHandler(action.payload);
+            } else {
+                console.error("Errors occurred, no bugs were monitored");
+            }
+        } else {
+            const handler = app.actionHandler[action.type];
+            if (handler) {
+                yield call(run, handler, action.payload);
+            }
         }
     });
 }

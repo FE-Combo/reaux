@@ -4,6 +4,7 @@ import {SagaMiddleware} from "redux-saga";
 import {RouterState} from "connected-react-router";
 import {LoadingStateView} from "./type";
 import {SagaIterator} from "redux-saga";
+import {Exception} from "./exception";
 
 export interface StateView {
     router: RouterState;
@@ -24,6 +25,7 @@ export interface AppView {
     readonly sagaMiddleware: SagaMiddleware<any>;
     readonly actionHandler: {[type: string]: ActionHandler};
     readonly modules: {[module: string]: number};
+    errorHandler: ErrorHandler | null;
 }
 
 export interface StateActionPayloadView {
@@ -39,3 +41,5 @@ export interface LoadingActionView {
 export interface LoadingStateView {
     [loading: string]: number; // there may be multiple effects listen to it, hide loading component when status === 0
 }
+
+export type ErrorHandler = (error: Exception) => SagaIterator;

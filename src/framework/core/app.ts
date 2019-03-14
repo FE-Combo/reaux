@@ -3,7 +3,7 @@ import {createBrowserHistory} from "history";
 import {applyMiddleware, createStore, Reducer, Store} from "redux";
 import createSagaMiddleware from "redux-saga";
 import {devtools} from "../util/devtools";
-import {saga, rootReducer, setErrorAction} from "./redux";
+import {saga, rootReducer} from "./redux";
 import {AppView, StateView, ActionHandler} from "./type";
 
 console.time("[framework] initialized");
@@ -15,22 +15,7 @@ function createApp(): AppView {
     const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
     sagaMiddleware.run(saga);
-    window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
-        console.error("Window Global Error");
-        console.error(`Message: ${message.toString()}`);
-        if (error) {
-            console.error(error);
-        }
-        if (source && line && column) {
-            console.error(`Source: ${source} (${line}, ${column})`);
-        }
-        if (!error) {
-            error = new Error(message.toString());
-        }
-        store.dispatch(setErrorAction(error));
-    };
-
-    return {history, store, sagaMiddleware, actionHandler, modules: {}};
+    return {history, store, sagaMiddleware, actionHandler, modules: {}, errorHandler: null};
 }
 const app = createApp();
 

@@ -12,7 +12,6 @@ abstract class LifeCycle {
     abstract onLoad(): SagaIterator;
     abstract onUnload(): SagaIterator;
     abstract onHide(): SagaIterator;
-    abstract onError(): SagaIterator;
 }
 
 export class Model<S extends object> implements LifeCycle {
@@ -34,10 +33,6 @@ export class Model<S extends object> implements LifeCycle {
     }
 
     *onHide(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onError(): SagaIterator {
         // extends to be overrode
     }
 
