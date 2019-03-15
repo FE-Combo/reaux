@@ -1,8 +1,7 @@
 import {connectRouter, routerMiddleware} from "connected-react-router";
 import {createBrowserHistory} from "history";
-import {applyMiddleware, createStore, Reducer, Store} from "redux";
+import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
 import createSagaMiddleware from "redux-saga";
-import {devtools} from "../util/devtools";
 import {saga, rootReducer} from "./redux";
 import {AppView, StateView, ActionHandler} from "./type";
 
@@ -20,3 +19,16 @@ function createApp(): AppView {
 const app = createApp();
 
 export default app;
+
+function devtools(enhancer: StoreEnhancer): StoreEnhancer {
+    // Add Redux DevTools plug-in support
+    // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+    const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
+    if (extension) {
+        return compose(
+            enhancer,
+            extension({})
+        );
+    }
+    return enhancer;
+}

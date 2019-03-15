@@ -2,7 +2,7 @@ import {render, register} from "./core/boot";
 import {Model} from "./core/mvc";
 import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "./core/exception";
 import {Async} from "./component/Async";
-import {Lifecycle, Loading} from "./util/decorator";
+import {Lifecycle, Loading} from "./core/decorator";
 import {isLoading} from "./core/redux";
 
 type ErrorListener = ErrorListenerInCore;
