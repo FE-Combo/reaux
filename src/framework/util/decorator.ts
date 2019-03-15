@@ -23,7 +23,7 @@ export function handlerDecorator<S extends StateView = StateView>(interceptor: H
     };
 }
 
-export function Loading(identifier: string) {
+export function Loading(identifier: string = "global") {
     return handlerDecorator(function*(handler) {
         try {
             yield put(setLoadingAction(identifier, true));
@@ -34,6 +34,9 @@ export function Loading(identifier: string) {
     });
 }
 
+/**
+ * 需要在事件的最顶部使用
+ */
 export function Lifecycle(): LifeCycleDecorator {
     return (target, propertyKey, descriptor) => {
         descriptor.value!.isLifecycle = true;

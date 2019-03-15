@@ -1,0 +1,31 @@
+.comp-loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 9999;
+  background-color: #ffffffe6;
+
+  @keyframes startup-loading {
+    0% {
+      transform: scale(0.4);
+      background: #fff;
+    }
+
+    100% {
+      transform: scale(1);
+      background: #1890ff;
+    }
+  }
+
+  .loading-ball {
+    margin: 175px auto 40px;
+    width: 36px;
+    height: 36px;
+    transform: scale(0.4);
+    background: #1890ff;
+    border-radius: 99px;
+    animation: startup-loading 900ms infinite;
+  }
+}

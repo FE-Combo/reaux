@@ -8,7 +8,6 @@ import Route from "framework/component/Route";
 import {Async} from "framework/component/Async";
 
 /** common */
-const Header = Async(() => import(/* webpackChunkName:"header" */ "module/common/header"), "View");
 const Footer = Async(() => import(/* webpackChunkName:"footer" */ "module/common/footer"), "View");
 const IntroHome = Async(() => import(/* webpackChunkName: "IntroHome" */ "module/intro/home"), "View");
 const IntroAbout = Async(() => import(/* webpackChunkName: "IntroAbout" */ "module/intro/about"), "View");

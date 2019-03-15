@@ -5,23 +5,28 @@ import {RootState} from "type/state";
 import {Switch} from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Route from "framework/component/Route";
+import {isLoading} from "framework";
+import Loading from "component/Loading";
 import "./index.less";
 
 interface StateProps {
     name: string;
+    isLoading: boolean;
 }
 
 interface Props extends StateProps, DispatchProp {}
 class Main extends React.PureComponent<Props> {
     render() {
-        const {dispatch} = this.props;
+        const {isLoading} = this.props;
         return (
-            <div className="main-container g-full-screen">
-                <Switch>
-                    <Route path="/register" />
-                    <Route component={MainLayout} />
-                </Switch>
-            </div>
+            <Loading isLoading={isLoading}>
+                <div className="main-container g-full-screen">
+                    <Switch>
+                        <Route path="/register" />
+                        <Route component={MainLayout} />
+                    </Switch>
+                </div>
+            </Loading>
         );
     }
 }
@@ -29,6 +34,7 @@ class Main extends React.PureComponent<Props> {
 const mapStateToProps = (state: RootState): StateProps => {
     return {
         name: state.app.main.name,
+        isLoading: isLoading(),
     };
 };
 

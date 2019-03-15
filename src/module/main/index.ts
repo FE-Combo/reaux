@@ -1,15 +1,18 @@
 import Component from "./component/Main";
-import {register, Model} from "framework";
+import {register, Model, Lifecycle, Loading} from "framework";
 import {State} from "./type";
 import {SagaIterator} from "redux-saga";
+import {delay} from "redux-saga/effects";
 
 const initialState: State = {
     name: "string",
 };
 
 class ActionHandler extends Model<State> {
-    *main(): SagaIterator {
-        //
+    @Lifecycle()
+    @Loading()
+    *onLoad(): SagaIterator {
+        yield delay(2000, {});
     }
 
     *onInitialized(): SagaIterator {
