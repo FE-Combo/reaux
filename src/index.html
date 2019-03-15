@@ -4,6 +4,36 @@
     <meta charset="UTF-8" />
     <title>vocoWone</title>
     <link rel="icon" href="/favicon.ico" />
+    <style>
+      @keyframes startup-loading {
+        0% {
+          transform: scale(0.4);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      #startup .ball {
+        margin: 175px auto 40px;
+        width: 36px;
+        height: 36px;
+        transform: scale(0.4);
+        background: #f761a0;
+        border-radius: 99px;
+        animation: startup-loading 600ms infinite;
+      }
+      #startup p {
+        font-family: Microsoft YaHei, Yahei, "Helvetica Neue", Helvetica, Arial, Segoe UI, Roboto, Hiragino Sans GB, sans-serif;
+        font-size: 22px;
+        color: #99a;
+        text-align: center;
+      }
+    </style>
   </head>
-  <body class="g-theme"></body>
+  <body class="g-theme">
+    <div id="startup">
+      <div class="ball"></div>
+      <p>加载中，请稍候 ...</p>
+    </div>
+  </body>
 </html>

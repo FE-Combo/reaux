@@ -8,8 +8,8 @@ import {createView, createController, Model} from "./mvc";
 import {ErrorListener} from "./exception";
 import app from "./app";
 
-// 1.new () 代表是一个class 2.Model<{}> & ErrorListener 代表 new 之后的类型
-type ErrorHandlerModuleClass = new () => Model<{}> & ErrorListener;
+// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承
+declare type ErrorHandlerModuleClass = new (name: string, state: {}) => Model<{}> & ErrorListener;
 
 interface RenderOptions {
     Component: ComponentType<any>;
@@ -50,7 +50,7 @@ export function register<H extends Model<any>>(handler: H, Component: ComponentT
     app.modules[handler.module] = 1;
 
     const Controller = createController(handler);
-    const View = createView(Component, Controller);
+    const View = createView(handler, Component, Controller);
 
     return {View, Controller};
 }
@@ -70,7 +70,7 @@ function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
             error = new Error(message.toString());
         }
 
-        const errorHandler = new ErrorHandlerModule();
+        const errorHandler = new ErrorHandlerModule("errorHandler", {});
         app.errorHandler = errorHandler.onError.bind(errorHandler);
     };
 }

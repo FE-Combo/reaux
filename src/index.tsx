@@ -1,9 +1,8 @@
 import {render} from "framework";
 import {View} from "module/main";
-import {ErrorHandlerModule} from "component/ErrorHandlerModule";
+import ErrorHandlerModule from "component/ErrorHandlerModule";
 render({
+    ErrorHandlerModule,
     Component: View,
-    onInitialized: null,
-    // TODO:
-    ErrorHandlerModule: ErrorHandlerModule as any,
+    onInitialized: () => document.getElementById("startup")!.remove(),
 });
