@@ -1,6 +1,6 @@
 {
   "name": "doreact",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Front-End core framework library, base on react and redux.",
   "main": "lib/index.js",
   "module": "lib/index.js",
