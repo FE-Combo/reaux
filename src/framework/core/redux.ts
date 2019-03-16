@@ -93,3 +93,5 @@ export function* saga(): SagaIterator {
 export function isLoading(identifier: string = "global") {
     return app.store.getState().loading[identifier] > 0;
 }
+
+// TODO: saga call 逻辑

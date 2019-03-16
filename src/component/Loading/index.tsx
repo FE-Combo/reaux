@@ -5,6 +5,7 @@ interface Props {
     isLoading: boolean;
 }
 
+// TODO: 使用createPortal代替
 export default class LoadingComponent extends React.PureComponent<Props> {
     render() {
         const {isLoading, children} = this.props;
