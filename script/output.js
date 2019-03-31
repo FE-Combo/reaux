@@ -18,7 +18,7 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "src/framework/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "framework/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
 }
 
 // function test() {
@@ -38,17 +38,15 @@ function cleanup() {
 
 function compile() {
     console.info(chalk`{green.bold [task]} {white.bold compile}`);
-    return spawn("tsc", ["-p", "config/tsconfig.output.json"], "compile failed, please fix");
+    return spawn("tsc", ["-p", "config/tsconfig.json"], "compile failed, please fix");
 }
 
 function distribute() {
     console.info(chalk`{green.bold [task]} {white.bold distribute}`);
     fs.mkdirsSync("output/dist/lib");
-    fs.copySync("output/out/src", "output/dist/lib/", {dereference: true});
+    fs.copySync("output/out/framework", "output/dist/lib/", {dereference: true});
     fs.copySync("package.json", "output/dist/package.json", {dereference: true});
     fs.copySync("webpack", "output/dist/webpack", {dereference: true});
-    fs.copySync("icon", "output/dist/icon", {dereference: true});
-    fs.copySync("module", "output/dist/module", {dereference: true});
 }
 
 function output() {
