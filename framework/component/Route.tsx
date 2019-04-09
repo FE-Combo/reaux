@@ -1,7 +1,7 @@
 import React from "react";
 import {RouteProps} from "react-router";
 import {Redirect, Route} from "react-router-dom";
-import {PickOptional} from "../util/type";
+import {PickOptional} from "../tool/type";
 import ErrorBoundary from "./ErrorBoundary";
 
 interface Props extends RouteProps {

@@ -1,17 +1,30 @@
-import React from "react";
+import React, {ComponentType} from "react";
 import app from "./app";
 import {push} from "connected-react-router";
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {ActionTypeView, StateView} from "./type";
-import {setStateAction} from "./redux";
-import {getPrototypeOfExceptConstructor} from "../util/object";
+import {ActionTypeView, StateView} from "../type";
+import {setStateAction} from "../redux/action";
+import {getPrototypeOfExceptConstructor} from "../tool/object";
 
 export abstract class LifeCycleListener {
     abstract onReady(): SagaIterator;
     abstract onLoad(): SagaIterator;
     abstract onUnload(): SagaIterator;
     abstract onHide(): SagaIterator;
+}
+
+export function register<H extends Model<any>>(handler: H, Component: ComponentType<any>): any {
+    // Trigger every module.
+    if (app.modules.hasOwnProperty(handler.module)) {
+        throw new Error(`module is already registered, module=${handler.module}`);
+    }
+    app.modules[handler.module] = 1;
+
+    const Controller = createController(handler);
+    const View = createView(handler, Component, Controller);
+
+    return {View, Controller};
 }
 
 export class Model<S extends object> implements LifeCycleListener {
@@ -53,7 +66,7 @@ export class Model<S extends object> implements LifeCycleListener {
     }
 }
 
-export function createView<H extends Model<any>>(handler: H, Component: React.ComponentType<any>, Controller: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
+function createView<H extends Model<any>>(handler: H, Component: React.ComponentType<any>, Controller: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
     return class ProxyView<P extends {} = {}> extends React.PureComponent<P> {
         constructor(props: P) {
             super(props);
@@ -91,7 +104,7 @@ export function createView<H extends Model<any>>(handler: H, Component: React.Co
     };
 }
 
-export function createController<H extends Model<any>>(handler: H) {
+function createController<H extends Model<any>>(handler: H) {
     // 1.return Controller(存储方法名与方法参数)、2.存储方法对应逻辑
     const moduleName = handler.module;
     const keys = getPrototypeOfExceptConstructor(handler);

@@ -1,16 +1,18 @@
-import {render, register} from "./core/boot";
-import {Model} from "./core/mvc";
-import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "./core/exception";
+import start from "./boot/start";
+import {Model, register} from "./boot/register";
+
 import {Async} from "./component/Async";
-import {Lifecycle, Loading} from "./core/decorator";
-import {isLoading} from "./core/redux";
+import {isLoading} from "./component/Loading";
+
+import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "./util/exception";
+import {Lifecycle, Loading} from "./util/decorator";
 
 type ErrorListener = ErrorListenerInCore;
 
-export {render, register, Async, Model, Exception, Lifecycle, APIException, ErrorListener, isLoading, Loading};
+export {start, register, Async, Model, Exception, Lifecycle, APIException, ErrorListener, isLoading, Loading};
 
 const Do = {
-    render,
+    start,
     register,
 };
 

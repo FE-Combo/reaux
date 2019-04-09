@@ -1,12 +1,13 @@
-import {ConnectedRouter} from "connected-react-router";
 import React, {ComponentType} from "react";
+import app from "./app";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {withRouter} from "react-router-dom";
 import ErrorBoundary from "../component/ErrorBoundary";
-import {createView, createController, Model} from "./mvc";
-import {ErrorListener} from "./exception";
-import app from "./app";
+import {Model} from "./register";
+import {ErrorListener} from "../util/exception";
+import {setErrorAction} from "../redux/action";
+import {ConnectedRouter} from "connected-react-router";
 
 // 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承
 declare type ErrorHandlerModuleClass = new (name: string, state: {}) => Model<{}> & ErrorListener;
@@ -17,7 +18,7 @@ interface RenderOptions {
     onInitialized: (() => void) | null;
 }
 
-export function render(options: RenderOptions): void {
+export default function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
     const rootElement: HTMLDivElement = document.createElement("div");
     rootElement.id = "framework-app-root";
@@ -42,35 +43,16 @@ export function render(options: RenderOptions): void {
     listenGlobalError(options.ErrorHandlerModule);
 }
 
-export function register<H extends Model<any>>(handler: H, Component: ComponentType<any>): any {
-    // Trigger every module.
-    if (app.modules.hasOwnProperty(handler.module)) {
-        throw new Error(`module is already registered, module=${handler.module}`);
-    }
-    app.modules[handler.module] = 1;
-
-    const Controller = createController(handler);
-    const View = createView(handler, Component, Controller);
-
-    return {View, Controller};
-}
-
 function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
     // 对客户端错误行为进行处理(超时/4**)
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
-        console.error(`Message: ${message.toString()}`);
-        if (error) {
-            console.error(error);
-        }
-        if (source && line && column) {
-            console.error(`Source: ${source} (${line}, ${column})`);
-        }
         if (!error) {
             error = new Error(message.toString());
         }
-
-        const errorHandler = new ErrorHandlerModule("errorHandler", {});
-        app.errorHandler = errorHandler.onError.bind(errorHandler);
+        app.store.dispatch(setErrorAction(error));
     };
+
+    const errorHandler = new ErrorHandlerModule("errorHandler", {});
+    app.errorHandler = errorHandler.onError.bind(errorHandler);
 }

@@ -26,3 +26,7 @@ export function Async<T, K extends ReactComponentKeyOf<T>>(resolve: () => Promis
         }
     } as any;
 }
+
+/**
+ * TODO: 使用React.lazy/React.Suspense替代，但是目前React.Suspense无法用于数据获取的情况
+ */

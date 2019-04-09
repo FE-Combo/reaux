@@ -2,9 +2,8 @@ import {History} from "history";
 import {Action, Store} from "redux";
 import {SagaMiddleware} from "redux-saga";
 import {RouterState} from "connected-react-router";
-import {LoadingStateView} from "./type";
 import {SagaIterator} from "redux-saga";
-import {Exception} from "./exception";
+import {Exception} from "./util/exception";
 
 export interface StateView {
     router: RouterState;
