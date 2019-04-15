@@ -1,0 +1,60 @@
+{
+  "name": "doreact",
+  "version": "1.0.1",
+  "description": "Front-End core framework library, base on react and redux.",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "start": "node script/start.js",
+    "build": "node script/build.js",
+    "output": "node script/output.js",
+    "format": "prettier --config config/prettier.json --write \"{framework,test}/**/*.{ts,tsx}\"",
+    "icon": "node script/icon.js",
+    "module": "node script/module.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vocoWone/doreact.git"
+  },
+  "keywords": [
+    "javascript",
+    "typescript"
+  ],
+  "author": "vocoWone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vocoWone/doreact/issues"
+  },
+  "homepage": "https://github.com/vocoWone/doreact#readme",
+  "dependencies": {
+    "@types/node": "11.13.4",
+    "@types/react": "16.8.13",
+    "@types/react-dom": "16.8.4",
+    "@types/react-redux": "7.0.6",
+    "@types/react-router-dom": "4.3.2",
+    "axios": "0.18.0",
+    "connected-react-router": "6.4.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-redux": "7.0.2",
+    "react-router-dom": "5.0.0",
+    "redux": "4.0.1",
+    "redux-saga": "1.0.2"
+  },
+  "peerDependencies": {
+    "@types/node": "11.13.4",
+    "@types/react": "16.8.13",
+    "@types/react-dom": "16.8.4",
+    "@types/react-redux": "7.0.6",
+    "@types/react-router-dom": "4.3.2",
+    "axios": "0.18.0",
+    "connected-react-router": "6.4.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-redux": "7.0.2",
+    "react-router-dom": "5.0.0",
+    "redux": "4.0.1",
+    "redux-saga": "1.0.2"
+  }
+}

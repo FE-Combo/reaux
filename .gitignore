@@ -1,10 +1,7 @@
 .idea/
 .vscode/
 /.gradle/
-mock/
-output/
-build/
-output/
+output*/
 *.iml
 /classes/
 .DS_Store
