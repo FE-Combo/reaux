@@ -3,9 +3,9 @@ import app from "./app";
 import {push} from "connected-react-router";
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {ActionTypeView, StateView} from "../type";
-import {setStateAction} from "../redux/action";
-import {getPrototypeOfExceptConstructor} from "../tool/object";
+import {ActionTypeView, StateView} from "./type";
+import {setStateAction} from "../../shared/redux/action";
+import {getPrototypeOfExceptConstructor} from "../../shared/tool/object";
 
 export abstract class LifeCycleListener {
     abstract onReady(): SagaIterator;

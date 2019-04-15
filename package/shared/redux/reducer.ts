@@ -1,5 +1,5 @@
 import {Reducer, combineReducers} from "redux";
-import {ActionTypeView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionView} from "../type";
+import {ActionTypeView, LoadingStateView, StateView, StateActionPayloadView, LoadingActionView} from "../../doReact/src/type";
 import {LocationChangeAction, RouterState} from "connected-react-router";
 import {SET_STATE_ACTION, LOADING_ACTION} from "./action";
 

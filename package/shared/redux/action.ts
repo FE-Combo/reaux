@@ -1,4 +1,4 @@
-import {ActionTypeView, StateActionPayloadView, LoadingActionView} from "../type";
+import {ActionTypeView, StateActionPayloadView, LoadingActionView} from "../../doReact/src/type";
 import {Exception, RuntimeException} from "../util/exception";
 
 export const SET_STATE_ACTION: string = "@@framework/setState";

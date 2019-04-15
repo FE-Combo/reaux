@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Front-End core framework library, base on react and redux.",
   "scripts": {
+    "output": "node script/output.react.js",
+    "format": "prettier --config config/prettier.json --write \"{package,test}/**/*.{ts,tsx}\"",
     "output-react": "yarn install && node script/output.react.js",
-    "publish-react": "rm -rf package/doReact/node_modules && rm -rf node_modules",
     "output-rn": "yarn install && node script/output.rn.js",
-    "format": "prettier --config config/prettier.json --write \"{package,test}/**/*.{ts,tsx}\""
+    "publish-react": "rm -rf package/doReact/node_modules && rm -rf node_modules",
+    "upgrade-react": "node script/upgrade-react.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,21 @@
     "ts-node": "8.1.0",
     "tslint": "5.15.0",
     "tslint-react": "4.0.0",
-    "typescript": "^3.4.3"
+    "typescript": "3.4.3"
+  },
+  "dependencies": {
+    "@types/node": "11.13.4",
+    "@types/react": "16.8.13",
+    "@types/react-dom": "16.8.4",
+    "@types/react-redux": "7.0.6",
+    "@types/react-router-dom": "4.3.2",
+    "axios": "0.18.0",
+    "connected-react-router": "6.4.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-redux": "7.0.2",
+    "react-router-dom": "5.0.0",
+    "redux": "4.0.1",
+    "redux-saga": "1.0.2"
   }
 }

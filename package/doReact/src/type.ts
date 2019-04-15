@@ -3,7 +3,7 @@ import {Action, Store} from "redux";
 import {SagaMiddleware} from "redux-saga";
 import {RouterState} from "connected-react-router";
 import {SagaIterator} from "redux-saga";
-import {Exception} from "./util/exception";
+import {Exception} from "../../shared/util/exception";
 
 export interface StateView {
     router: RouterState;

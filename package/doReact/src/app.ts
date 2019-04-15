@@ -2,11 +2,11 @@ import {connectRouter, routerMiddleware} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
 import createSagaMiddleware from "redux-saga";
-import {rootReducer} from "../redux/reducer";
-import {AppView, StateView, ActionTypeView, ActionHandler} from "../type";
+import {rootReducer} from "../../shared/redux/reducer";
+import {AppView, StateView, ActionTypeView, ActionHandler} from "./type";
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
-import {setErrorAction, ERROR_ACTION_TYPE} from "../redux/action";
+import {setErrorAction, ERROR_ACTION_TYPE} from "../../shared/redux/action";
 
 console.time("[framework] initialized");
 

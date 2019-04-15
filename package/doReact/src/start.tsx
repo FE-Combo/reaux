@@ -3,10 +3,10 @@ import app from "./app";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {withRouter} from "react-router-dom";
-import ErrorBoundary from "../component/ErrorBoundary";
+import ErrorBoundary from "../../shared/component/ErrorBoundary";
 import {Model} from "./register";
-import {ErrorListener} from "../util/exception";
-import {setErrorAction} from "../redux/action";
+import {ErrorListener} from "../../shared/util/exception";
+import {setErrorAction} from "../../shared/redux/action";
 import {ConnectedRouter} from "connected-react-router";
 
 // 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承

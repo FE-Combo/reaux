@@ -5,14 +5,6 @@
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
-  "scripts": {
-    "start": "node script/start.js",
-    "build": "node script/build.js",
-    "output": "node script/output.js",
-    "format": "prettier --config config/prettier.json --write \"{framework,test}/**/*.{ts,tsx}\"",
-    "icon": "node script/icon.js",
-    "module": "node script/module.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vocoWone/doreact.git"
