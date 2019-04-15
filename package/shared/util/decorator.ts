@@ -1,14 +1,13 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
 import {setLoadingAction} from "../redux/action";
-import {StateView, ActionHandler} from "../../doReact/src/type";
-import {LifeCycleListener} from "../../doReact/src/register";
+import {LifeCycleListener, ActionHandler, BaseStateView} from "../type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
 type LifeCycleDecorator = (target: object, propertyKey: keyof LifeCycleListener, descriptor: TypedPropertyDescriptor<ActionHandler & {isLifecycle?: boolean}>) => TypedPropertyDescriptor<ActionHandler>;
 
-export function handlerDecorator<S extends StateView = StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
+export function handlerDecorator<S extends BaseStateView<any>>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
     return (target, name, descriptor) => {
         const handler = descriptor.value!;
         descriptor.value = function*(...args: any[]): SagaIterator {

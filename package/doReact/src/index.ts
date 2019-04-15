@@ -1,15 +1,13 @@
-import start from "./start";
-import {Model, register} from "./register";
+import {start, register, Model} from "./bootstrap";
 
 import {Async} from "../../shared/component/Async";
-import {isLoading} from "../../shared/component/Loading";
 
 import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "../../shared/util/exception";
 import {Lifecycle, Loading} from "../../shared/util/decorator";
 
 type ErrorListener = ErrorListenerInCore;
 
-export {start, register, Async, Model, Exception, Lifecycle, APIException, ErrorListener, isLoading, Loading};
+export {start, register, Async, Model, Exception, Lifecycle, APIException, ErrorListener, Loading};
 
 const Do = {
     start,

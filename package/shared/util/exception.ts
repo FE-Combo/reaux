@@ -1,4 +1,4 @@
-import {ErrorHandler} from "../../doReact/src/type";
+import {ErrorHandler} from "../type";
 
 export abstract class Exception {
     protected constructor(public message: string) {}
