@@ -9,7 +9,7 @@ export interface BaseStateView<R = any> {
     app: {};
 }
 
-export interface BaseAppView<H, R = any> {
+export interface BaseAppView<H = any, R = any> {
     readonly history?: H; // use in website
     readonly store: Store<BaseStateView<R>>;
     readonly sagaMiddleware: SagaMiddleware<any>;

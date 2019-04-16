@@ -1,7 +1,7 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {setLoadingAction} from "../redux/action";
-import {LifeCycleListener, ActionHandler, BaseStateView} from "../type";
+import {setLoadingAction} from "../../../shared/redux/action";
+import {LifeCycleListener, ActionHandler, BaseStateView} from "../../../shared/type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
@@ -12,11 +12,7 @@ export function handlerDecorator<S extends BaseStateView<any>>(interceptor: Hand
         const handler = descriptor.value!;
         descriptor.value = function*(...args: any[]): SagaIterator {
             const rootState: S = (target as any).rootState;
-            if (rootState) {
-                yield* interceptor(handler.bind(this, ...args), rootState);
-            } else {
-                throw new Error("decorator must be applied to handler method");
-            }
+            yield* interceptor(handler.bind(this, ...args), rootState);
         };
         return descriptor;
     };

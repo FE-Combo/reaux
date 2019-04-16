@@ -3,7 +3,7 @@ import {start, register, Model} from "./bootstrap";
 import {Async} from "../../shared/component/Async";
 
 import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "../../shared/util/exception";
-import {Lifecycle, Loading} from "../../shared/util/decorator";
+import {Lifecycle, Loading} from "./utils/decorator";
 
 type ErrorListener = ErrorListenerInCore;
 

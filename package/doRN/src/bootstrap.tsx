@@ -1,69 +1,72 @@
 import React, {ComponentType} from "react";
-import ReactDOM from "react-dom";
-import {withRouter} from "react-router-dom";
+import {AppRegistry} from "react-native";
 import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware, {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
-import {createBrowserHistory, History} from "history";
 import {rootReducer} from "../../shared/redux/reducer";
 import {saga} from "../../shared/redux/saga";
 import ErrorBoundary from "../../shared/component/ErrorBoundary";
 import {ErrorListener} from "../../shared/util/exception";
-import {setErrorAction, setStateAction} from "../../shared/redux/action";
+import {setErrorAction, setStateAction, LOADING_ACTION} from "../../shared/redux/action";
 import {getPrototypeOfExceptConstructor} from "../../shared/tool/object";
 import {ActionTypeView, LifeCycleListener, ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
 
-console.time("[framework] initialized");
+let app: AppView;
+declare const window: any;
 
-type StateView = BaseStateView<RouterState>;
-type AppView = BaseAppView<History, RouterState>;
+type StateView = BaseStateView;
+type AppView = BaseAppView;
 
 // 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承
 declare type ErrorHandlerModuleClass = new (name: string, state: {}) => Model<{}> & ErrorListener;
 interface RenderOptions {
+    name: string;
     Component: ComponentType<any>;
     ErrorHandlerModule: ErrorHandlerModuleClass;
-    onInitialized: (() => void) | null;
+    onInitialized: () => Promise<any>;
 }
 
 function createApp(): AppView {
-    const history = createBrowserHistory();
     const actionHandler: {[type: string]: ActionHandler} = {};
     const sagaMiddleware = createSagaMiddleware();
-    const routeReducer = connectRouter(history);
-    const reducer: Reducer<StateView> = rootReducer(routeReducer);
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
+    const reducer: Reducer<StateView> = rootReducer();
+    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware)));
     const errorHandler: ErrorHandler | null = null;
     sagaMiddleware.run(saga, actionHandler, errorHandler);
-    return {history, store, sagaMiddleware, actionHandler, modules: {}, errorHandler};
+    return {store, sagaMiddleware, actionHandler, modules: {}, errorHandler};
 }
 
-const app = createApp();
+app = createApp();
 
 export function start(options: RenderOptions): void {
-    // Whole project trigger once(main module).
-    const rootElement: HTMLDivElement = document.createElement("div");
-    rootElement.id = "framework-app-root";
-    document.body.appendChild(rootElement);
-    const WithRouterComponent = withRouter(options.Component);
-    ReactDOM.render(
-        <Provider store={app.store}>
-            <ErrorBoundary>
-                <ConnectedRouter history={app.history!}>
-                    <WithRouterComponent />
-                </ConnectedRouter>
-            </ErrorBoundary>
-        </Provider>,
-        rootElement,
-        () => {
-            console.timeEnd("[framework] initialized");
-            if (typeof options.onInitialized === "function") {
-                options.onInitialized();
-            }
+    class WrappedAppComponent extends React.PureComponent<{}, {initialized: boolean}> {
+        constructor(props: {}) {
+            super(props);
+            this.state = {initialized: false};
         }
-    );
+
+        async componentDidMount() {
+            if (options.onInitialized) {
+                await options.onInitialized();
+            }
+            this.setState({initialized: true});
+        }
+
+        render() {
+            const Component = options.Component;
+            return (
+                this.state.initialized && (
+                    <Provider store={app.store}>
+                        <ErrorBoundary>
+                            <Component />
+                        </ErrorBoundary>
+                    </Provider>
+                )
+            );
+        }
+    }
+    AppRegistry.registerComponent(options.name, () => WrappedAppComponent);
     listenGlobalError(options.ErrorHandlerModule);
 }
 
@@ -111,10 +114,6 @@ export class Model<S extends object> implements LifeCycleListener {
 
     protected *setState(newState: Partial<S>): SagaIterator {
         yield put(setStateAction(this.module, newState, `@@${this.module}/setState[${Object.keys(newState).join(",")}]`));
-    }
-
-    protected *setHistory(newURL: string): SagaIterator {
-        yield put(push(newURL));
     }
 }
 
@@ -172,27 +171,26 @@ function createActions<H extends Model<any>>(handler: H) {
 
 function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
     // 对客户端错误行为进行处理(超时/4**)
-    window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
-        console.error("Window Global Error");
-        if (!error) {
-            error = new Error(message.toString());
+    ErrorUtils.setGlobalHandler((error, isFatal) => {
+        if (isFatal) {
+            console.info("***** Fatal Error *****");
         }
         app.store.dispatch(setErrorAction(error));
-    };
-
+    });
     const errorHandler = new ErrorHandlerModule("errorHandler", {});
     app.errorHandler = errorHandler.onError.bind(errorHandler);
 }
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
-    // Add Redux DevTools plug-in support
-    // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
-    const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
-    if (extension) {
-        return compose(
-            enhancer,
-            extension({})
-        );
+    let composeEnhancers = compose;
+    if (process.env.NODE_ENV !== "production") {
+        const extension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+        if (extension) {
+            composeEnhancers = extension({
+                // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+                actionsBlacklist: [LOADING_ACTION],
+            });
+        }
     }
-    return enhancer;
+    return composeEnhancers(enhancer);
 }
