@@ -1,14 +1,14 @@
 {
   "name": "core-react",
   "version": "1.0.0",
-  "description": "Front-End core framework library, base on react and redux.",
+  "description": "Front-End lightweight framework base on react + redux + axios, strict in TypeScript.",
   "scripts": {
-    "output": "node script/output.react.js",
+    "output": "node script/output.react.js && node script/output.rn.js",
     "format": "prettier --config config/prettier.json --write \"{package,test}/**/*.{ts,tsx}\"",
+    "upgrade-react": "node script/upgrade-react.js",
     "output-react": "yarn install && node script/output.react.js",
-    "output-rn": "yarn install && node script/output.rn.js",
     "publish-react": "rm -rf package/doReact/node_modules && rm -rf node_modules",
-    "upgrade-react": "node script/upgrade-react.js"
+    "output-rn": "yarn install && node script/output.rn.js"
   },
   "repository": {
     "type": "git",

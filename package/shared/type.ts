@@ -3,14 +3,14 @@ import {SagaIterator, SagaMiddleware} from "redux-saga";
 import {Exception} from "./util/exception";
 import {Store} from "redux";
 
-export interface BaseStateView<R> {
-    router: R; // website not be null, native be null
+export interface BaseStateView<R = any> {
+    router?: R; // use in website
     loading: LoadingStateView;
     app: {};
 }
 
-export interface BaseAppView<H, R> {
-    readonly history: H; // website not be null, native be null
+export interface BaseAppView<H, R = any> {
+    readonly history?: H; // use in website
     readonly store: Store<BaseStateView<R>>;
     readonly sagaMiddleware: SagaMiddleware<any>;
     readonly actionHandler: {[type: string]: ActionHandler};

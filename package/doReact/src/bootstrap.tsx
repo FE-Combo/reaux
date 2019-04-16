@@ -15,6 +15,8 @@ import {setErrorAction, setStateAction} from "../../shared/redux/action";
 import {getPrototypeOfExceptConstructor} from "../../shared/tool/object";
 import {ActionTypeView, LifeCycleListener, ActionHandler, BaseAppView, BaseStateView} from "../../shared/type";
 
+console.time("[framework] initialized");
+
 type StateView = BaseStateView<RouterState>;
 type AppView = BaseAppView<History, RouterState>;
 
@@ -26,13 +28,12 @@ interface RenderOptions {
     onInitialized: (() => void) | null;
 }
 
-console.time("[framework] initialized");
-
 function createApp(): AppView {
     const history = createBrowserHistory();
     const actionHandler: {[type: string]: ActionHandler} = {};
     const sagaMiddleware = createSagaMiddleware();
-    const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
+    const routeReducer = connectRouter(history);
+    const reducer: Reducer<StateView> = rootReducer(routeReducer);
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
     sagaMiddleware.run(saga, app);
     return {history, store, sagaMiddleware, actionHandler, modules: {}, errorHandler: null};
