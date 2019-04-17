@@ -1,22 +1,23 @@
 {
   "compilerOptions": {
     "outDir": "../output/doRN/out",
-    "target": "esnext",
     "module": "esnext",
+    "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "inlineSources": true,
-    "declaration": true,
-    "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "importHelpers": true,
     "jsx": "react-native",
     "lib": ["es2017", "esnext"],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "noImplicitAny": true,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
-    "downlevelIteration": true
+    "esModuleInterop": true,
+    "inlineSources": true,
+    "declaration": true
   },
   "include": ["../package/doRN"]
 }

@@ -2,10 +2,9 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import createSagaMiddleware, {SagaIterator} from "redux-saga";
-import {put} from "redux-saga/effects";
-import {ErrorBoundary, ErrorListener, setErrorAction, setStateAction, LOADING_ACTION, getPrototypeOfExceptConstructor, rootReducer, saga} from "../../shared";
-import {ActionTypeView, LifeCycleListener, ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
+import createSagaMiddleware from "redux-saga";
+import {ErrorBoundary, ErrorListener, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, saga, BaseModel, createModel} from "../../shared";
+import {ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
 
 let app: AppView;
 declare const window: any;
@@ -13,8 +12,8 @@ declare const window: any;
 type StateView = BaseStateView;
 type AppView = BaseAppView;
 
-// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承
-declare type ErrorHandlerModuleClass = new (name: string, state: {}) => Model<{}> & ErrorListener;
+// 1.new () 代表是一个class 2.new 中参数为初始参数 BaseModel(module/initialState) 3.BaseModel<{}> & ErrorListener 代表 class 的继承
+declare type ErrorHandlerModuleClass = new (name: string, state: {}) => BaseModel<{}> & ErrorListener;
 interface RenderOptions {
     name: string;
     Component: ComponentType<any>;
@@ -33,6 +32,7 @@ function createApp(): AppView {
 }
 
 app = createApp();
+export const Model = createModel(app);
 
 export function start(options: RenderOptions): void {
     class WrappedAppComponent extends React.PureComponent<{}, {initialized: boolean}> {
@@ -65,103 +65,16 @@ export function start(options: RenderOptions): void {
     listenGlobalError(options.ErrorHandlerModule);
 }
 
-export function register<H extends Model<any>>(handler: H, Component: ComponentType<any>): any {
+export function register<H extends BaseModel<any>>(handler: H, Component: ComponentType<any>): any {
     // Trigger every module.
-    if (app.modules.hasOwnProperty(handler.module)) {
-        throw new Error(`module is already registered, module=${handler.module}`);
+    if (app.modules.hasOwnProperty(handler.moduleName)) {
+        throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
 
-    const actions = createActions(handler);
-    const View = createView(handler, Component, actions);
+    const actions = createLogicActions(app, handler);
+    const View = createView(app, handler, Component, actions);
 
     return {View, actions};
-}
-
-export class Model<S extends object> implements LifeCycleListener {
-    public constructor(public readonly module: string, private readonly initialState: S) {
-        // 存储初始化 State 到 redux
-        app.store.dispatch(setStateAction(module, initialState, `@@${module}/initState`));
-    }
-
-    *onReady(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onLoad(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onUnload(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onHide(): SagaIterator {
-        // extends to be overrode
-    }
-
-    protected get state(): Readonly<S> {
-        return app.store.getState().app[this.module];
-    }
-
-    protected get rootState(): Readonly<StateView> {
-        return app.store.getState();
-    }
-
-    protected *setState(newState: Partial<S>): SagaIterator {
-        yield put(setStateAction(this.module, newState, `@@${this.module}/setState[${Object.keys(newState).join(",")}]`));
-    }
-}
-
-function createView<H extends Model<any>>(handler: H, Component: React.ComponentType<any>, actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
-    return class ProxyView<P extends {} = {}> extends React.PureComponent<P> {
-        constructor(props: P) {
-            super(props);
-
-            if ((handler.onReady as any).isLifecycle) {
-                app.store.dispatch(actions.onReady());
-            }
-        }
-
-        componentDidMount() {
-            if ((handler.onLoad as any).isLifecycle) {
-                app.store.dispatch(actions.onLoad());
-            }
-        }
-
-        componentDidUpdate(prevProps: Readonly<P>) {
-            const prevLocation = (prevProps as any).location;
-            const currentLocation = (this.props as any).location;
-            const currentRouteParams = (this.props as any).match ? (this.props as any).match.params : null;
-            if (currentLocation && currentRouteParams && prevLocation !== currentLocation && (handler.onLoad as any).isLifecycle) {
-                // Only trigger if current component is connected to <Route> and call Handler's setHistory
-                app.store.dispatch(actions.onLoad());
-            }
-        }
-
-        componentWillUnmount() {
-            if (actions.onUnload) {
-                app.store.dispatch(actions.onUnload());
-            }
-        }
-
-        render() {
-            return <Component {...this.props} />;
-        }
-    };
-}
-
-function createActions<H extends Model<any>>(handler: H) {
-    // 1.return actions(存储方法名与方法参数)、2.存储方法对应逻辑
-    const moduleName = handler.module;
-    const keys = getPrototypeOfExceptConstructor(handler);
-    const actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
-    keys.forEach(actionType => {
-        const method = handler[actionType];
-        const qualifiedActionType = `${moduleName}/${actionType}`;
-        app.actionHandler[qualifiedActionType] = method.bind(handler);
-        actions[actionType] = (...payload: any[]): ActionTypeView<any[]> => ({type: qualifiedActionType, payload});
-    });
-    return actions;
 }
 
 function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {

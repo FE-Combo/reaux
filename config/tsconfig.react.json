@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "../package/doReact",
     "outDir": "../output/doReact/out",
     "module": "esnext",
     "target": "es5",
@@ -15,7 +14,10 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "esModuleInterop": true,
+    "inlineSources": true,
+    "declaration": true // 所有function都需要返回返回类型
   },
   "include": ["../package/doReact"]
 }

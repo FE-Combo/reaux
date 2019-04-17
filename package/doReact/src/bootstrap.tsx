@@ -65,8 +65,8 @@ export function start(options: RenderOptions): void {
 
 export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>): any {
     // Trigger every module.
-    if (app.modules.hasOwnProperty(handler.module)) {
-        throw new Error(`module is already registered, module=${handler.module}`);
+    if (app.modules.hasOwnProperty(handler.moduleName)) {
+        throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
 
     const actions = createLogicActions(app, handler);

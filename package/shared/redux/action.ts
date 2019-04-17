@@ -32,7 +32,7 @@ export function setErrorAction(error: any): ActionTypeView<Exception> {
 
 export function createLogicActions<H extends BaseModel<{}>>(app: BaseAppView, handler: H) {
     // 1.return actions(存储方法名与方法参数)、2.存储方法对应逻辑
-    const moduleName = handler.module;
+    const moduleName = handler.moduleName;
     const keys = getPrototypeOfExceptConstructor(handler);
     const actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
     keys.forEach(actionType => {
