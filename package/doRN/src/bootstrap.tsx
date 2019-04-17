@@ -4,12 +4,7 @@ import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} fr
 import {Provider} from "react-redux";
 import createSagaMiddleware, {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {rootReducer} from "../../shared/redux/reducer";
-import {saga} from "../../shared/redux/saga";
-import ErrorBoundary from "../../shared/component/ErrorBoundary";
-import {ErrorListener} from "../../shared/util/exception";
-import {setErrorAction, setStateAction, LOADING_ACTION} from "../../shared/redux/action";
-import {getPrototypeOfExceptConstructor} from "../../shared/tool/object";
+import {ErrorBoundary, ErrorListener, setErrorAction, setStateAction, LOADING_ACTION, getPrototypeOfExceptConstructor, rootReducer, saga} from "../../shared";
 import {ActionTypeView, LifeCycleListener, ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
 
 let app: AppView;

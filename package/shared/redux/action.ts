@@ -1,5 +1,7 @@
-import {ActionTypeView, StateActionPayloadView, LoadingActionView} from "../type";
+import {ActionTypeView, StateActionPayloadView, LoadingActionView, BaseAppView} from "../type";
 import {Exception, RuntimeException} from "../util/exception";
+import {BaseModel} from "../component/Model";
+import {getPrototypeOfExceptConstructor} from "../tool/object";
 
 export const SET_STATE_ACTION: string = "@@framework/setState";
 export const LOADING_ACTION: string = "@@framework/loading";
@@ -26,4 +28,18 @@ export function setErrorAction(error: any): ActionTypeView<Exception> {
         type: ERROR_ACTION_TYPE,
         payload: exception,
     };
+}
+
+export function createLogicActions<H extends BaseModel<{}>>(app: BaseAppView, handler: H) {
+    // 1.return actions(存储方法名与方法参数)、2.存储方法对应逻辑
+    const moduleName = handler.module;
+    const keys = getPrototypeOfExceptConstructor(handler);
+    const actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
+    keys.forEach(actionType => {
+        const method = handler[actionType];
+        const qualifiedActionType = `${moduleName}/${actionType}`;
+        app.actionHandler[qualifiedActionType] = method.bind(handler);
+        actions[actionType] = (...payload: any[]): ActionTypeView<any[]> => ({type: qualifiedActionType, payload});
+    });
+    return actions;
 }

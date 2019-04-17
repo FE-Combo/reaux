@@ -1,17 +1,15 @@
 import {start, register, Model} from "./bootstrap";
 
-import {Async} from "../../shared/component/Async";
+export {Async, Exception, APIException, ErrorListener} from "../../shared";
 
-import {Exception, APIException, ErrorListener as ErrorListenerInCore} from "../../shared/util/exception";
-import {Lifecycle, Loading} from "./utils/decorator";
+export {Lifecycle, Loading} from "./utils/decorator";
 
-type ErrorListener = ErrorListenerInCore;
-
-export {start, register, Async, Model, Exception, Lifecycle, APIException, ErrorListener, Loading};
+export {start, register, Model};
 
 const Do = {
     start,
     register,
+    Model,
 };
 
 export default Do;

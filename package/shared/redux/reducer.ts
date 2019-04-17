@@ -2,7 +2,7 @@ import {Reducer, combineReducers, ReducersMapObject} from "redux";
 import {SET_STATE_ACTION, LOADING_ACTION} from "./action";
 import {ActionTypeView, LoadingStateView, StateActionPayloadView, LoadingActionView, BaseStateView} from "../type";
 
-export function appReducer(state: BaseStateView["app"] = {}, action: ActionTypeView<any>): BaseStateView["app"] {
+function appReducer(state: BaseStateView["app"] = {}, action: ActionTypeView<any>): BaseStateView["app"] {
     if (action.name === SET_STATE_ACTION) {
         const {module, state: moduleState} = action.payload as StateActionPayloadView;
         return {...state, [module]: {...state[module], ...moduleState}};

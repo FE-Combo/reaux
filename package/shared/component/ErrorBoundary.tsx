@@ -34,5 +34,4 @@ class Component extends React.PureComponent<Props, State> {
     }
 }
 
-const ErrorBoundary = connect()(Component);
-export default ErrorBoundary;
+export const ErrorBoundary = connect()(Component);

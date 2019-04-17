@@ -3,25 +3,19 @@ import ReactDOM from "react-dom";
 import {withRouter} from "react-router-dom";
 import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import createSagaMiddleware, {SagaIterator} from "redux-saga";
-import {put} from "redux-saga/effects";
+import createSagaMiddleware from "redux-saga";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
-import {rootReducer} from "../../shared/redux/reducer";
-import {saga} from "../../shared/redux/saga";
-import ErrorBoundary from "../../shared/component/ErrorBoundary";
-import {ErrorListener} from "../../shared/util/exception";
-import {setErrorAction, setStateAction} from "../../shared/redux/action";
-import {getPrototypeOfExceptConstructor} from "../../shared/tool/object";
-import {ActionTypeView, LifeCycleListener, ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
+import {saga, rootReducer, ErrorBoundary, ErrorListener, setErrorAction, createModel, createView, BaseModel, createLogicActions} from "../../shared";
+import {ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
 
 console.time("[framework] initialized");
 
 type StateView = BaseStateView<RouterState>;
 type AppView = BaseAppView<History, RouterState>;
 
-// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model<{}> & ErrorListener 代表 class 的继承
-declare type ErrorHandlerModuleClass = new (name: string, state: {}) => Model<{}> & ErrorListener;
+// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model & ErrorListener 代表 class 的继承
+declare type ErrorHandlerModuleClass = new (name: string, state: {}) => BaseModel<{}> & ErrorListener;
 interface RenderOptions {
     Component: ComponentType<any>;
     ErrorHandlerModule: ErrorHandlerModuleClass;
@@ -41,6 +35,8 @@ function createApp(): AppView {
 }
 
 const app = createApp();
+
+export const Model = createModel(app, push);
 
 export function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
@@ -67,107 +63,16 @@ export function start(options: RenderOptions): void {
     listenGlobalError(options.ErrorHandlerModule);
 }
 
-export function register<H extends Model<any>>(handler: H, Component: ComponentType<any>): any {
+export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>): any {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.module)) {
         throw new Error(`module is already registered, module=${handler.module}`);
     }
 
-    const actions = createActions(handler);
-    const View = createView(handler, Component, actions);
+    const actions = createLogicActions(app, handler);
+    const View = createView(app, handler, Component, actions);
 
     return {View, actions};
-}
-
-export class Model<S extends object> implements LifeCycleListener {
-    public constructor(public readonly module: string, private readonly initialState: S) {
-        // 存储初始化 State 到 redux
-        app.store.dispatch(setStateAction(module, initialState, `@@${module}/initState`));
-    }
-
-    *onReady(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onLoad(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onUnload(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onHide(): SagaIterator {
-        // extends to be overrode
-    }
-
-    protected get state(): Readonly<S> {
-        return app.store.getState().app[this.module];
-    }
-
-    protected get rootState(): Readonly<StateView> {
-        return app.store.getState();
-    }
-
-    protected *setState(newState: Partial<S>): SagaIterator {
-        yield put(setStateAction(this.module, newState, `@@${this.module}/setState[${Object.keys(newState).join(",")}]`));
-    }
-
-    protected *setHistory(newURL: string): SagaIterator {
-        yield put(push(newURL));
-    }
-}
-
-function createView<H extends Model<any>>(handler: H, Component: React.ComponentType<any>, actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
-    return class ProxyView<P extends {} = {}> extends React.PureComponent<P> {
-        constructor(props: P) {
-            super(props);
-
-            if ((handler.onReady as any).isLifecycle) {
-                app.store.dispatch(actions.onReady());
-            }
-        }
-
-        componentDidMount() {
-            if ((handler.onLoad as any).isLifecycle) {
-                app.store.dispatch(actions.onLoad());
-            }
-        }
-
-        componentDidUpdate(prevProps: Readonly<P>) {
-            const prevLocation = (prevProps as any).location;
-            const currentLocation = (this.props as any).location;
-            const currentRouteParams = (this.props as any).match ? (this.props as any).match.params : null;
-            if (currentLocation && currentRouteParams && prevLocation !== currentLocation && (handler.onLoad as any).isLifecycle) {
-                // Only trigger if current component is connected to <Route> and call Handler's setHistory
-                app.store.dispatch(actions.onLoad());
-            }
-        }
-
-        componentWillUnmount() {
-            if (actions.onUnload) {
-                app.store.dispatch(actions.onUnload());
-            }
-        }
-
-        render() {
-            return <Component {...this.props} />;
-        }
-    };
-}
-
-function createActions<H extends Model<any>>(handler: H) {
-    // 1.return actions(存储方法名与方法参数)、2.存储方法对应逻辑
-    const moduleName = handler.module;
-    const keys = getPrototypeOfExceptConstructor(handler);
-    const actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>} = {};
-    keys.forEach(actionType => {
-        const method = handler[actionType];
-        const qualifiedActionType = `${moduleName}/${actionType}`;
-        app.actionHandler[qualifiedActionType] = method.bind(handler);
-        actions[actionType] = (...payload: any[]): ActionTypeView<any[]> => ({type: qualifiedActionType, payload});
-    });
-    return actions;
 }
 
 function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
