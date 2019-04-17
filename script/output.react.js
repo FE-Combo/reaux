@@ -44,7 +44,7 @@ function compile() {
 function distribute() {
     console.info(chalk`{green.bold [task]} {white.bold distribute}`);
     fs.mkdirsSync("output/doReact/dist/lib");
-    fs.copySync("output/doReact/out/framework", "output/doReact/dist/lib/", {dereference: true});
+    fs.copySync("output/doReact/out", "output/doReact/dist/lib/", {dereference: true});
     fs.copySync("package/doReact/package.json", "output/doReact/dist/package.json", {dereference: true});
 }
 

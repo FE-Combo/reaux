@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Front-End lightweight framework base on react + redux + axios, strict in TypeScript.",
   "scripts": {
-    "output": "node script/output.react.js && node script/output.rn.js",
+    "output": "node script/upgrade-react.js &&  node script/output.react.js && rm -rf node_modules && node script/output.rn.js",
     "format": "prettier --config config/prettier.json --write \"{package,test}/**/*.{ts,tsx}\"",
     "upgrade-react": "node script/upgrade-react.js",
+    "upgrade-rn": "node script/upgrade-rn.js",
     "output-react": "yarn install && node script/output.react.js",
-    "publish-react": "rm -rf package/doReact/node_modules && rm -rf node_modules",
-    "output-rn": "yarn install && node script/output.rn.js"
+    "output-rn": "yarn install && node script/output.rn.js",
+    "publish-react": "rm -rf node_modules"
   },
   "repository": {
     "type": "git",

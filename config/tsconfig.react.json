@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "../package/doReact",
-    "outDir": "../output/doReact/out/framework",
+    "outDir": "../output/doReact/out",
     "module": "esnext",
     "target": "es5",
     "moduleResolution": "node",
@@ -17,6 +17,5 @@
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["../package/doReact"],
-  "exclude": ["node_modules"]
+  "include": ["../package/doReact"]
 }

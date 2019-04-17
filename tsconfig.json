@@ -1,3 +1,3 @@
 {
-  "extends": "./config/tsconfig.react.json"
+  "extends": "./config/tsconfig.rn.json"
 }
