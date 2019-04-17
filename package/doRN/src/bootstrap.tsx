@@ -1,37 +1,25 @@
 import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
-import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
+import {compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import {ErrorBoundary, ErrorListener, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, saga, BaseModel, createModel} from "../../shared";
-import {ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
+import {ErrorBoundary, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, BaseModel, createModel, createApp} from "../../shared";
+import {BaseAppView, BaseStateView} from "../../shared/type";
+import {SagaIterator} from "redux-saga";
 
-let app: AppView;
 declare const window: any;
 
 type StateView = BaseStateView;
 type AppView = BaseAppView;
 
-// 1.new () 代表是一个class 2.new 中参数为初始参数 BaseModel(module/initialState) 3.BaseModel<{}> & ErrorListener 代表 class 的继承
-declare type ErrorHandlerModuleClass = new (name: string, state: {}) => BaseModel<{}> & ErrorListener;
 interface RenderOptions {
     name: string;
     Component: ComponentType<any>;
-    ErrorHandlerModule: ErrorHandlerModuleClass;
+    onError: () => SagaIterator;
     onInitialized: () => Promise<any>;
 }
 
-function createApp(): AppView {
-    const actionHandler: {[type: string]: ActionHandler} = {};
-    const sagaMiddleware = createSagaMiddleware();
-    const reducer: Reducer<StateView> = rootReducer();
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware)));
-    const errorHandler: ErrorHandler | null = null;
-    sagaMiddleware.run(saga, actionHandler, errorHandler);
-    return {store, sagaMiddleware, actionHandler, modules: {}, errorHandler};
-}
+const app: AppView = createApp(app => app, rootReducer(), devtools);
 
-app = createApp();
 export const Model = createModel(app);
 
 export function start(options: RenderOptions): void {
@@ -62,7 +50,7 @@ export function start(options: RenderOptions): void {
         }
     }
     AppRegistry.registerComponent(options.name, () => WrappedAppComponent);
-    listenGlobalError(options.ErrorHandlerModule);
+    listenGlobalError(options.onError);
 }
 
 export function register<H extends BaseModel<any>>(handler: H, Component: ComponentType<any>): any {
@@ -77,7 +65,7 @@ export function register<H extends BaseModel<any>>(handler: H, Component: Compon
     return {View, actions};
 }
 
-function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
+function listenGlobalError(onError: () => SagaIterator) {
     // 对客户端错误行为进行处理(超时/4**)
     ErrorUtils.setGlobalHandler((error, isFatal) => {
         if (isFatal) {
@@ -85,8 +73,7 @@ function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
         }
         app.store.dispatch(setErrorAction(error));
     });
-    const errorHandler = new ErrorHandlerModule("errorHandler", {});
-    app.errorHandler = errorHandler.onError.bind(errorHandler);
+    app.errorHandler = onError.bind(app);
 }
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {

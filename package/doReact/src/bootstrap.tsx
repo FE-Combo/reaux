@@ -1,40 +1,29 @@
 import React, {ComponentType} from "react";
 import ReactDOM from "react-dom";
 import {withRouter} from "react-router-dom";
-import {applyMiddleware, createStore, Reducer, Store, compose, StoreEnhancer} from "redux";
+import {Reducer, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import createSagaMiddleware from "redux-saga";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
-import {saga, rootReducer, ErrorBoundary, ErrorListener, setErrorAction, createModel, createView, BaseModel, createLogicActions} from "../../shared";
-import {ActionHandler, BaseAppView, BaseStateView, ErrorHandler} from "../../shared/type";
+import {rootReducer, ErrorBoundary, setErrorAction, createModel, createView, BaseModel, createLogicActions, createApp} from "../../shared";
+import {BaseAppView, BaseStateView} from "../../shared/type";
+import {SagaIterator} from "redux-saga";
 
 console.time("[framework] initialized");
 
 type StateView = BaseStateView<RouterState>;
 type AppView = BaseAppView<History, RouterState>;
 
-// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.Model & ErrorListener 代表 class 的继承
-declare type ErrorHandlerModuleClass = new (name: string, state: {}) => BaseModel<{}> & ErrorListener;
 interface RenderOptions {
     Component: ComponentType<any>;
-    ErrorHandlerModule: ErrorHandlerModuleClass;
+    onError: () => SagaIterator;
     onInitialized: (() => void) | null;
 }
 
-function createApp(): AppView {
-    const history = createBrowserHistory();
-    const actionHandler: {[type: string]: ActionHandler} = {};
-    const sagaMiddleware = createSagaMiddleware();
-    const routeReducer = connectRouter(history);
-    const reducer: Reducer<StateView> = rootReducer(routeReducer);
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(routerMiddleware(history), sagaMiddleware)));
-    const errorHandler: ErrorHandler | null = null;
-    sagaMiddleware.run(saga, actionHandler, errorHandler);
-    return {history, store, sagaMiddleware, actionHandler, modules: {}, errorHandler};
-}
-
-const app = createApp();
+const history = createBrowserHistory();
+const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
+const historyMiddleware = routerMiddleware(history);
+const app: AppView = createApp(app => ({...app, history}), reducer, devtools, historyMiddleware);
 
 export const Model = createModel(app, push);
 
@@ -60,7 +49,7 @@ export function start(options: RenderOptions): void {
             }
         }
     );
-    listenGlobalError(options.ErrorHandlerModule);
+    listenGlobalError(options.onError);
 }
 
 export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>): any {
@@ -68,14 +57,12 @@ export function register<H extends BaseModel<{}>>(handler: H, Component: Compone
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
-
     const actions = createLogicActions(app, handler);
     const View = createView(app, handler, Component, actions);
-
     return {View, actions};
 }
 
-function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
+function listenGlobalError(onError: () => SagaIterator) {
     // 对客户端错误行为进行处理(超时/4**)
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
@@ -85,8 +72,7 @@ function listenGlobalError(ErrorHandlerModule: ErrorHandlerModuleClass) {
         app.store.dispatch(setErrorAction(error));
     };
 
-    const errorHandler = new ErrorHandlerModule("errorHandler", {});
-    app.errorHandler = errorHandler.onError.bind(errorHandler);
+    app.errorHandler = onError.bind(app);
 }
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {

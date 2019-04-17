@@ -15,3 +15,6 @@ export {Exception, APIException, RuntimeException, ReactLifecycleException, Netw
 /** tool */
 export {objectToArray, isEmptyObject, mapEnumToArray, getPrototypeOfExceptConstructor} from "./tool/object";
 export {typeObject, PickOptional, Omit} from "./tool/type";
+
+/** app */
+export {createApp} from "./app";

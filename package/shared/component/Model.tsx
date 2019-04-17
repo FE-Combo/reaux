@@ -2,7 +2,8 @@ import {SagaIterator} from "redux-saga";
 import {setStateAction} from "../index";
 import {LifeCycleListener, BaseStateView, BaseAppView} from "../type";
 
-export function createModel<S extends object = {}>(app: BaseAppView, setHistory?: (newURL: string) => {type: any; payload: any}): new (name: string, state: S) => BaseModel<S> {
+// 1.new () 代表是一个class 2.new 中参数为初始参数 Model(module/initialState) 3.BaseModel & ErrorListener 代表 Model 的继承
+export function createModel<S extends object = {}>(app: BaseAppView, setHistory?: (newURL: string) => {type: any; payload: any}): new (name: string, state: S) => BaseModel<S> & LifeCycleListener {
     return class Model extends BaseModel<S> {
         public constructor(public readonly moduleName: string, protected readonly initialState: S) {
             super(moduleName, initialState);
