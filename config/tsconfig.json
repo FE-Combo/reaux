@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../package",
+    "module": "esnext",
+    "target": "es5",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "jsx": "react",
+    "lib": ["dom", "es2017"],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "noImplicitAny": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "include": ["../package"],
+  "exclude": ["node_modules"]
+}
