@@ -5,8 +5,8 @@ import {Reducer, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
-import {rootReducer, ErrorBoundary, setErrorAction, createModel, createView, BaseModel, createLogicActions, createApp} from "../../shared";
-import {BaseAppView, BaseStateView} from "../../shared/type";
+import {rootReducer, ErrorBoundary, setErrorAction, setStateAction, createView, createLogicActions, createApp, Exception} from "../../shared";
+import {BaseAppView, BaseStateView, BaseModel, ErrorHandler} from "../../shared/type";
 import {SagaIterator} from "redux-saga";
 
 console.time("[framework] initialized");
@@ -16,7 +16,7 @@ type AppView = BaseAppView<History, RouterState>;
 
 interface RenderOptions {
     Component: ComponentType<any>;
-    onError: () => SagaIterator;
+    onError: ErrorHandler;
     onInitialized: (() => void) | null;
 }
 
@@ -24,8 +24,6 @@ const history = createBrowserHistory();
 const reducer: Reducer<StateView> = rootReducer(connectRouter(history));
 const historyMiddleware = routerMiddleware(history);
 const app: AppView = createApp(app => ({...app, history}), reducer, devtools, historyMiddleware);
-
-export const Model = createModel(app, push);
 
 export function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
@@ -62,7 +60,48 @@ export function register<H extends BaseModel<{}>>(handler: H, Component: Compone
     return {View, actions};
 }
 
-function listenGlobalError(onError: () => SagaIterator) {
+export class Model<State extends object = {}> implements BaseModel<State> {
+    public constructor(readonly moduleName: string, readonly initState: State) {
+        // 存储初始化 State 到 redux
+        // super(moduleName, initialState);
+        app.store.dispatch(setStateAction(moduleName, initState, `@@${moduleName}/initState`));
+    }
+
+    *onReady(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onLoad(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onUnload(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onHide(): SagaIterator {
+        // extends to be overrode
+    }
+
+    get state(): Readonly<State> {
+        return app.store.getState().app[this.moduleName];
+    }
+
+    get rootState(): Readonly<BaseStateView> {
+        return app.store.getState();
+    }
+
+    setState(newState: Partial<State>) {
+        app.store.dispatch(setStateAction(this.moduleName, newState, `@@${this.moduleName}/setState[${Object.keys(newState).join(",")}]`));
+    }
+
+    /** custom function */
+    setHistory(newURL: string) {
+        app.store.dispatch(push(newURL));
+    }
+}
+
+function listenGlobalError(onError: ErrorHandler) {
     // 对客户端错误行为进行处理(超时/4**)
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");

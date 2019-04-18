@@ -1,7 +1,7 @@
 import React from "react";
-import {LifeCycleListener, BaseAppView, ActionTypeView} from "../type";
+import {BaseModel, BaseAppView, ActionTypeView} from "../type";
 
-export function createView<H extends LifeCycleListener>(app: BaseAppView, handler: H, Component: React.ComponentType<any>, actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
+export function createView<H extends BaseModel<{}>>(app: BaseAppView, handler: H, Component: React.ComponentType<any>, actions: {[type: string]: (...payload: any[]) => ActionTypeView<any[]>}) {
     return class View<P extends {} = {}> extends React.PureComponent<P> {
         constructor(props: P) {
             super(props);

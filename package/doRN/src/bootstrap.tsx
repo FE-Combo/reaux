@@ -2,8 +2,8 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import {ErrorBoundary, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, BaseModel, createModel, createApp} from "../../shared";
-import {BaseAppView, BaseStateView} from "../../shared/type";
+import {ErrorBoundary, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, createApp, setStateAction} from "../../shared";
+import {BaseAppView, BaseStateView, BaseModel} from "../../shared/type";
 import {SagaIterator} from "redux-saga";
 
 declare const window: any;
@@ -19,8 +19,6 @@ interface RenderOptions {
 }
 
 const app: AppView = createApp(app => app, rootReducer(), devtools);
-
-export const Model = createModel(app);
 
 export function start(options: RenderOptions): void {
     class WrappedAppComponent extends React.PureComponent<{}, {initialized: boolean}> {
@@ -53,7 +51,7 @@ export function start(options: RenderOptions): void {
     listenGlobalError(options.onError);
 }
 
-export function register<H extends BaseModel<any>>(handler: H, Component: ComponentType<any>): any {
+export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>): any {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
@@ -63,6 +61,42 @@ export function register<H extends BaseModel<any>>(handler: H, Component: Compon
     const View = createView(app, handler, Component, actions);
 
     return {View, actions};
+}
+
+export class Model<State extends object = {}> implements BaseModel<State> {
+    public constructor(readonly moduleName: string, readonly initState: State) {
+        // 存储初始化 State 到 redux
+        // super(moduleName, initialState);
+        app.store.dispatch(setStateAction(moduleName, initState, `@@${moduleName}/initState`));
+    }
+
+    *onReady(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onLoad(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onUnload(): SagaIterator {
+        // extends to be overrode
+    }
+
+    *onHide(): SagaIterator {
+        // extends to be overrode
+    }
+
+    get state(): Readonly<State> {
+        return app.store.getState().app[this.moduleName];
+    }
+
+    get rootState(): Readonly<BaseStateView> {
+        return app.store.getState();
+    }
+
+    setState(newState: Partial<State>) {
+        app.store.dispatch(setStateAction(this.moduleName, newState, `@@${this.moduleName}/setState[${Object.keys(newState).join(",")}]`));
+    }
 }
 
 function listenGlobalError(onError: () => SagaIterator) {

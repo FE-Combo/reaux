@@ -1,7 +1,6 @@
-import {ActionTypeView, StateActionPayloadView, LoadingActionView, BaseAppView} from "../type";
 import {Exception, RuntimeException} from "../util/exception";
-import {BaseModel} from "../component/Model";
 import {getPrototypeOfExceptConstructor} from "../tool/object";
+import {ActionTypeView, StateActionPayloadView, LoadingActionView, BaseAppView, BaseModel} from "../type";
 
 export const SET_STATE_ACTION: string = "@@framework/setState";
 export const LOADING_ACTION: string = "@@framework/loading";

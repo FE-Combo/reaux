@@ -1,7 +1,6 @@
 /** component */
 export {Async} from "./component/Async";
 export {ErrorBoundary} from "./component/ErrorBoundary";
-export {BaseModel, createModel} from "./component/Model";
 export {createView} from "./component/View";
 
 /** redux */
