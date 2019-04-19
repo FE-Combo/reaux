@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "../output/doRN/out",
+    "outDir": "../../",
+    "outDir": "../output/out",
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
@@ -19,5 +20,6 @@
     "inlineSources": true,
     "declaration": true
   },
-  "include": ["../package/doRN"]
+  "include": ["../src", "../../shared"],
+  "exclude": ["node_modules"]
 }

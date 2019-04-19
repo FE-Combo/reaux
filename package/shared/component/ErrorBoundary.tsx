@@ -1,5 +1,5 @@
 import React from "react";
-import {connect, DispatchProp} from "react-redux";
+import {connect, DispatchProp, ConnectedComponentClass} from "react-redux";
 import {ReactLifecycleException} from "../util/exception";
 import {setErrorAction} from "../redux/action";
 
@@ -34,4 +34,4 @@ class Component extends React.PureComponent<Props, State> {
     }
 }
 
-export const ErrorBoundary = connect()(Component);
+export const ErrorBoundary: ConnectedComponentClass<typeof Component, Pick<Props, "render" | "children">> = connect()(Component);

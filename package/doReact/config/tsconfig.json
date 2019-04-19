@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": "../package",
+    "baseUrl": "../../",
+    "outDir": "../output/out",
     "module": "esnext",
     "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
     "jsx": "react",
-    "lib": ["dom", "es2017", "esnext"],
+    "lib": ["dom", "es2017"],
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -14,8 +15,11 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "esModuleInterop": true,
+    "inlineSources": true,
+    "declaration": true // 所有function都需要返回返回类型
   },
-  "include": ["../package"],
+  "include": ["../src", "../../shared"],
   "exclude": ["node_modules"]
 }

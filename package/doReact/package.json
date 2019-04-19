@@ -5,6 +5,9 @@
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
+  "scripts":{
+    "output":"node output.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vocoWone/core-react.git"

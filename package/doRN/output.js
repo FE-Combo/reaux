@@ -18,7 +18,7 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", "config/prettier.json", "--list-different", "package/doReact/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", "./config/prettier.json", "--list-different", "{src,../shared}/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
 }
 
 // function test() {
@@ -28,24 +28,24 @@ function checkCodeStyle() {
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
-    return spawn("tslint", ["-c", "config/tslint.json", "{package/doReact,test}/**/*.{ts,tsx}"], "lint failed, please fix");
+    return spawn("tslint", ["-c", "./config/tslint.json", "{src,../shared,test}/**/*.{ts,tsx}"], "lint failed, please fix");
 }
 
 function cleanup() {
-    console.info(chalk`{green.bold [task]} output/doReact {white.bold cleanup}`);
-    fs.emptyDirSync("output/doReact");
+    console.info(chalk`{green.bold [task]} output {white.bold cleanup}`);
+    fs.emptyDirSync("output");
 }
 
 function compile() {
     console.info(chalk`{green.bold [task]} {white.bold compile}`);
-    return spawn("tsc", ["-p", "config/tsconfig.react.json"], "compile failed, please fix");
+    return spawn("tsc", ["-p", "./config/tsconfig.json"], "compile failed, please fix");
 }
 
 function distribute() {
     console.info(chalk`{green.bold [task]} {white.bold distribute}`);
-    fs.mkdirsSync("output/doReact/dist/lib");
-    fs.copySync("output/doReact/out", "output/doReact/dist/lib/", {dereference: true});
-    fs.copySync("package/doReact/package.json", "output/doReact/dist/package.json", {dereference: true});
+    fs.mkdirsSync("output/dist/lib");
+    fs.copySync("output/out", "output/dist/lib/", {dereference: true});
+    fs.copySync("package.json", "output/dist/package.json", {dereference: true});
 }
 
 function output() {

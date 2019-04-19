@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "description": "Front-End lightweight framework base on react + redux + axios, strict in TypeScript.",
   "scripts": {
-    "output": "yarn && node script/output.react.js && node script/upgrade-rn.js && rm -rf node_modules && yarn && node script/output.rn.js",
-    "format": "prettier --config config/prettier.json --write \"{package,test}/**/*.{ts,tsx}\"",
-    "upgrade-react": "node script/upgrade-react.js",
-    "upgrade-rn": "node script/upgrade-rn.js",
-    "output-react": "node script/output.react.js",
-    "output-rn": "node script/output.rn.js",
-    "publish-react": "rm -rf node_modules"
+    "output": "cd package/doReact && yarn && yarn output && cd ../doRN && yarn && yarn output"
   },
   "repository": {
     "type": "git",
@@ -24,29 +18,5 @@
   "bugs": {
     "url": "https://github.com/vocoWone/core-react/issues"
   },
-  "homepage": "https://github.com/vocoWone/core-react#readme",
-  "devDependencies": {
-    "chalk": "2.4.2",
-    "fs-extra": "7.0.1",
-    "prettier": "1.17.0",
-    "ts-node": "8.1.0",
-    "tslint": "5.15.0",
-    "tslint-react": "4.0.0",
-    "typescript": "3.4.3"
-  },
-  "dependencies": {
-    "@types/node": "11.13.4",
-    "@types/react": "16.8.13",
-    "@types/react-dom": "16.8.4",
-    "@types/react-redux": "7.0.6",
-    "@types/react-router-dom": "4.3.2",
-    "axios": "0.18.0",
-    "connected-react-router": "6.4.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-redux": "7.0.2",
-    "react-router-dom": "5.0.0",
-    "redux": "4.0.1",
-    "redux-saga": "1.0.2"
-  }
+  "homepage": "https://github.com/vocoWone/core-react#readme"
 }
