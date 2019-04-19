@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Front-End lightweight framework base on react + redux + axios, strict in TypeScript.",
   "scripts": {
-    "output": "cd package/doReact && yarn && node ./output.js && cd ../doRN && yarn && node ./output.js"
+    "output": "node package/doReact/output.js"
   },
   "repository": {
     "type": "git",
