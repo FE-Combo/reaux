@@ -1,10 +1,10 @@
 {
   "name": "doreact",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Front-End web framework",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/doReact/src/index.js",
+  "module": "lib/doReact/src/index.js",
+  "types": "lib/doReact/src/index.d.ts",
   "scripts": {
     "output": "node output.js"
   },
