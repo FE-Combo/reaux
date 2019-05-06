@@ -1,8 +1,8 @@
 import React from "react";
 import {RouteProps} from "react-router";
 import {Redirect, Route} from "react-router-dom";
-import {PickOptional} from "../../../shared";
-import {ErrorBoundary} from "../../../shared";
+import {PickOptional} from "../../../shared/src/index";
+import {ErrorBoundary} from "../../../shared/src/index";
 
 interface Props extends RouteProps {
     withErrorBoundary?: boolean;

@@ -5,8 +5,8 @@ import {Reducer, compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
-import {rootReducer, ErrorBoundary, setErrorAction, setStateAction, createView, createLogicActions, createApp} from "../../shared";
-import {BaseAppView, BaseStateView, BaseModel, ErrorHandler} from "../../shared/type";
+import {rootReducer, ErrorBoundary, setErrorAction, setStateAction, createView, createLogicActions, createApp} from "../../shared/src/index";
+import {BaseAppView, BaseStateView, BaseModel, ErrorHandler} from "../../shared/src/type";
 import {SagaIterator} from "redux-saga";
 
 console.time("[framework] initialized");

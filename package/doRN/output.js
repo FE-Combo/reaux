@@ -18,7 +18,7 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", "./config/prettier.json", "--list-different", "{src,../shared}/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", "./config/prettier.json", "--list-different", "src/**/*.{ts,tsx,js}"], "check code style failed, please format above files");
 }
 
 // function test() {
@@ -28,7 +28,7 @@ function checkCodeStyle() {
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
-    return spawn("tslint", ["-c", "./config/tslint.json", "{src,../shared,test}/**/*.{ts,tsx}"], "lint failed, please fix");
+    return spawn("tslint", ["-c", "./config/tslint.json", "{src,test}/**/*.{ts,tsx}"], "lint failed, please fix");
 }
 
 function cleanup() {

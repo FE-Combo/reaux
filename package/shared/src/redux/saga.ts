@@ -1,8 +1,8 @@
 // TODO: saga call / saga folk / saga spawn
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
-import {setErrorAction, ERROR_ACTION_TYPE} from "../../shared/redux/action";
-import {ActionTypeView, ActionHandler, ErrorHandler} from "../../shared/type";
+import {setErrorAction, ERROR_ACTION_TYPE} from "./action";
+import {ActionTypeView, ActionHandler, ErrorHandler} from "../type";
 
 export function* saga(actionHandler: {[type: string]: ActionHandler}, errorHandler: ErrorHandler | null): SagaIterator {
     // Register saga, listener all actions

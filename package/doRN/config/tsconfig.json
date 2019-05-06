@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../",
+    "outDir": "../src",
     "outDir": "../output/out",
     "module": "esnext",
     "target": "esnext",
@@ -20,6 +20,6 @@
     "inlineSources": true,
     "declaration": true
   },
-  "include": ["../src", "../../shared"],
+  "include": ["../src"],
   "exclude": ["node_modules"]
 }

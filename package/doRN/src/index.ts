@@ -1,10 +1,10 @@
 import {start, register, Model} from "./bootstrap";
 
-export {Exception, APIException, ErrorListener, Async} from "../../shared";
+export {Exception, APIException, ErrorListener, Async} from "../../shared/src/index";
 
 export {Lifecycle} from "./utils/decorator";
 
-export {BaseStateView as State} from "../../shared/type";
+export {BaseStateView as State} from "../../shared/src/type";
 
 export {start, register, Model};
 

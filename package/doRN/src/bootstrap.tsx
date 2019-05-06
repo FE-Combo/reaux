@@ -2,8 +2,8 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {compose, StoreEnhancer} from "redux";
 import {Provider} from "react-redux";
-import {ErrorBoundary, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, createApp, setStateAction} from "../../shared";
-import {BaseAppView, BaseStateView, BaseModel} from "../../shared/type";
+import {ErrorBoundary, setErrorAction, LOADING_ACTION, createView, createLogicActions, rootReducer, createApp, setStateAction} from "../../shared/src/index";
+import {BaseAppView, BaseStateView, BaseModel} from "../../shared/src/type";
 import {SagaIterator} from "redux-saga";
 
 declare const window: any;

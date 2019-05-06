@@ -1,5 +1,5 @@
 import {SagaIterator} from "redux-saga";
-import {ActionHandler, BaseModelLifeCycle, BaseStateView} from "../../../shared/type";
+import {ActionHandler, BaseModelLifeCycle, BaseStateView} from "../../../shared/src/type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;
