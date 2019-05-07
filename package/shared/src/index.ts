@@ -13,12 +13,9 @@ export {Exception, APIException, RuntimeException, ReactLifecycleException, Netw
 import {ErrorListener as ErrorListenerInCore} from "./util/exception";
 export type ErrorListener = ErrorListenerInCore;
 
-/** tool */
-export {objectToArray, isEmptyObject, mapEnumToArray, getPrototypeOfExceptConstructor} from "./tool/object";
-export {typeObject} from "./tool/type";
-import {Omit as OmitInCore, PickOptional as PickOptionalInCore} from "./tool/type";
-export type Omit<A, B extends keyof A> = OmitInCore<A, B>;
-export type PickOptional<A> = PickOptionalInCore<A>;
+/** kit */
+export {getPrototypeOfExceptConstructor} from "./kit";
+export {Omit, PickOptional} from "./kit";
 
 /** app */
 export {createApp} from "./app";
