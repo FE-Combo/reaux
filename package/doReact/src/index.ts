@@ -4,6 +4,8 @@ export {Async, Exception, APIException} from "../../shared/src/index";
 
 export {Lifecycle, Loading} from "./utils/decorator";
 
+export {ajax} from "./utils/ajax";
+
 import Route from "./utils/Route";
 
 import {ErrorListener as ErrorListenerInCore} from "../../shared/src/index";

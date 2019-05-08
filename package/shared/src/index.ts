@@ -10,6 +10,7 @@ export {saga} from "./redux/saga";
 
 /** util */
 export {Exception, APIException, RuntimeException, ReactLifecycleException, NetworkConnectionException} from "./util/exception";
+export {call} from "./util/ajax";
 import {ErrorListener as ErrorListenerInCore} from "./util/exception";
 export type ErrorListener = ErrorListenerInCore;
 
