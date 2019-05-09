@@ -40,5 +40,7 @@ export function createLogicActions<H extends BaseModel<{}>>(app: BaseAppView, ha
         app.actionHandler[qualifiedActionType] = method.bind(handler);
         actions[actionType] = (...payload: any[]): ActionTypeView<any[]> => ({type: qualifiedActionType, payload});
     });
+
+    // TODO: 返回的action key不是强类型
     return actions;
 }

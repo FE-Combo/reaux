@@ -50,7 +50,7 @@ export function start(options: RenderOptions): void {
     listenGlobalError(options.onError);
 }
 
-export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>): any {
+export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>) {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
