@@ -1,7 +1,7 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {setLoadingAction} from "../../../shared/src/index";
-import {BaseModelLifeCycle, ActionHandler, BaseStateView} from "../../../shared/src/type";
+import {setLoadingAction} from "../shared";
+import {BaseModelLifeCycle, ActionHandler, BaseStateView} from "../shared/type";
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => SagaIterator;

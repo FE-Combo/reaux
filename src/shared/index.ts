@@ -13,10 +13,5 @@ export {Exception, APIException, RuntimeException, ReactLifecycleException, Netw
 export {call} from "./util/ajax";
 import {ErrorListener as ErrorListenerInCore} from "./util/exception";
 export type ErrorListener = ErrorListenerInCore;
-
-/** kit */
-export {getPrototypeOfExceptConstructor} from "./kit";
-export {Omit, PickOptional} from "./kit";
-
 /** app */
 export {createApp} from "./app";
