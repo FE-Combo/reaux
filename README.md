@@ -8,7 +8,7 @@
 Front-End lightweight framework base on react + redux + axios, strict in TypeScript.
 
 - **Simple:** Integrating with react and redux. Easier to use.
-- **Quickly:** Focus more on UI logic without considering framework logic and performance.
+- **Quickly:** Users are more focused on UI logic than framework logic and performance.
 
 ## Installation
 
