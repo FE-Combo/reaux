@@ -9,7 +9,6 @@ Front-End lightweight framework base on react + redux + axios, strict in TypeScr
 
 - **Simple:** Integrating with react and redux. Easier to use.
 - **Quickly:** Focus more on UI logic without considering framework logic and performance.
-- **Frontier:** Continuous upgrading.
 
 ## Installation
 
@@ -22,6 +21,4 @@ yarn add doreact --save
 
 ## Documentation
 
-You see demo [on the website](https://www.iwangzh.com).
-
-Check out the source code for a quick overview and **yarn start** for start project.
+You see demo [on the website](http://www.vocowone.com:3003).
