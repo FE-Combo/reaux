@@ -24,6 +24,6 @@
 - Add declaration in compilerOptions of tsconfig.json
 - Modify main/module/type in package.json
 
-### 1.0.1 (2019/03/16 - 2019/04/09)
+### 1.0.0 - 1.0.1 (2019/03/16 - 2019/04/09)
 
 - Refactor File structure
