@@ -1,4 +1,4 @@
-import {ErrorHandler} from "../type";
+import {SagaIterator} from "redux-saga";
 
 export abstract class Exception {
     protected constructor(public message: string) {}
@@ -32,6 +32,7 @@ export class NetworkConnectionException extends Exception {
     }
 }
 
+// TODO: remove？
 export interface ErrorListener {
-    onError: ErrorHandler;
+    onError: (error: Exception) => SagaIterator;
 }

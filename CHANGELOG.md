@@ -2,6 +2,8 @@
 
 ###1.1.2(2019/5/17 - )
 
+- Fix appears error logic
+
 ### 1.1.1 - 1.1.2(2019/5/13 - 2019/5/17)
 
 - Add actions type inference

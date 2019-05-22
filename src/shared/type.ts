@@ -8,7 +8,7 @@ export interface BaseAppView<H = any, R = any> {
     readonly sagaMiddleware: SagaMiddleware<any>;
     readonly actionHandler: {[type: string]: ActionHandler};
     readonly modules: {[module: string]: number};
-    errorHandler: ErrorHandler | null;
+    exceptionHandler: ExceptionHandler;
 }
 
 export interface BaseStateView<R = any> {
@@ -57,3 +57,7 @@ export interface LoadingStateView {
 export type ActionHandler = (...args: any[]) => SagaIterator;
 
 export type ErrorHandler = (error: Exception) => SagaIterator;
+
+export interface ExceptionHandler {
+    onError: ErrorHandler;
+}

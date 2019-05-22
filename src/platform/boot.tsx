@@ -27,6 +27,10 @@ const app: AppView = createApp(app => ({...app, history}), reducer, devtools, hi
 
 export function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
+
+    app.exceptionHandler.onError = options.onError.bind(app);
+    listenGlobalError();
+
     const rootElement: HTMLDivElement = document.createElement("div");
     rootElement.id = "framework-app-root";
     document.body.appendChild(rootElement);
@@ -47,7 +51,6 @@ export function start(options: RenderOptions): void {
             }
         }
     );
-    listenGlobalError(options.onError);
 }
 
 export function register<H extends BaseModel<{}>>(handler: H, Component: ComponentType<any>) {
@@ -101,8 +104,8 @@ export class Model<State extends object = {}> implements BaseModel<State> {
     }
 }
 
-function listenGlobalError(onError: ErrorHandler) {
-    // 对客户端错误行为进行处理(超时/4**)
+function listenGlobalError() {
+    // 监听全局 error
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
         if (!error) {
@@ -110,8 +113,6 @@ function listenGlobalError(onError: ErrorHandler) {
         }
         app.store.dispatch(setErrorAction(error));
     };
-
-    app.errorHandler = onError.bind(app);
 }
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
