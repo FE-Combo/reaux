@@ -27,5 +27,5 @@ export function rootReducer(routerReducer?: Reducer<any, any>): Reducer<BaseStat
     if (routerReducer) {
         reducers.router = routerReducer;
     }
-    return combineReducers<BaseStateView>(reducers);
+    return combineReducers(reducers);
 }

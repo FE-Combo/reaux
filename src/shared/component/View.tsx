@@ -18,6 +18,7 @@ export function createView<H extends BaseModel<{}>>(app: BaseAppView, handler: H
         }
 
         componentDidUpdate(prevProps: Readonly<P>) {
+            // prevProps.location come from Route
             const prevLocation = (prevProps as any).location;
             const currentLocation = (this.props as any).location;
             const currentRouteParams = (this.props as any).match ? (this.props as any).match.params : null;
