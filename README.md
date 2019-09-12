@@ -21,4 +21,4 @@ yarn add doreact --save
 
 ## Documentation
 
-You see demo [on the website](http://www.vocowone.com/note/5d0a0885e0bc093273281464).
+See [on the website](http://www.vocowone.com/note/5d0a0885e0bc093273281464).
