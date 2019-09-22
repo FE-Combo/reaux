@@ -22,3 +22,7 @@ yarn add doreact --save
 ## Documentation
 
 See [on the website](http://www.vocowone.com/note/5d0a0885e0bc093273281464).
+
+## Idea
+
+Refactor!! Injecting react-native & Next.js(ssr)
