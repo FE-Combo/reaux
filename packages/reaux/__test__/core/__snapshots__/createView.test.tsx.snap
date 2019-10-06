@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create Component View 1`] = `
+<div
+  onClick={[Function]}
+>
+  component
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`Create Component View 2`] = `
+<div
+  onClick={[Function]}
+>
+  toggle component
+  <div>
+    text
+  </div>
+</div>
+`;

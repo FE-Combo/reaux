@@ -1,0 +1,24 @@
+{
+  "name": "reaux-dom",
+  "version": "1.0.0",
+  "description": "Front-End web framework base on react and redux",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "author": "vocoWone",
+  "license": "MIT",
+  "dependencies": {
+    "@types/react-dom": "16.8.4",
+    "@types/react-router-dom": "4.3.4",
+    "connected-react-router": "6.5.0",
+    "react-dom": "16.8.6",
+    "react-router-dom": "5.0.1"
+  },
+  "peerDependencies": {
+    "@types/react-dom": "16.8.4",
+    "@types/react-router-dom": "4.3.4",
+    "connected-react-router": "6.5.0",
+    "react-dom": "16.8.6",
+    "react-router-dom": "5.0.1"
+  }
+}
