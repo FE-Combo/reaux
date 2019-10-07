@@ -1,6 +1,6 @@
 import {ActionType} from "../type";
 
-interface ActionsType {
+export interface ActionsType {
     [key: string]: (...payload: any[]) => ActionType<any[]>;
 }
 

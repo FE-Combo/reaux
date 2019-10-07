@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, BaseModel, ErrorHandler, createBaseModelGenerator, saga} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, BaseModel, ErrorHandler, createBaseModelGenerator, saga, ActionsType} from "reaux";
 import {SagaIterator} from "redux-saga";
 
 console.time("[framework] initialized");
@@ -58,7 +58,7 @@ export function start(options: RenderOptions): void {
     );
 }
 
-export function register<H extends BaseModel<State, SagaIterator>>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel<State, SagaIterator>>(handler: H, Component: ComponentType<any>): {View: React.ReactType<any>; actions: ActionsType} {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);

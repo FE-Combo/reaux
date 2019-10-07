@@ -2,7 +2,7 @@ import Async from "./src/component/Async";
 
 import ErrorBoundary from "./src/component/ErrorBoundary";
 
-import createAction from "./src/core/createAction";
+import createAction, {ActionsType} from "./src/core/createAction";
 
 import createApp from "./src/core/createApp";
 
@@ -18,4 +18,4 @@ import {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandl
 
 export {Async, ErrorBoundary, createAction, createApp, createModel, createBaseModelPromise, createBaseModelGenerator, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga};
 
-export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler};
+export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ActionsType};

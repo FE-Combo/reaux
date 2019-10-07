@@ -1,11 +1,12 @@
 const chalk = require("chalk");
 const childProcess = require("child_process");
 const fs = require("fs-extra");
-const prettierPath = "config/prettier.json";
-const tsLintPath = "config/tslint.json";
-const tsConfigPath = "config/tsconfig.reaux.json";
-const jestPath = "config/jest.json";
 const targetPath = "packages/**/src/*.{ts,tsx,js}";
+const jestConfig = "config/jest.json";
+const tsLintConfig = "config/tslint.json";
+const prettierConfig = "config/prettier.json";
+const reauxTSConfig = "config/tsconfig.reaux.json";
+const reauxDOMTSConfig = "config/tsconfig.reaux-dom.json";
 
 function spawn(command, args, errorMessage) {
     const isWindows = process.platform === "win32"; // spawn with {shell: true} can solve .cmd resolving, but prettier doesn't run correctly on mac/linux
@@ -23,17 +24,17 @@ function spawn(command, args, errorMessage) {
 
 function checkCodeStyle() {
     console.info(chalk`{green.bold [task]} {white.bold check code style}`);
-    return spawn("prettier", ["--config", prettierPath, "--list-different", targetPath], "check code style failed, please format above files");
+    return spawn("prettier", ["--config", prettierConfig, "--list-different", targetPath], "check code style failed, please format above files");
 }
 
 function test() {
     console.info(chalk`{green.bold [task]} {white.bold test}`);
-    return spawn("jest", ["--config", jestPath], "test failed, please fix");
+    return spawn("jest", ["--config", jestConfig], "test failed, please fix");
 }
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
-    return spawn("tslint", ["-c", tsLintPath, targetPath], "lint failed, please fix");
+    return spawn("tslint", ["-c", tsLintConfig, targetPath], "lint failed, please fix");
 }
 
 function cleanup() {
@@ -42,15 +43,23 @@ function cleanup() {
 }
 
 function compile() {
-    console.info(chalk`{green.bold [task]} {white.bold compile}`);
-    return spawn("tsc", ["-p", tsConfigPath], "compile failed, please fix");
+    console.info(chalk`{green.bold [task]} {white.bold compile reaux}`);
+    spawn("tsc", ["-p", reauxTSConfig], "compile failed, please fix");
+
+    console.info(chalk`{green.bold [task]} {white.bold compile reaux-dom}`);
+    spawn("tsc", ["-p", reauxDOMTSConfig], "compile failed, please fix");
 }
 
 function distribute() {
-    console.info(chalk`{green.bold [task]} {white.bold distribute}`);
+    console.info(chalk`{green.bold [task]} {white.bold distribute reaux}`);
     fs.mkdirsSync("build/reaux/dist");
     fs.copySync("build/reaux/output", "build/reaux/dist", {dereference: true});
     fs.copySync("packages/reaux/package.json", "build/reaux/dist/package.json", {dereference: true});
+
+    console.info(chalk`{green.bold [task]} {white.bold distribute reaux-dom}`);
+    fs.mkdirsSync("build/reaux-dom/dist");
+    fs.copySync("build/reaux-dom/output", "build/reaux-dom/dist", {dereference: true});
+    fs.copySync("packages/reaux-dom/package.json", "build/reaux-dom/dist/package.json", {dereference: true});
 }
 
 function build() {

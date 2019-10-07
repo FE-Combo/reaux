@@ -1,7 +1,7 @@
 {
   "name": "reaux",
   "version": "2.0.0",
-  "description": "Sharing redux and common component",
+  "description": "Core framework base on redux and common component",
   "author": "vocoWone",
   "license": "MIT",
   "main": "index.js",
