@@ -50,7 +50,7 @@ export interface LoadingState {
     [loading: string]: number; // there may be multiple effects listen to it, hide loading component when status === 0
 }
 
-abstract class ModelProperty<State = any> {
+abstract class ModelProperty<State = {}> {
     abstract readonly moduleName: string;
     abstract readonly initState: State;
     abstract state: Readonly<State>;

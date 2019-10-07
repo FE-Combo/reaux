@@ -18,8 +18,8 @@ interface App extends AppView {
 }
 interface RenderOptions {
     Component: ComponentType<any>;
-    onError: ErrorHandler;
-    onInitialized: (() => void) | null;
+    onError?: ErrorHandler;
+    onInitialized?: () => void;
 }
 
 const history = createBrowserHistory();
@@ -34,7 +34,9 @@ const GeneratorModel = createBaseModelGenerator(store.getState(), (moduleName, i
 export function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
     const {Component, onError, onInitialized} = options;
-    app.exceptionHandler.onError = onError.bind(app);
+    if (typeof onError === "function") {
+        app.exceptionHandler.onError = onError.bind(app);
+    }
     listenGlobalError();
     const rootElement: HTMLDivElement = document.createElement("div");
     rootElement.id = "framework-app-root";
@@ -58,7 +60,8 @@ export function start(options: RenderOptions): void {
     );
 }
 
-export function register<H extends BaseModel<State, SagaIterator>>(handler: H, Component: ComponentType<any>): {View: React.ReactType<any>; actions: ActionsType} {
+// TODO: type S is error
+export function register<S, H extends BaseModel<S, SagaIterator>>(handler: H, Component: ComponentType<any>): {View: React.ComponentType<any>; actions: ActionsType} {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);

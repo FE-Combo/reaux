@@ -1,8 +1,11 @@
 import Main from "./component/Main";
-import { register } from "../../core";
-const moduleName = "main";
+import {register, Model} from "reaux-dom";
+
 const initState = {
-  name: "main"
+    name: "main",
 };
-register(moduleName, initState);
-export { Main };
+class MainModel extends Model {}
+
+const handler = new MainModel("main", initState);
+const {View, actions} = register(handler, Main);
+export {View, actions};

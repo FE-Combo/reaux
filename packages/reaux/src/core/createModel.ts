@@ -43,7 +43,7 @@ export default function createModel<State>(allState: StateView, dispatchState: D
 }
 
 export function createBaseModelPromise<State>(allState: StateView, dispatchState: DispatchState<State>) {
-    const BaseModel = createModel(allState, dispatchState);
+    const BaseModel = createModel<State>(allState, dispatchState);
     return class Model extends BaseModel implements ModelLifeCycle {
         async onReady() {
             // extends to be overrode
@@ -64,7 +64,7 @@ export function createBaseModelPromise<State>(allState: StateView, dispatchState
 }
 
 export function createBaseModelGenerator<State>(allState: StateView, dispatchState: DispatchState<State>) {
-    const BaseModel = createModel(allState, dispatchState);
+    const BaseModel = createModel<State>(allState, dispatchState);
     return class Model extends BaseModel implements ModelLifeCycle {
         *onReady(): any {
             // extends to be overrode
