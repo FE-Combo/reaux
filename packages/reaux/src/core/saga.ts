@@ -1,4 +1,4 @@
-// TODO: saga call / saga folk / saga spawn
+// TODO: remove redux-saga in version 3.0.0
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
 import {ActionType, ActionHandler, AppView} from "../type";

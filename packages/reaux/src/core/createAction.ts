@@ -12,6 +12,10 @@ interface ActionHandlers {
     [key: string]: (...args: any[]) => any;
 }
 
+/**
+ * According handler propertyNames generate actions and actionsHandler
+ * @param handler Module reference. e.g: const handler = new Module("name",{})
+ */
 export default function createAction<H extends object & {moduleName: string}>(handler: H) {
     const moduleName = handler.moduleName;
     const keys = getPrototypeOfExceptConstructor(handler);

@@ -1,9 +1,5 @@
-/**
- * 1. generate Model
- * 2. proxy store and life cycle
- */
-
 import {StateView} from "../type";
+import {SagaIterator} from "redux-saga";
 
 abstract class ModelProperty<State = {}> {
     abstract readonly moduleName: string;
@@ -32,11 +28,14 @@ export function injection(allState: StateView, dispatchState: DispatchState) {
     cache.dispatchState = dispatchState;
 }
 
-class StoreModel<State> extends ModelProperty<State> {
+/**
+ * Proxy store
+ */
+class Model<State> extends ModelProperty<State> {
     public constructor(readonly moduleName: string, readonly initState: State) {
         super();
         if (!cache.allState || !cache.dispatchState) {
-            console.error("Execute the injection function before using StoreModel only!!");
+            console.error("Execute the injection function before using Model only!!");
             return;
         }
         cache.dispatchState(moduleName, initState, `@@${moduleName}/initState`);
@@ -55,7 +54,10 @@ class StoreModel<State> extends ModelProperty<State> {
     }
 }
 
-export class BaseOnPromiseModel<State> extends StoreModel<State> implements ModelLifeCycle {
+/**
+ * Proxy Promise Model
+ */
+export class BaseOnPromiseModel<State> extends Model<State> implements ModelLifeCycle {
     async onReady() {
         // extends to be overrode
     }
@@ -73,20 +75,23 @@ export class BaseOnPromiseModel<State> extends StoreModel<State> implements Mode
     }
 }
 
-export class BaseOnGeneratorModel<State> extends StoreModel<State> implements ModelLifeCycle {
-    *onReady(): any {
+/**
+ * Proxy Generator Model
+ */
+export class BaseOnGeneratorModel<State> extends Model<State> implements ModelLifeCycle<SagaIterator> {
+    *onReady(): SagaIterator {
         // extends to be overrode
     }
 
-    *onLoad(): any {
+    *onLoad(): SagaIterator {
         // extends to be overrode
     }
 
-    *onUnload(): any {
+    *onUnload(): SagaIterator {
         // extends to be overrode
     }
 
-    *onHide(): any {
+    *onHide(): SagaIterator {
         // extends to be overrode
     }
 }

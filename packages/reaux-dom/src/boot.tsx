@@ -1,9 +1,8 @@
 /**
  * 1. create store
  * 2. create reducer
- * 3. create action
- * 4. error handle
- * 5. redux devtool
+ * 3. error handle
+ * 4. redux devtool
  */
 
 import React, {ComponentType} from "react";
