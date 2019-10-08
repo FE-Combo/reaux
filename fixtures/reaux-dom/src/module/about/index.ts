@@ -1,11 +1,11 @@
 import Main from "./component/Main";
-import {register, Model} from "reaux-dom";
+import {register, GModel} from "reaux-dom";
+import {State} from "./type";
 
-const initState = {
+const initState: State = {
     name: "about",
 };
-class AboutModel extends Model {}
 
-const handler = new AboutModel("about", initState);
-const {View, actions} = register(handler, Main);
-export {View, actions};
+class ActionHandler extends GModel<State> {}
+
+export const {View, actions} = register(new ActionHandler("about", initState), Main);

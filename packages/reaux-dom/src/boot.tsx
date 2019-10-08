@@ -1,3 +1,11 @@
+/**
+ * 1. create store
+ * 2. create reducer
+ * 3. create action
+ * 4. error handle
+ * 5. redux devtool
+ */
+
 import React, {ComponentType} from "react";
 import ReactDOM from "react-dom";
 import {withRouter} from "react-router-dom";
@@ -6,8 +14,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, BaseModel, ErrorHandler, createBaseModelGenerator, saga, ActionsType} from "reaux";
-import {SagaIterator} from "redux-saga";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, saga, ActionsType, BaseModel} from "reaux";
 
 console.time("[framework] initialized");
 
@@ -28,8 +35,8 @@ const historyMiddleware = routerMiddleware(history);
 const sagaMiddleware = createSagaMiddleware();
 const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
 const app: App = createApp(app => ({...app, store, sagaMiddleware}));
-sagaMiddleware.run(saga, app.actionHandler, app.exceptionHandler);
-const GeneratorModel = createBaseModelGenerator(store.getState(), (moduleName, initState, type) => store.dispatch(setStateAction(moduleName, initState, type)));
+sagaMiddleware.run(saga, app);
+modelInjection(store.getState(), (moduleName, initState, type) => store.dispatch(setStateAction(moduleName, initState, type)));
 
 export function start(options: RenderOptions): void {
     // Whole project trigger once(main module).
@@ -60,8 +67,7 @@ export function start(options: RenderOptions): void {
     );
 }
 
-// TODO: type S is error
-export function register<S, H extends BaseModel<S, SagaIterator>>(handler: H, Component: ComponentType<any>): {View: React.ComponentType<any>; actions: ActionsType} {
+export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
     // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
@@ -70,12 +76,6 @@ export function register<S, H extends BaseModel<S, SagaIterator>>(handler: H, Co
     app.actionHandler = {...app.actionHandler, ...actionsHandler};
     const View = createCView(handler, Component);
     return {View, actions};
-}
-
-export class Model extends GeneratorModel {
-    setHistory(newURL: string) {
-        app.store.dispatch(push(newURL));
-    }
 }
 
 function listenGlobalError() {
@@ -100,4 +100,16 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
         );
     }
     return enhancer;
+}
+
+export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {
+    setHistory(newURL: string) {
+        app.store.dispatch(push(newURL));
+    }
+}
+
+export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {
+    setHistory(newURL: string) {
+        app.store.dispatch(push(newURL));
+    }
 }

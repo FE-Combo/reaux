@@ -1,21 +1,32 @@
 import React from "react";
-import { connect } from "react-redux";
+import {connect, DispatchProp} from "react-redux";
+import {actions} from "../index";
 
-interface Props {
-  name: string;
+interface Props extends DispatchProp {
+    name: string;
 }
 
 class Main extends React.PureComponent<Props> {
-  render() {
-    console.info(this.props);
-    return <div>{this.props.name}</div>;
-  }
+    render() {
+        return (
+            <div>
+                {this.props.name}
+                <button
+                    onClick={() => {
+                        this.props.dispatch(actions.test());
+                    }}
+                >
+                    Test
+                </button>
+            </div>
+        );
+    }
 }
 
-const mapStateToProps = (state:any): Props => {
-  return {
-    name: state.app.home.name
-  };
+const mapStateToProps = (state: any) => {
+    return {
+        name: state.app.home.name,
+    };
 };
 
 export default connect(mapStateToProps)(Main);

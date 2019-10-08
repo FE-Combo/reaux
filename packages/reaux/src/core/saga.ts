@@ -1,7 +1,7 @@
 // TODO: saga call / saga folk / saga spawn
 import {SagaIterator} from "redux-saga";
 import {call, put, takeEvery} from "redux-saga/effects";
-import {ActionType, ActionHandler, ExceptionHandler} from "../type";
+import {ActionType, ActionHandler, AppView} from "../type";
 
 const ERROR_ACTION_TYPE: string = "@@framework/error";
 
@@ -12,9 +12,10 @@ export function setErrorAction<Error>(error: Error): ActionType<Error> {
     };
 }
 
-export default function* saga(actionHandler: {[type: string]: ActionHandler}, exceptionHandler: ExceptionHandler): SagaIterator {
+export default function* saga(app: AppView): SagaIterator {
     // Register saga, listener all actions
     yield takeEvery("*", function*(action: ActionType<any>): SagaIterator {
+        const {actionHandler, exceptionHandler} = app;
         // Trigger by dispatch or yield put
         if (action.type === ERROR_ACTION_TYPE) {
             // 全局 Error 或 actionHandler Error 处理逻辑

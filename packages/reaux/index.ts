@@ -6,7 +6,7 @@ import createAction, {ActionsType} from "./src/core/createAction";
 
 import createApp from "./src/core/createApp";
 
-import createModel, {createBaseModelPromise, createBaseModelGenerator} from "./src/core/createModel";
+import {injection as modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel} from "./src/core/createModel";
 
 import createReducer, {setStateAction, setLoadingAction} from "./src/core/createReducer";
 
@@ -16,6 +16,6 @@ import {createCView, createFCView} from "./src/core/createView";
 
 import {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler} from "./src/type";
 
-export {Async, ErrorBoundary, createAction, createApp, createModel, createBaseModelPromise, createBaseModelGenerator, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga};
+export {Async, ErrorBoundary, createAction, createApp, modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga};
 
 export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ActionsType};
