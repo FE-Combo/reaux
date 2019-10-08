@@ -35,8 +35,8 @@ test.only("Create Action", () => {
         type: "moduleName/fn1",
         payload: [],
     });
-    expect(createAction(handler).actions.fn1(1, 2)).toEqual({
-        type: "moduleName/fn1",
+    expect(createAction(handler).actions.fn2(1, 2)).toEqual({
+        type: "moduleName/fn2",
         payload: [1, 2],
     });
 
