@@ -1,26 +1,18 @@
-/**
- * 1. create store
- * 2. create reducer
- * 3. error handle
- * 4. redux devtool
- */
-
 import React, {ComponentType} from "react";
 import ReactDOM from "react-dom";
 import {withRouter} from "react-router-dom";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
-import {createBrowserHistory} from "history";
+import {createBrowserHistory, History} from "history";
 import createSagaMiddleware from "redux-saga";
 import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, saga, BaseModel} from "reaux";
-
-console.time("[framework] initialized");
 
 type State = StateView<RouterState>;
 
 interface App extends AppView {
     store: Store<StateView<RouterState>>;
+    history: History;
 }
 interface RenderOptions {
     Component: ComponentType<any>;
@@ -28,17 +20,31 @@ interface RenderOptions {
     onInitialized?: () => void;
 }
 
-const history = createBrowserHistory();
-const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
-const historyMiddleware = routerMiddleware(history);
-const sagaMiddleware = createSagaMiddleware();
-const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
-const app: App = createApp(app => ({...app, store, sagaMiddleware}));
-sagaMiddleware.run(saga, app);
-modelInjection(store.getState(), (moduleName, initState, type) => store.dispatch(setStateAction(moduleName, initState, type)));
+console.time("[framework] initialized");
 
+let app = {} as App;
+generate();
+
+/**
+ * Create history, reducer, redux, middleware, store, redux-saga, app
+ */
+function generate() {
+    const history = createBrowserHistory();
+    const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
+    const historyMiddleware = routerMiddleware(history);
+    const sagaMiddleware = createSagaMiddleware();
+    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
+    sagaMiddleware.run(saga, app);
+    modelInjection(store.getState(), (moduleName, initState, type) => store.dispatch(setStateAction(moduleName, initState, type)));
+    app = createApp(app => ({...app, store, history}));
+}
+
+/**
+ * Start react-dom render.
+ * Project entry, trigger once. e.g: main module.
+ * @param options
+ */
 export function start(options: RenderOptions): void {
-    // Whole project trigger once(main module).
     const {Component, onError, onInitialized} = options;
     if (typeof onError === "function") {
         app.exceptionHandler.onError = onError.bind(app);
@@ -51,7 +57,7 @@ export function start(options: RenderOptions): void {
     ReactDOM.render(
         <Provider store={app.store}>
             <ErrorBoundary setErrorAction={setErrorAction}>
-                <ConnectedRouter history={history!}>
+                <ConnectedRouter history={app.history}>
                     <WithRouterComponent />
                 </ConnectedRouter>
             </ErrorBoundary>
@@ -66,8 +72,13 @@ export function start(options: RenderOptions): void {
     );
 }
 
+/**
+ * Register module create View and actions.
+ * Trigger in every module.
+ * @param handler
+ * @param Component
+ */
 export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
-    // Trigger every module.
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
@@ -77,8 +88,28 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     return {View, actions};
 }
 
+/**
+ * Module extends Generator Model
+ */
+export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {
+    setHistory(newURL: string) {
+        app.store.dispatch(push(newURL));
+    }
+}
+
+/**
+ * Module extends Promise Model
+ */
+export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {
+    setHistory(newURL: string) {
+        app.store.dispatch(push(newURL));
+    }
+}
+
+/**
+ * Listen global error
+ */
 function listenGlobalError() {
-    // 监听全局 error
     window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
         console.error("Window Global Error");
         if (!error) {
@@ -88,9 +119,12 @@ function listenGlobalError() {
     };
 }
 
+/**
+ * Redux DevTools plug-in support
+ * Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+ * @param enhancer
+ */
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
-    // Add Redux DevTools plug-in support
-    // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
     const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
     if (extension) {
         return compose(
@@ -99,16 +133,4 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
         );
     }
     return enhancer;
-}
-
-export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {
-    setHistory(newURL: string) {
-        app.store.dispatch(push(newURL));
-    }
-}
-
-export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {
-    setHistory(newURL: string) {
-        app.store.dispatch(push(newURL));
-    }
 }

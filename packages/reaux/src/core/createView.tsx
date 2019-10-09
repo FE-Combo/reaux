@@ -2,7 +2,7 @@ import React from "react";
 import {BaseModel} from "../type";
 
 /**
- * Proxy component lifecycle
+ * Create Component and proxy component lifecycle
  * @param handler
  * @param Component
  */
@@ -32,7 +32,7 @@ export function createCView<H extends BaseModel<{}, any>>(handler: H, Component:
 }
 
 /**
- * Proxy function component lifecycle
+ * Create function-component and proxy function-component lifecycle
  * @param handler
  * @param Component
  */

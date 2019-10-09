@@ -35,8 +35,7 @@ class Model<State> extends ModelProperty<State> {
     public constructor(readonly moduleName: string, readonly initState: State) {
         super();
         if (!cache.allState || !cache.dispatchState) {
-            console.error("Execute the injection function before using Model only!!");
-            return;
+            throw new Error("Execute the injection function before using Model only!!");
         }
         cache.dispatchState(moduleName, initState, `@@${moduleName}/initState`);
     }
