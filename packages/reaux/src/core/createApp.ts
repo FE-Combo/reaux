@@ -1,7 +1,7 @@
 import {AppView} from "../type";
 
 /**
- * Global cache.
+ * App cache.
  * Create actionHandler, modulesName, exceptionHandler.
  * @param callback
  */

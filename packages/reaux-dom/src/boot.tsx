@@ -22,21 +22,21 @@ interface RenderOptions {
 
 console.time("[framework] initialized");
 
-let app = {} as App;
-generate();
+const app = generateApp() as App;
+modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.dispatch(setStateAction(moduleName, initState, type)));
 
 /**
- * Create history, reducer, redux, middleware, store, redux-saga, app
+ * Create history, reducer, middleware, store, redux-saga, app cache
  */
-function generate() {
+function generateApp(): App {
     const history = createBrowserHistory();
     const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
     const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
+    const app = createApp(app => ({...app, store, history}));
     sagaMiddleware.run(saga, app);
-    modelInjection(store.getState(), (moduleName, initState, type) => store.dispatch(setStateAction(moduleName, initState, type)));
-    app = createApp(app => ({...app, store, history}));
+    return app;
 }
 
 /**

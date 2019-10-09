@@ -1,6 +1,6 @@
 import {injection, BaseOnPromiseModel, BaseOnGeneratorModel} from "../../src/core/createModel";
 
-test("Generate Base On Promise Model Or Generator Model ", () => {
+test("Generate Base On Promise Model And Generator Model ", () => {
     expect(() => new BaseOnPromiseModel("name", {})).toThrowError();
     expect(() => new BaseOnGeneratorModel("name2", {})).toThrowError();
 
