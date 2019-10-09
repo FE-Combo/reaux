@@ -1,13 +1,13 @@
 {
   "private": true,
-  "name": "reaux-dom",
+  "name": "dom",
   "description": "Demo for reaux-dom",
   "scripts": {
     "start": "node start.js"
   },
   "devDependencies": {
     "html-webpack-plugin": "3.2.0",
-    "ts-loader": "5.3.3",
+    "ts-loader": "6.2.0",
     "webpack": "4.28.3",
     "webpack-dev-server": "3.1.14"
   }
