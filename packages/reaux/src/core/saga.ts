@@ -25,7 +25,6 @@ export default function* saga(app: AppView): SagaIterator {
                 console.error("Errors occurred, no bugs were monitored");
             }
         } else {
-            console.log(app);
             const handler = actionHandler[action.type];
             if (handler) {
                 yield call(run, handler, action.payload);

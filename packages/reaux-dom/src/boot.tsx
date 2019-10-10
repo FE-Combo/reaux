@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, saga, BaseModel} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, saga, BaseModel, gMiddleware} from "reaux";
 
 type State = StateView<RouterState>;
 
@@ -33,9 +33,10 @@ function generateApp(): App {
     const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
+    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
     sagaMiddleware.run(saga, app);
+    gMiddleware.run(app);
     return app;
 }
 
