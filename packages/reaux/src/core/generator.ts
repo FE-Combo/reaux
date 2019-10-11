@@ -9,18 +9,17 @@ let cache: AppView;
 
 export function createGeneratorMiddleware(): GMiddleware {
     const middleware: GMiddleware = (api: MiddlewareAPI) => next => actions => {
-        if (!cache.actionHandler) {
-            throw new Error("Invoking action before execute middleware.run function only!!");
+        next(actions);
+        if (!cache.actionGHandlers) {
+            throw new Error("Invoking action before execute generator middleware.run function only!!");
         }
-
-        if (cache.actionHandler[actions.type]) {
-            const g = cache.actionHandler[actions.type](actions.payload);
+        if (cache.actionGHandlers[actions.type]) {
+            const g = cache.actionGHandlers[actions.type](actions.payload);
             let isDone = false;
             while (!isDone) {
                 isDone = g.next().done;
             }
         }
-        next(actions);
     };
 
     middleware.run = function(app: AppView): any {

@@ -20,15 +20,15 @@ export default function createAction<H extends object & {moduleName: string}>(ha
     const moduleName = handler.moduleName;
     const keys = getPrototypeOfExceptConstructor(handler);
     const actions = {} as ActionCreators<H>;
-    const actionsHandler = {} as ActionHandlers;
+    const actionHandlers = {} as ActionHandlers;
     keys.forEach(actionType => {
         const method = handler[actionType];
         const qualifiedActionType = `${moduleName}/${actionType}`;
         actions[actionType] = (...payload: any[]) => ({type: qualifiedActionType, payload});
-        actionsHandler[qualifiedActionType] = method.bind(handler);
+        actionHandlers[qualifiedActionType] = method.bind(handler);
     });
 
-    return {actions, actionsHandler};
+    return {actions, actionHandlers};
 }
 
 function getPrototypeOfExceptConstructor(object: object): string[] {

@@ -14,12 +14,14 @@ import saga, {setErrorAction} from "./src/core/saga";
 
 import {createCView, createFCView} from "./src/core/createView";
 
-import {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler} from "./src/type";
+import {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ModelType} from "./src/type";
+
+import {pMiddleware} from "./src/core/promise";
 
 import {gMiddleware} from "./src/core/generator";
 
-export {createAction, createApp, modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga, gMiddleware};
+export {createAction, createApp, modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga, pMiddleware, gMiddleware};
 
 export {Async, ErrorBoundary};
 
-export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ActionsType};
+export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ActionsType, ModelType};

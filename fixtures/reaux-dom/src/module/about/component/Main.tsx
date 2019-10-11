@@ -1,4 +1,5 @@
 import React from "react";
+import {actions} from "../index";
 import {connect, DispatchProp} from "react-redux";
 
 interface StateProps {
@@ -11,19 +12,7 @@ class Main extends React.PureComponent<Props> {
         return (
             <div>
                 {this.props.name}
-                <button
-                    onClick={() =>
-                        this.props.dispatch({
-                            type: "setState",
-                            name: "about",
-                            payload: {
-                                name: "new about",
-                            },
-                        })
-                    }
-                >
-                    change
-                </button>
+                <button onClick={() => this.props.dispatch(actions.test())}>change</button>
             </div>
         );
     }

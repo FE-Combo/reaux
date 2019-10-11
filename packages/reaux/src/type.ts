@@ -20,6 +20,8 @@ export interface ExceptionHandler {
 export type ErrorHandler = (error: Exception) => any;
 
 export interface AppView {
+    actionPHandlers: {[type: string]: ActionHandler};
+    actionGHandlers: {[type: string]: ActionHandler};
     actionHandler: {[type: string]: ActionHandler};
     modules: {};
     exceptionHandler: ExceptionHandler;
@@ -63,6 +65,11 @@ export abstract class ModelLifeCycle<R = any> {
     abstract onLoad(): R;
     abstract onUnload(): R;
     abstract onHide(): R;
+}
+
+export enum ModelType {
+    P = "promise",
+    G = "generator",
 }
 
 export type BaseModel<S = {}, R = any> = ModelProperty<S> & ModelLifeCycle<R>;

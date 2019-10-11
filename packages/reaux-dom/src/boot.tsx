@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, saga, BaseModel, gMiddleware} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType} from "reaux";
 
 type State = StateView<RouterState>;
 
@@ -33,9 +33,10 @@ function generateApp(): App {
     const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, gMiddleware)));
+    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
-    sagaMiddleware.run(saga, app);
+    // sagaMiddleware.run(saga, app);
+    pMiddleware.run(app);
     gMiddleware.run(app);
     return app;
 }
@@ -83,8 +84,15 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
-    const {actions, actionsHandler} = createAction(handler);
-    app.actionHandler = {...app.actionHandler, ...actionsHandler};
+    const {actions, actionHandlers} = createAction(handler);
+    app.actionHandler = {...app.actionHandler, ...actionHandlers};
+
+    if ((handler as any).type === ModelType.P) {
+        app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
+    } else if ((handler as any).type === ModelType.G) {
+        app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
+    }
+
     const View = createCView(handler, Component);
     return {View, actions};
 }

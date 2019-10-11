@@ -1,4 +1,4 @@
-import {StateView} from "../type";
+import {StateView, ModelType} from "../type";
 import {SagaIterator} from "redux-saga";
 
 abstract class ModelProperty<State = {}> {
@@ -57,6 +57,7 @@ class Model<State> extends ModelProperty<State> {
  * Proxy Promise Model
  */
 export class BaseOnPromiseModel<State> extends Model<State> implements ModelLifeCycle {
+    type: ModelType = ModelType.P;
     async onReady() {
         // extends to be overrode
     }
@@ -78,6 +79,7 @@ export class BaseOnPromiseModel<State> extends Model<State> implements ModelLife
  * Proxy Generator Model
  */
 export class BaseOnGeneratorModel<State> extends Model<State> implements ModelLifeCycle<SagaIterator> {
+    type: ModelType = ModelType.G;
     *onReady(): SagaIterator {
         // extends to be overrode
     }

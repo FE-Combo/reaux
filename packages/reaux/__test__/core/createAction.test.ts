@@ -18,7 +18,7 @@ test.only("Create Action", () => {
         fn2: (...payload: any[]) => ({type: "moduleName/fn2", payload}),
     };
 
-    const actionsHandler = {
+    const actionHandlers = {
         "moduleName/fn1": handler.fn1.bind(handler),
         "moduleName/fn2": handler.fn2.bind(handler),
     };
@@ -27,7 +27,7 @@ test.only("Create Action", () => {
     expect(JSON.stringify(createAction(handler))).toEqual(
         JSON.stringify({
             actions,
-            actionsHandler,
+            actionHandlers,
         })
     );
 
@@ -40,6 +40,6 @@ test.only("Create Action", () => {
         payload: [1, 2],
     });
 
-    expect(createAction(handler).actionsHandler["moduleName/fn1"]()).toBe(undefined);
-    expect(createAction(handler).actionsHandler["moduleName/fn2"](1, 2)).toEqual({a: 1, b: 2});
+    expect(createAction(handler).actionHandlers["moduleName/fn1"]()).toBe(undefined);
+    expect(createAction(handler).actionHandlers["moduleName/fn2"](1, 2)).toEqual({a: 1, b: 2});
 });
