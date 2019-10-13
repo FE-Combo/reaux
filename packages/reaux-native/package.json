@@ -1,0 +1,18 @@
+{
+  "name": "reaux-native",
+  "version": "1.0.0",
+  "description": "Front-End app framework",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "author": "vocoWone",
+  "license": "MIT",
+  "dependencies": {
+    "reaux": "^2.0.0",
+    "react-native": "0.60.6"
+  },
+  "peerDependencies": {
+    "reaux": "^2.0.0",
+    "react-native": "0.60.6"
+  }
+}

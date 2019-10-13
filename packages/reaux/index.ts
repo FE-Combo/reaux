@@ -8,7 +8,7 @@ export {createApp} from "./src/core/createApp";
 
 export {injection as modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel} from "./src/core/createModel";
 
-export {createReducer, setStateAction, setLoadingAction} from "./src/core/createReducer";
+export {LOADING_ACTION, SET_STATE_ACTION, createReducer, setStateAction, setLoadingAction} from "./src/core/createReducer";
 
 export {saga, setErrorAction} from "./src/core/saga";
 

@@ -11,7 +11,7 @@ import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCVie
 type State = StateView<RouterState>;
 
 interface App extends AppView {
-    store: Store<StateView<RouterState>>;
+    store: Store<State>;
     history: History;
 }
 interface RenderOptions {
@@ -33,7 +33,7 @@ function generateApp(): App {
     const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
+    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
     sagaMiddleware.run(saga, app);
     pMiddleware.run(app);
