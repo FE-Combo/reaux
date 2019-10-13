@@ -26,4 +26,5 @@ export function createPromiseMiddleware(): PMiddleware {
 
 const pMiddleware: PMiddleware = createPromiseMiddleware();
 
+// Reference: https://github.com/pburtchaell/redux-promise-middleware
 export {pMiddleware};

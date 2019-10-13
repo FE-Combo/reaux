@@ -44,6 +44,4 @@ class Component extends React.PureComponent<Props, State> {
     }
 }
 
-const ErrorBoundary: ConnectedComponentClass<typeof Component, Pick<Props, "render" | "children" | "setErrorAction">> = connect()(Component);
-
-export default ErrorBoundary;
+export const ErrorBoundary: ConnectedComponentClass<typeof Component, Pick<Props, "render" | "children" | "setErrorAction">> = connect()(Component);

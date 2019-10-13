@@ -1,4 +1,4 @@
-import createApp from "../../src/core/createApp";
+import {createApp} from "../../src/core/createApp";
 
 test("Create App", () => {
     expect(createApp()).toEqual({

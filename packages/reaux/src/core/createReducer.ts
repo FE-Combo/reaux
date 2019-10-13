@@ -39,7 +39,7 @@ function loadingReducer(state: LoadingState = {}, action: ActionType<any>): Load
     return state;
 }
 
-export default function createReducer<T extends StateView>(callback?: (result: ReducersMapObject<StateView, any>) => ReducersMapObject<any, any>): Reducer<T> {
+export function createReducer<T extends StateView>(callback?: (result: ReducersMapObject<StateView, any>) => ReducersMapObject<any, any>): Reducer<T> {
     const reducers: ReducersMapObject<StateView, any> = {app: appReducer, loading: loadingReducer};
     const resultReducers = callback ? callback(reducers) : reducers;
     return combineReducers(resultReducers);

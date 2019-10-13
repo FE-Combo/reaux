@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
 import {createBrowserHistory, History} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
 
 type State = StateView<RouterState>;
 
@@ -35,7 +35,7 @@ function generateApp(): App {
     const sagaMiddleware = createSagaMiddleware();
     const store: Store<StateView<RouterState>> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
-    // sagaMiddleware.run(saga, app);
+    sagaMiddleware.run(saga, app);
     pMiddleware.run(app);
     gMiddleware.run(app);
     return app;
@@ -80,16 +80,16 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param Component
  */
-export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel & {type: ModelType}>(handler: H, Component: ComponentType<any>) {
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandler = {...app.actionHandler, ...actionHandlers};
 
-    if ((handler as any).type === ModelType.P) {
+    if (handler.type === ModelType.P) {
         app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
-    } else if ((handler as any).type === ModelType.G) {
+    } else if (handler.type === ModelType.G) {
         app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
     }
 

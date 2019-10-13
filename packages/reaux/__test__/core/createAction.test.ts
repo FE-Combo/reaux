@@ -1,4 +1,4 @@
-import createAction from "../../src/core/createAction";
+import {createAction} from "../../src/core/createAction";
 
 test.only("Create Action", () => {
     class Model {

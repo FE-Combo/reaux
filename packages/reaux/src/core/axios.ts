@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig, Method} from "axios";
 
-export default function ajax<Request, Response>(method: Method, path: string, pathParams: object, request: Request): Promise<Response> {
+export function ajax<Request, Response>(method: Method, path: string, pathParams: object, request: Request): Promise<Response> {
     const config: AxiosRequestConfig = {method, url: url(path, pathParams)};
 
     if (method === "GET" || method === "DELETE") {

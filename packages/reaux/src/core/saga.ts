@@ -12,7 +12,7 @@ export function setErrorAction<Error>(error: Error): ActionType<Error> {
     };
 }
 
-export default function* saga(app: AppView): SagaIterator {
+export function* saga(app: AppView): SagaIterator {
     // Register saga, listener all actions
     yield takeEvery("*", function*(action: ActionType<any>): SagaIterator {
         const {actionHandler, exceptionHandler} = app;

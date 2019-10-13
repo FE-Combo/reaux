@@ -1,4 +1,4 @@
-import createReducer, {setStateAction, setLoadingAction} from "../../src/core/createReducer";
+import {createReducer, setStateAction, setLoadingAction} from "../../src/core/createReducer";
 
 test("Set State Action", () => {
     expect(setStateAction("moduleName", {name: "name", age: 11}, "type")).toEqual({

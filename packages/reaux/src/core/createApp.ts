@@ -5,7 +5,7 @@ import {AppView} from "../type";
  * Create actionHandler, actionPHandlers(promise handler), actionGHandlers(generator handler), modulesName, exceptionHandler.
  * @param callback
  */
-export default function createApp<T extends AppView>(callback?: (app: AppView) => T): T {
+export function createApp<T extends AppView>(callback?: (app: AppView) => T): T {
     const app = {
         actionPHandlers: {},
         actionGHandlers: {},

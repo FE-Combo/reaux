@@ -1,27 +1,21 @@
-import Async from "./src/component/Async";
+export {Async} from "./src/component/Async";
 
-import ErrorBoundary from "./src/component/ErrorBoundary";
+export {ErrorBoundary} from "./src/component/ErrorBoundary";
 
-import createAction, {ActionsType} from "./src/core/createAction";
+export {createAction, ActionsType} from "./src/core/createAction";
 
-import createApp from "./src/core/createApp";
+export {createApp} from "./src/core/createApp";
 
-import {injection as modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel} from "./src/core/createModel";
+export {injection as modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel} from "./src/core/createModel";
 
-import createReducer, {setStateAction, setLoadingAction} from "./src/core/createReducer";
+export {createReducer, setStateAction, setLoadingAction} from "./src/core/createReducer";
 
-import saga, {setErrorAction} from "./src/core/saga";
+export {saga, setErrorAction} from "./src/core/saga";
 
-import {createCView, createFCView} from "./src/core/createView";
+export {createCView, createFCView} from "./src/core/createView";
 
-import {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ModelType} from "./src/type";
+export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ModelType} from "./src/type";
 
-import {pMiddleware} from "./src/core/promise";
+export {pMiddleware} from "./src/core/promise";
 
-import {gMiddleware} from "./src/core/generator";
-
-export {createAction, createApp, modelInjection, BaseOnPromiseModel, BaseOnGeneratorModel, createReducer, setStateAction, setLoadingAction, setErrorAction, createCView, createFCView, saga, pMiddleware, gMiddleware};
-
-export {Async, ErrorBoundary};
-
-export {AppView, StateView, BaseModel, ErrorHandler, ModelLifeCycle, ActionHandler, ActionsType, ModelType};
+export {gMiddleware, effects} from "./src/core/generator";
