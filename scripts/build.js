@@ -50,8 +50,8 @@ function compile() {
     console.info(chalk`{green.bold [task]} {white.bold compile reaux-dom}`);
     spawn("tsc", ["-p", reauxDOMTSConfig], "compile failed, please fix");
 
-    // console.info(chalk`{green.bold [task]} {white.bold compile reaux-native}`);
-    // spawn("tsc", ["-p", reauxNativeTSConfig], "compile failed, please fix");
+    console.info(chalk`{green.bold [task]} {white.bold compile reaux-native}`);
+    spawn("tsc", ["-p", reauxNativeTSConfig], "compile failed, please fix");
 }
 
 function distribute() {
@@ -65,10 +65,10 @@ function distribute() {
     fs.copySync("build/reaux-dom/output", "build/reaux-dom/dist", {dereference: true});
     fs.copySync("packages/reaux-dom/package.json", "build/reaux-dom/dist/package.json", {dereference: true});
 
-    // console.info(chalk`{green.bold [task]} {white.bold distribute reaux-native}`);
-    // fs.mkdirsSync("build/reaux-native/dist");
-    // fs.copySync("build/reaux-native/output", "build/reaux-native/dist", {dereference: true});
-    // fs.copySync("packages/reaux-native/package.json", "build/reaux-native/dist/package.json", {dereference: true});
+    console.info(chalk`{green.bold [task]} {white.bold distribute reaux-native}`);
+    fs.mkdirsSync("build/reaux-native/dist");
+    fs.copySync("build/reaux-native/output", "build/reaux-native/dist", {dereference: true});
+    fs.copySync("packages/reaux-native/package.json", "build/reaux-native/dist/package.json", {dereference: true});
 }
 
 function build() {

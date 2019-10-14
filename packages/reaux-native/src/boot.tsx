@@ -27,7 +27,7 @@ modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.
  * Create reducer, middleware, store, redux-saga, app cache
  */
 function generateApp(): App {
-    const reducer: Reducer<State> = createReducer(reducers => ({...reducers}));
+    const reducer: Reducer<State> = createReducer();
     const sagaMiddleware = createSagaMiddleware();
     const store: Store<State> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store}));
@@ -110,7 +110,7 @@ export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {}
 
 function listenGlobalError(onError: ErrorHandler) {
     // 对客户端错误行为进行处理(超时/4**)
-    ErrorUtils.setGlobalHandler((error: any, isFatal: boolean) => {
+    ErrorUtils.setGlobalHandler((error, isFatal) => {
         if (isFatal) {
             console.info("***** Fatal Error *****");
         }

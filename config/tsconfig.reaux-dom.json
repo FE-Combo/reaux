@@ -18,7 +18,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "esModuleInterop": true,
     "inlineSources": true,
-    "declaration": true // 所有function都需要返回返回类型
+    "declaration": true, // 所有function都需要返回返回类型
+    "skipLibCheck": true
   },
   "include": ["../packages/reaux-dom"],
   "exclude": ["node_modules", "../packages/reaux-dom/__test__"]
