@@ -1,6 +1,6 @@
 {
-  "private": true,
   "name": "dom",
+  "private": true,
   "description": "Demo for reaux-dom",
   "scripts": {
     "start": "node start.js"
