@@ -1,7 +1,7 @@
 import Component from './component/Main';
-import {register, GModel} from 'reaux-native';
+import {register, GModel} from 'reaux-native/index';
 import {State} from './type';
-import {SagaIterator} from 'redux-saga';
+import {SagaIterator} from 'redux-saga/index';
 
 const initialState: State = {
     name: 'main',

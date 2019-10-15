@@ -1,4 +1,4 @@
-import {start} from 'reaux-native';
+import {start} from 'reaux-native/index';
 import {View} from './module/main';
 
 export function startApp() {

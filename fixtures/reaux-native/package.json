@@ -2,6 +2,7 @@
   "name": "AwesomeProject",
   "private": true,
   "scripts": {
+    "update": "node update.js",
     "start": "react-native start --reset-cache",
     "link-native": "react-native link",
     "ios": "react-native run-ios",
@@ -10,25 +11,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "16.8.6",
-    "react-native": "0.60.6",
-    "@types/react": "16.9.5",
-    "@types/react-native": "^0.60.19",
-    "@types/react-redux": "7.1.1",
-    "react-redux": "7.1.0",
-    "redux": "4.0.2",
-    "redux-saga": "1.0.5"
+    "react": "../../node_modules/react",
+    "react-native": "../../node_modules/react-native",
+    "@types/react": "../../node_modules/@types/react",
+    "@types/react-native": "../../node_modules/@types/react-native",
+    "@types/react-redux": "../../node_modules/@types/react-redux",
+    "react-redux": "../../node_modules/react-redux",
+    "redux": "../../node_modules/redux",
+    "redux-saga": "../../node_modules/redux-saga"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/runtime": "^7.6.3",
     "@react-native-community/eslint-config": "^0.0.5",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.5.1",
-    "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-native-typescript-transformer": "^1.2.13",
-    "react-test-renderer": "16.8.6",
-    "typescript": "^3.6.4"
+    "typescript": "link:../../node_modules/typescript"
   }
 }
