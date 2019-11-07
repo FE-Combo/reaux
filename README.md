@@ -33,11 +33,11 @@ Front-End lightweight framework base on react + redux + axios, strict in TypeScr
 
 ## Ecosystem
 
-| Project        | Status                                         | Description                                    |
-| -------------- | ---------------------------------------------- | ---------------------------------------------- |
-| [reaux]        | [![reaux-status]][reaux-package]               | Flux architecture based on React and Redux     |
-| [reaux-dom]    | [![reaux-dom-status]][reaux-dom-package]       | Base on reaux and react-dom applied to website |
-| [reaux-native] | [![reaux-native-status]][reaux-native-package] | Base on reaux and react-native applied to app  |
+| Project          | Status | Description                                    |
+| ---------------- | ------ | ---------------------------------------------- |
+| **reaux**        |        | Flux architecture based on React and Redux     |
+| **reaux-dom**    |        | Base on reaux and react-dom applied to website |
+| **reaux-native** |        | Base on reaux and react-native applied to app  |
 
 ## Installation
 
