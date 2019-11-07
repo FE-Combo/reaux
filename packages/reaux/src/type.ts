@@ -1,13 +1,21 @@
 import {Action} from "redux";
+
 export interface ActionType<P = any> extends Action {
     name?: string;
     payload: P;
 }
 
-export interface ActionPayload {
+export interface AppActionPayload {
     module: string;
     state: any;
 }
+
+export interface LoadingActionPayload {
+    identifier: string;
+    hasShow: boolean;
+}
+
+export type LangActionPayload = "CN" | "EN";
 
 // return Generator or Promise
 export type ActionHandler = (...args: any[]) => any;
@@ -37,15 +45,12 @@ export class RuntimeException extends Exception {
     }
 }
 
-export interface StateView<R = {}> {
-    router?: R; // use in website
-    loading: LoadingState;
+export interface StateView {
     app: {};
-}
-
-export interface LoadingActionType {
-    identifier: string;
-    hasShow: boolean;
+    helper: {
+        loading?: LoadingState;
+        lang?: LangActionPayload;
+    };
 }
 
 export interface LoadingState {

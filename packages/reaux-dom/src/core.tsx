@@ -3,37 +3,26 @@ import ReactDOM from "react-dom";
 import {withRouter} from "react-router-dom";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
-import {connectRouter, routerMiddleware, ConnectedRouter, RouterState, push} from "connected-react-router";
-import {createBrowserHistory, History} from "history";
+import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
+import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
-
-type State = StateView<RouterState>;
-
-interface App extends AppView {
-    store: Store<State>;
-    history: History;
-}
-interface RenderOptions {
-    Component: ComponentType<any>;
-    onError?: ErrorHandler;
-    onInitialized?: () => void;
-}
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
+import {StateView, AppView, RenderOptions} from "./type";
 
 console.time("[framework] initialized");
 
-const app = generateApp() as App;
+const app = generateApp();
 modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.dispatch(setStateAction(moduleName, initState, type)));
 
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
  */
-function generateApp(): App {
+function generateApp(): AppView {
     const history = createBrowserHistory();
-    const reducer: Reducer<State> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
+    const reducer: Reducer<StateView> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
+    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
     sagaMiddleware.run(saga, app);
     pMiddleware.run(app);
@@ -84,6 +73,7 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
+    app.modules[handler.moduleName] = true;
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandler = {...app.actionHandler, ...actionHandlers};
 

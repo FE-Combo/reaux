@@ -1,6 +1,6 @@
 import React from "react";
 import {RouteProps} from "react-router";
-import {Redirect, Route} from "react-router-dom";
+import {Redirect, Route as ReactRoute} from "react-router-dom";
 import {ErrorBoundary, setErrorAction} from "reaux";
 
 type PickOptional<T> = Pick<T, {[K in keyof T]-?: {} extends {[P in K]: T[K]} ? K : never}[keyof T]>;
@@ -11,7 +11,7 @@ interface Props extends RouteProps {
     unauthorizedRedirectTo?: string;
 }
 
-export default class RouteComponent extends React.PureComponent<Props> {
+export class Route extends React.PureComponent<Props> {
     public static defaultProps: PickOptional<Props> = {
         exact: true,
         withErrorBoundary: true,
@@ -23,7 +23,7 @@ export default class RouteComponent extends React.PureComponent<Props> {
         const {component, withErrorBoundary, accessCondition, unauthorizedRedirectTo, ...restProps} = this.props;
         const TargetComponent = component!;
         const routeNode = (
-            <Route
+            <ReactRoute
                 {...restProps}
                 render={props => {
                     return accessCondition ? <TargetComponent {...props} /> : <Redirect to={{pathname: unauthorizedRedirectTo}} />;

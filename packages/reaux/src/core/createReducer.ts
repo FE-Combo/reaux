@@ -1,46 +1,65 @@
 import {Reducer, combineReducers, ReducersMapObject} from "redux";
-import {StateView, LoadingState, ActionType, ActionPayload, LoadingActionType} from "../type";
+import {StateView, ActionType, AppActionPayload, LoadingActionPayload, LangActionPayload} from "../type";
 
 export const SET_STATE_ACTION: string = "@@framework/setState";
-export const LOADING_ACTION: string = "@@framework/loading";
+export const SET_HELPER_ACTION: string = "@framework/setHelper";
+export const LOADING_ACTION_NAME: string = "@@framework/setHelper/loading";
+export const LANG_ACTION_NAME: string = "@@framework/setHelper/lang";
 
-export function setStateAction<State>(module: string, state: Partial<State>, type: string): ActionType<ActionPayload> {
+export function setStateAction<State>(module: string, state: Partial<State>, name: string): ActionType<AppActionPayload> {
     return {
-        type,
-        name: SET_STATE_ACTION,
+        type: SET_STATE_ACTION,
+        name,
         payload: {module, state},
     };
 }
 
-export function setLoadingAction(identifier: string, hasShow: boolean): ActionType<LoadingActionType> {
+export function setLoadingHelperAction(identifier: string, hasShow: boolean): ActionType<LoadingActionPayload> {
     return {
-        type: LOADING_ACTION,
+        type: SET_HELPER_ACTION,
+        name: LOADING_ACTION_NAME,
         payload: {identifier, hasShow},
     };
 }
 
-function appReducer(state: StateView["app"] = {}, action: ActionType<any>): StateView["app"] {
-    if (action.name === SET_STATE_ACTION) {
-        const {module, state: moduleState} = action.payload as ActionPayload;
+export function setLangHelperAction(lang: LangActionPayload) {
+    return {
+        type: SET_HELPER_ACTION,
+        name: LANG_ACTION_NAME,
+        payload: lang,
+    };
+}
+
+function appReducer(state: StateView["app"] = {}, action: ActionType<AppActionPayload>): StateView["app"] {
+    if (action.type === SET_STATE_ACTION) {
+        const {module, state: moduleState} = action.payload as AppActionPayload;
         return {...state, [module]: {...state[module], ...moduleState}};
     }
     return state;
 }
 
-function loadingReducer(state: LoadingState = {}, action: ActionType<any>): LoadingState {
-    if (action.type === LOADING_ACTION) {
-        const payload = action.payload as LoadingActionType;
-        const count = state[payload.identifier] || 0;
-        return {
-            ...state,
-            [payload.identifier]: count + (payload.hasShow ? 1 : -1),
-        };
+function helperReducer(state: StateView["helper"] = {}, action: ActionType<LoadingActionPayload | LangActionPayload>): StateView["helper"] {
+    if (action.type === SET_HELPER_ACTION) {
+        if (action.name === LOADING_ACTION_NAME) {
+            const {hasShow, identifier} = action.payload as LoadingActionPayload;
+            const nextState = {...state};
+            !nextState.loading && (nextState.loading = {});
+            const count = nextState.loading[identifier] || 0;
+            nextState.loading.identifier = count + (hasShow ? 1 : -1);
+            return nextState;
+        }
+        if (action.name === LANG_ACTION_NAME) {
+            const lang = action.payload as LangActionPayload;
+            const nextState = {...state};
+            nextState.lang = lang;
+            return nextState;
+        }
     }
     return state;
 }
 
 export function createReducer<T extends StateView>(callback?: (result: ReducersMapObject<StateView, any>) => ReducersMapObject<any, any>): Reducer<T> {
-    const reducers: ReducersMapObject<StateView, any> = {app: appReducer, loading: loadingReducer};
+    const reducers: ReducersMapObject<StateView, any> = {app: appReducer, helper: helperReducer};
     const resultReducers = callback ? callback(reducers) : reducers;
     return combineReducers(resultReducers);
 }

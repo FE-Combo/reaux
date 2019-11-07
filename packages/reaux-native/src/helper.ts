@@ -6,7 +6,7 @@ type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => Sag
 
 type LifeCycleDecorator = (target: object, propertyKey: keyof ModelLifeCycle, descriptor: TypedPropertyDescriptor<ActionHandler & {isLifecycle?: boolean}>) => TypedPropertyDescriptor<ActionHandler>;
 
-export function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
+function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S>): HandlerDecorator {
     return (target: any) => {
         const descriptor = target.descriptor;
         const fn: ActionHandler = descriptor.value;
@@ -18,10 +18,15 @@ export function handlerDecorator<S extends StateView>(interceptor: HandlerInterc
     };
 }
 
-export function Lifecycle(): LifeCycleDecorator {
+function Lifecycle(): LifeCycleDecorator {
     return (target: any) => {
         const descriptor = target.descriptor;
         descriptor.value.isLifecycle = true;
         return target;
     };
 }
+
+export const helper = {
+    handlerDecorator,
+    Lifecycle,
+};

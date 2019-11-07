@@ -6,7 +6,7 @@ test("Generate Base On Promise Model And Generator Model ", () => {
 
     const allState = {
         app: {main: {}, home: {}},
-        loading: {load: 0},
+        helper: {loading: {load: 0}},
     };
     const dispatchState = (module: string, state: object, type: string) => {
         allState.app[module] = {...allState.app[module], ...state};

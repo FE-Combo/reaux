@@ -3,33 +3,21 @@ import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, AppView, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga, LOADING_ACTION} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
+import {AppView, RenderOptions} from "./type";
 
 declare const window: any;
 
-type State = StateView;
-
-interface App extends AppView {
-    store: Store<State>;
-}
-
-interface RenderOptions {
-    name: string;
-    Component: ComponentType<any>;
-    onError?: ErrorHandler;
-    onInitialized?: () => Promise<any>;
-}
-
-const app = generateApp() as App;
+const app = generateApp();
 modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.dispatch(setStateAction(moduleName, initState, type)));
 
 /**
  * Create reducer, middleware, store, redux-saga, app cache
  */
-function generateApp(): App {
-    const reducer: Reducer<State> = createReducer();
+function generateApp(): AppView {
+    const reducer: Reducer<StateView> = createReducer();
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
+    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store}));
     sagaMiddleware.run(saga, app);
     pMiddleware.run(app);
@@ -126,7 +114,7 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
         if (extension) {
             composeEnhancers = extension({
                 // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
-                actionsBlacklist: [LOADING_ACTION],
+                actionsBlacklist: [],
             });
         }
     }
