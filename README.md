@@ -1,11 +1,10 @@
 # [Reaux](https://www.vocowone.com/) &middot;
 
 [![Build Status](https://travis-ci.com/vocoWone/reaux.svg?branch=master)](https://travis-ci.com/vocoWone/reaux)
-[![npm version](https://img.shields.io/npm/v/reaux.svg?style=flat)](https://www.npmjs.com/package/reaux)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/context:javascript)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/alerts/)
 
-Front-End lightweight framework base on react + redux + axios, strict in TypeScript.
+FE lightweight framework base on react + redux + axios, strict in TypeScript.
 
 ## Motivation
 
@@ -22,6 +21,14 @@ Front-End lightweight framework base on react + redux + axios, strict in TypeScr
 - Global error handler.
 - Built-in helper.
 
+## Ecosystem
+
+| Project          | Status                                                                                                                 | Description                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **reaux**        | [![npm version](https://img.shields.io/npm/v/reaux.svg?style=flat)](https://www.npmjs.com/package/reaux)               | Flux architecture based on React and Redux     |
+| **reaux-dom**    | [![npm version](https://img.shields.io/npm/v/reaux-dom.svg?style=flat)](https://www.npmjs.com/package/reaux-dom)       | Base on reaux and react-dom applied to website |
+| **reaux-native** | [![npm version](https://img.shields.io/npm/v/reaux-native.svg?style=flat)](https://www.npmjs.com/package/reaux-native) | Base on reaux and react-native applied to app  |
+
 ## Core API
 
 - start
@@ -30,14 +37,6 @@ Front-End lightweight framework base on react + redux + axios, strict in TypeScr
   - Register a module.
 - Model
   - Proxy state and action.
-
-## Ecosystem
-
-| Project          | Status | Description                                    |
-| ---------------- | ------ | ---------------------------------------------- |
-| **reaux**        |        | Flux architecture based on React and Redux     |
-| **reaux-dom**    |        | Base on reaux and react-dom applied to website |
-| **reaux-native** |        | Base on reaux and react-native applied to app  |
 
 ## Installation
 
