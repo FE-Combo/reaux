@@ -30,7 +30,7 @@ function checkCodeStyle() {
 
 function test() {
     console.info(chalk`{green.bold [task]} {white.bold test}`);
-    return spawn("jest", ["--config", jestConfig], "test failed, please fix");
+    return spawn("jest", ["--config", jestConfig, "--coverage"], "test failed, please fix");
 }
 
 function lint() {
