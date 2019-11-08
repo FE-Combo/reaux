@@ -1,6 +1,7 @@
 # [Reaux](https://www.vocowone.com/) &middot;
 
 [![Build Status](https://travis-ci.com/vocoWone/reaux.svg?branch=master)](https://travis-ci.com/vocoWone/reaux)
+[![codecov](https://codecov.io/gh/vocoWone/reaux/branch/master/graph/badge.svg)](https://codecov.io/gh/vocoWone/reaux)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/context:javascript)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/alerts/)
 
