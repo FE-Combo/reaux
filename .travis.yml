@@ -4,4 +4,4 @@ node_js:
 cache: yarn
 script:
   - yarn build
-  - codecov
+  - codecov -f coverage/coverage-final.json
