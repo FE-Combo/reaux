@@ -16,7 +16,7 @@ FE lightweight framework base on react + redux + axios, strict in TypeScript.
 ## Feature
 
 - The whole project split into some modules.
-- Each module contain 1 view, 1 state and some actions.
+- Each module contain 1 view, 1 module(contain 1 state and some actions).
 - Each module implement its own lifecycle actions. e.g: onReady/onLoad etc.
 - No matter sync or async, each action handler wrapped by promise or generator.
 - Global error handler.
@@ -24,20 +24,97 @@ FE lightweight framework base on react + redux + axios, strict in TypeScript.
 
 ## Ecosystem
 
-| Project          | Status                                                                                                                 | Description                                    |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| **reaux**        | [![npm version](https://img.shields.io/npm/v/reaux.svg?style=flat)](https://www.npmjs.com/package/reaux)               | Flux architecture based on React and Redux     |
-| **reaux-dom**    | [![npm version](https://img.shields.io/npm/v/reaux-dom.svg?style=flat)](https://www.npmjs.com/package/reaux-dom)       | Base on reaux and react-dom applied to website |
-| **reaux-native** | [![npm version](https://img.shields.io/npm/v/reaux-native.svg?style=flat)](https://www.npmjs.com/package/reaux-native) | Base on reaux and react-native applied to app  |
+| Project      | Status                                                                                                                 | Description                                    |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| reaux        | [![npm version](https://img.shields.io/npm/v/reaux.svg?style=flat)](https://www.npmjs.com/package/reaux)               | Flux architecture based on React and Redux     |
+| reaux-dom    | [![npm version](https://img.shields.io/npm/v/reaux-dom.svg?style=flat)](https://www.npmjs.com/package/reaux-dom)       | Base on reaux and react-dom applied to website |
+| reaux-native | [![npm version](https://img.shields.io/npm/v/reaux-native.svg?style=flat)](https://www.npmjs.com/package/reaux-native) | Base on reaux and react-native applied to app  |
 
 ## Core API
 
-- start
-  - The whole project entrance.
-- register
-  - Register a module.
-- Model
-  - Proxy state and action.
+### Model
+
+- Initial state, proxy view and generate action.
+
+```
+// in website
+import { Model} from "reaux-dom";
+import {State} from "xxx/xxx/type";
+const initialState: State = {
+    name: "name",
+};
+class ActionHandler extends Model<State> {
+    *test(): SagaIterator {
+        this.setState({name: "new name"});
+    }
+}
+
+//in app
+import { Model} from "reaux-native";
+import {State} from "xxx/xxx/type";
+const initialState: State = {
+    name: "name",
+};
+class ActionHandler extends Model<State> {
+    *test(): SagaIterator {
+        this.setState({name: "new name"});
+    }
+}
+```
+
+### register
+
+- Register a module.
+
+```
+// in website
+import Component from "xxx/xxx/Main.tsx";
+import {register, Model} from "reaux-dom";
+import {State} from "xxx/xxx/type";
+const initialState: State = {
+    name: "name",
+};
+class ActionHandler extends Model<State> {
+    *test(): SagaIterator {
+        this.setState({name: "new name"});
+    }
+}
+export const {actions, View} = register(new ActionHandler("main", initialState), Component);
+
+// in app
+import Component from "xxx/xxx/Main.tsx";
+import {register, Model} from "reaux-native";
+import {State} from "xxx/xxx/type";
+const initialState: State = {
+    name: "name",
+};
+class ActionHandler extends Model<State> {
+    *test(): SagaIterator {
+        this.setState({name: "new name"});
+    }
+}
+export const {actions, View} = register(new ActionHandler("main", initialState), Component);
+```
+
+### start
+
+- The whole project entrance.
+
+```
+// in website
+import {start} from "reaux-dom";
+import {View} from "xxx/xxx/Main.tsx";
+start({
+    Component: View,
+});
+
+// in app
+import {start} from "reaux-native";
+import {View} from "module/main";
+start({
+    Component: View,
+});
+```
 
 ## Installation
 
