@@ -1,7 +1,6 @@
 import {Action} from "redux";
 
 export interface ActionType<P = any> extends Action {
-    name?: string;
     payload: P;
 }
 

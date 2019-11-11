@@ -23,7 +23,7 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
     const actionHandlers = {} as ActionHandlers;
     keys.forEach(actionType => {
         const method = handler[actionType];
-        const qualifiedActionType = `${moduleName}/${actionType}`;
+        const qualifiedActionType = `@@framework/dispatchAction/${moduleName}/${actionType}`;
         actions[actionType] = (...payload: any[]) => ({type: qualifiedActionType, payload});
         actionHandlers[qualifiedActionType] = method.bind(handler);
     });

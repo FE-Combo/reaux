@@ -2,30 +2,26 @@ import {Reducer, combineReducers, ReducersMapObject} from "redux";
 import {StateView, ActionType, AppActionPayload, LoadingActionPayload, LangActionPayload} from "../type";
 
 export const SET_STATE_ACTION: string = "@@framework/setState";
-export const SET_HELPER_ACTION: string = "@framework/setHelper";
 export const LOADING_ACTION_NAME: string = "@@framework/setHelper/loading";
 export const LANG_ACTION_NAME: string = "@@framework/setHelper/lang";
 
-export function setStateAction<State>(module: string, state: Partial<State>, name: string): ActionType<AppActionPayload> {
+export function setStateAction<State>(module: string, state: Partial<State>, type: string = SET_STATE_ACTION): ActionType<AppActionPayload> {
     return {
-        type: SET_STATE_ACTION,
-        name,
+        type,
         payload: {module, state},
     };
 }
 
 export function setLoadingHelperAction(identifier: string, hasShow: boolean): ActionType<LoadingActionPayload> {
     return {
-        type: SET_HELPER_ACTION,
-        name: LOADING_ACTION_NAME,
+        type: LOADING_ACTION_NAME,
         payload: {identifier, hasShow},
     };
 }
 
 export function setLangHelperAction(lang: LangActionPayload) {
     return {
-        type: SET_HELPER_ACTION,
-        name: LANG_ACTION_NAME,
+        type: LANG_ACTION_NAME,
         payload: lang,
     };
 }
@@ -39,22 +35,21 @@ function appReducer(state: StateView["app"] = {}, action: ActionType<AppActionPa
 }
 
 function helperReducer(state: StateView["helper"] = {}, action: ActionType<LoadingActionPayload | LangActionPayload>): StateView["helper"] {
-    if (action.type === SET_HELPER_ACTION) {
-        if (action.name === LOADING_ACTION_NAME) {
-            const {hasShow, identifier} = action.payload as LoadingActionPayload;
-            const nextState = {...state};
-            !nextState.loading && (nextState.loading = {});
-            const count = nextState.loading[identifier] || 0;
-            nextState.loading.identifier = count + (hasShow ? 1 : -1);
-            return nextState;
-        }
-        if (action.name === LANG_ACTION_NAME) {
-            const lang = action.payload as LangActionPayload;
-            const nextState = {...state};
-            nextState.lang = lang;
-            return nextState;
-        }
+    if (action.type === LOADING_ACTION_NAME) {
+        const {hasShow, identifier} = action.payload as LoadingActionPayload;
+        const nextState = {...state};
+        !nextState.loading && (nextState.loading = {});
+        const count = nextState.loading[identifier] || 0;
+        nextState.loading.identifier = count + (hasShow ? 1 : -1);
+        return nextState;
     }
+    if (action.type === LANG_ACTION_NAME) {
+        const lang = action.payload as LangActionPayload;
+        const nextState = {...state};
+        nextState.lang = lang;
+        return nextState;
+    }
+
     return state;
 }
 
