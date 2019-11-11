@@ -25,8 +25,9 @@ function generateApp(): AppView {
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
     const app = createApp(app => ({...app, store, history}));
     sagaMiddleware.run(saga, app);
-    pMiddleware.run(app);
-    gMiddleware.run(app);
+    // TODO:
+    // pMiddleware.run(app);
+    // gMiddleware.run(app);
     return app;
 }
 

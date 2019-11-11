@@ -34,7 +34,7 @@ FE lightweight framework base on react + redux + axios, strict in TypeScript.
 
 ### Model
 
-- Initial state, proxy lifecyle.
+- proxy state and action.
 
 ```
 // in website
