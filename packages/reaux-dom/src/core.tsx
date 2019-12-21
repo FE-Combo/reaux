@@ -20,7 +20,6 @@ modelInjection(app);
  */
 function generateApp(): App {
     const reducer: Reducer<StateView> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
-    console.log(reducer);
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
