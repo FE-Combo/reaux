@@ -1,9 +1,6 @@
 import React from "react";
 import {connect, DispatchProp, ConnectedComponentClass} from "react-redux";
-import {ActionType} from "../type";
-export abstract class Exception {
-    protected constructor(public message: string) {}
-}
+import {ActionType, Exception} from "../type";
 
 class ReactLifecycleException extends Exception {
     constructor(public message: string, public componentStack: string) {

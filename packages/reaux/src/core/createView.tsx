@@ -6,7 +6,7 @@ import {BaseModel} from "../type";
  * @param handler
  * @param Component
  */
-export function createCView<H extends BaseModel<{}, any>>(handler: H, Component: React.ComponentType<any>) {
+export function createView<H extends BaseModel<{}, any>>(handler: H, Component: React.ComponentType<any>) {
     return class View<P extends {} = {}> extends React.PureComponent<P> {
         constructor(props: P) {
             super(props);
@@ -14,11 +14,11 @@ export function createCView<H extends BaseModel<{}, any>>(handler: H, Component:
         }
 
         componentDidMount() {
-            handler.onLoad();
+            handler.onLoad(true);
         }
 
         componentDidUpdate() {
-            handler.onLoad();
+            handler.onLoad(false);
         }
 
         componentWillUnmount() {
@@ -29,13 +29,4 @@ export function createCView<H extends BaseModel<{}, any>>(handler: H, Component:
             return <Component {...this.props} />;
         }
     };
-}
-
-/**
- * Create function-component and proxy function-component lifecycle
- * @param handler
- * @param Component
- */
-export function createFCView<H extends BaseModel<{}, any>>(handler: H, Component: React.ComponentType<any>) {
-    // TODO:
 }

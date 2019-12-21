@@ -2,6 +2,8 @@
 
 exports[`Create Component View 1`] = `
 <div
+  age={18}
+  name="name"
   onClick={[Function]}
 >
   component
@@ -13,6 +15,8 @@ exports[`Create Component View 1`] = `
 
 exports[`Create Component View 2`] = `
 <div
+  age={18}
+  name="name"
   onClick={[Function]}
 >
   toggle component

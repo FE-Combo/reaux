@@ -1,18 +1,19 @@
-import {AppView} from "../type";
+import {Store} from "redux";
+import {App} from "../type";
 
 /**
  * App cache.
- * Create actionHandler, actionPHandlers(promise handler), actionGHandlers(generator handler), modulesName, exceptionHandler.
+ * Create store, actionHandler, actionPHandlers(promise handler), actionGHandlers(generator handler), modulesName, exceptionHandler.
  * @param callback
  */
-export function createApp<T extends AppView>(callback?: (app: AppView) => T): T {
-    const app = {
+export function createApp(store: Store): App {
+    return {
+        store,
         actionPHandlers: {},
         actionGHandlers: {},
-        actionHandler: {},
+        // TODO: delete in v3.0
+        actionHandlers: {},
         modules: {},
-        // TODO: Why use object ?????????
         exceptionHandler: {},
-    } as T;
-    return callback ? callback(app) : app;
+    };
 }

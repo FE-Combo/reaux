@@ -1,6 +1,4 @@
-export abstract class Exception {
-    protected constructor(public message: string) {}
-}
+import {Exception} from "../type";
 
 // 请求返回错误 e.g: 3**/4**/5**
 export class APIException extends Exception {

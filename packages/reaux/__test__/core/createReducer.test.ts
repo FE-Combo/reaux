@@ -1,40 +1,4 @@
-import {createReducer, setStateAction, setLoadingHelperAction, setLangHelperAction} from "../../src/core/createReducer";
-
-test("Set State Action", () => {
-    expect(setStateAction("moduleName", {name: "name", age: 11})).toEqual({
-        type: "@@framework/setState",
-        payload: {module: "moduleName", state: {name: "name", age: 11}},
-    });
-
-    expect(setStateAction("moduleName2", {name: "name2", age: 22})).toEqual({
-        type: "@@framework/setState",
-        payload: {module: "moduleName2", state: {name: "name2", age: 22}},
-    });
-});
-
-test("Set Loading In Helper", () => {
-    expect(setLoadingHelperAction("identifier", true)).toEqual({
-        type: "@@framework/setHelper/loading",
-        payload: {identifier: "identifier", hasShow: true},
-    });
-
-    expect(setLoadingHelperAction("identifier2", false)).toEqual({
-        type: "@@framework/setHelper/loading",
-        payload: {identifier: "identifier2", hasShow: false},
-    });
-});
-
-test("Set Lang In Helper", () => {
-    expect(setLangHelperAction("CN")).toEqual({
-        type: "@@framework/setHelper/lang",
-        payload: "CN",
-    });
-
-    expect(setLangHelperAction("EN")).toEqual({
-        type: "@@framework/setHelper/lang",
-        payload: "EN",
-    });
-});
+import {createReducer} from "../../src/core/createReducer";
 
 test("Create Reducer", () => {
     const reducer = createReducer();

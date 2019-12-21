@@ -6,24 +6,25 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
-import {StateView, AppView, RenderOptions} from "./type";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, ModelType, saga, App} from "reaux";
+import {StateView, RenderOptions} from "./type";
 
 console.time("[framework] initialized");
 
+const history = createBrowserHistory();
 const app = generateApp();
-modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.dispatch(setStateAction(moduleName, initState, type)));
+modelInjection(app);
 
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
  */
-function generateApp(): AppView {
-    const history = createBrowserHistory();
+function generateApp(): App {
     const reducer: Reducer<StateView> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
+    console.log(reducer);
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware, pMiddleware, gMiddleware)));
-    const app = createApp(app => ({...app, store, history}));
+    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
+    const app = createApp(store);
     sagaMiddleware.run(saga, app);
     // TODO:
     // pMiddleware.run(app);
@@ -49,7 +50,7 @@ export function start(options: RenderOptions): void {
     ReactDOM.render(
         <Provider store={app.store}>
             <ErrorBoundary setErrorAction={setErrorAction}>
-                <ConnectedRouter history={app.history}>
+                <ConnectedRouter history={history}>
                     <WithRouterComponent />
                 </ConnectedRouter>
             </ErrorBoundary>
@@ -76,7 +77,7 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
     }
     app.modules[handler.moduleName] = true;
     const {actions, actionHandlers} = createAction(handler);
-    app.actionHandler = {...app.actionHandler, ...actionHandlers};
+    app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
     if (handler.type === ModelType.P) {
         app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
@@ -84,7 +85,7 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
         app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
     }
 
-    const View = createCView(handler, Component);
+    const View = createView(handler, Component);
     return {View, actions};
 }
 

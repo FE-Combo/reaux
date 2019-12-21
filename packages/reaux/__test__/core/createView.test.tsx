@@ -1,5 +1,5 @@
 import React from "react";
-import {createCView} from "../../src/core/createView";
+import {createView} from "../../src/core/createView";
 import renderer from "react-test-renderer";
 
 test("Create Component View", () => {
@@ -34,18 +34,18 @@ test("Create Component View", () => {
 
         render() {
             return (
-                <div onClick={this.onToggle}>
+                <div onClick={this.onToggle} {...this.props}>
                     {this.state.toggle ? "toggle component" : "component"}
                     <DIV />
                 </div>
             );
         }
     }
-    const NewComponent = createCView(handler, Component);
+    const NewComponent = createView(handler, Component);
     /* 
         Error: [test-renderer] Cannot read property `current` of undefined
         ref: https://github.com/facebook/react/issues/16323
-        react and react-test-renderer be same version
+        react and react-test-renderer must be same version
      */
     const newComponent = renderer.create(<NewComponent name="name" age={18} />);
     let tree = newComponent.toJSON()!;
@@ -54,8 +54,8 @@ test("Create Component View", () => {
     expect(tree).toMatchSnapshot();
     expect(tree.type).toBe("div");
     expect(tree.children).toEqual(["component", divTree]);
-    // TODO: Jest error
-    // expect(tree.props).toEqual({name: "name", age: 18});
+    // TODO: Why not {name:"name", age:18 }
+    expect(JSON.stringify(tree.props)).toEqual(JSON.stringify({name: "name", age: 18, onClick: () => {}}));
 
     // manually trigger the callback
     tree.props.onClick();

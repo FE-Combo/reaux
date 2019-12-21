@@ -1,24 +1,14 @@
 import {createApp} from "../../src/core/createApp";
+import {Store} from "redux";
 
 test("Create App", () => {
-    expect(createApp()).toEqual({
+    const store = {} as Store;
+    expect(createApp(store)).toEqual({
+        store,
         actionPHandlers: {},
         actionGHandlers: {},
-        actionHandler: {},
+        actionHandlers: {},
         modules: {},
-        exceptionHandler: {},
-    });
-
-    expect(
-        createApp(app => {
-            return {...app, modules: {a: 1}, store: {}};
-        })
-    ).toEqual({
-        actionPHandlers: {},
-        actionGHandlers: {},
-        actionHandler: {},
-        store: {},
-        modules: {a: 1},
         exceptionHandler: {},
     });
 });
