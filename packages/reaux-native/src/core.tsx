@@ -3,22 +3,22 @@ import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, setStateAction, createCView, createAction, createApp, StateView, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga} from "reaux";
-import {AppView, RenderOptions} from "./type";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga, App} from "reaux";
+import {RenderOptions} from "./type";
 
 declare const window: any;
 
 const app = generateApp();
-modelInjection(app.store.getState(), (moduleName, initState, type) => app.store.dispatch(setStateAction(moduleName, initState, type)));
+modelInjection(app);
 
 /**
  * Create reducer, middleware, store, redux-saga, app cache
  */
-function generateApp(): AppView {
-    const reducer: Reducer<StateView> = createReducer();
+function generateApp(): App {
+    const reducer: Reducer<State> = createReducer();
     const sagaMiddleware = createSagaMiddleware();
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
-    const app = createApp(app => ({...app, store}));
+    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
+    const app = createApp(store);
     sagaMiddleware.run(saga, app);
     pMiddleware.run(app);
     gMiddleware.run(app);
@@ -74,7 +74,7 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
     const {actions, actionHandlers} = createAction(handler);
-    app.actionHandler = {...app.actionHandler, ...actionHandlers};
+    app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
     if (handler.type === ModelType.P) {
         app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
@@ -82,7 +82,7 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
         app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
     }
 
-    const View = createCView(handler, Component);
+    const View = createView(handler, Component);
     return {View, actions};
 }
 

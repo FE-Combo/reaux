@@ -1,10 +1,5 @@
 import {ComponentType} from "react";
-import {Store} from "redux";
-import {AppView as App, StateView, ErrorHandler} from "reaux";
-
-export interface AppView extends App {
-    store: Store<StateView>;
-}
+import {ErrorHandler} from "reaux";
 
 export interface RenderOptions {
     name: string;
