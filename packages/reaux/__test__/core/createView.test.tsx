@@ -9,6 +9,7 @@ test("Create Component View", () => {
         state: any;
         rootState: any;
         setState: any;
+        restState: any;
         constructor(moduleName: string, state: any) {
             this.moduleName = moduleName;
             this.state = state;

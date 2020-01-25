@@ -1,7 +1,9 @@
 import React from "react";
+import {Async} from "reaux";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {View as AboutView} from "../../about";
-import {View as HomeView} from "../..//home";
+
+const HomeView = Async(() => import(/* webpackChunkName: "home" */ "../../home"), "View");
+const AboutView = Async(() => import(/* webpackChunkName: "about" */ "../../about"), "View");
 
 class Main extends React.PureComponent {
     render() {

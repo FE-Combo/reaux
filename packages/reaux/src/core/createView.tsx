@@ -1,5 +1,7 @@
 import React from "react";
-import {BaseModel} from "../type";
+import {ModelProperty, ModelLifeCycle} from "../type";
+
+export type BaseModel<S = {}, R = any> = ModelProperty<S> & ModelLifeCycle<R>;
 
 /**
  * Create Component and proxy component lifecycle

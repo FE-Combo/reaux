@@ -1,5 +1,5 @@
-import {Store} from "redux";
-import {App} from "../type";
+import {Store, ReducersMapObject, Reducer} from "redux";
+import {App, State} from "../type";
 
 /**
  * App cache.
@@ -15,5 +15,7 @@ export function createApp(store: Store): App {
         actionHandlers: {},
         modules: {},
         exceptionHandler: {},
+        asyncReducers: {} as ReducersMapObject<State, any>,
+        injectReducer: (reducers: Reducer<State>) => store.replaceReducer(reducers),
     };
 }

@@ -3,7 +3,7 @@ import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, ErrorHandler, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, pMiddleware, gMiddleware, ModelType, saga, App} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, modelInjection, BaseModel, pMiddleware, gMiddleware, saga, Model, App, Exception, createModuleReducer} from "reaux";
 import {RenderOptions} from "./type";
 
 declare const window: any;
@@ -69,19 +69,23 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param Component
  */
-export function register<H extends BaseModel & {type: ModelType}>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
+
+    // register reducer
+    const currentModuleReducer = createModuleReducer(handler.moduleName);
+    app.asyncReducers[handler.moduleName] = currentModuleReducer;
+    app.store.replaceReducer(createReducer(app.asyncReducers));
+
+    // register actions
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
+    app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
+    app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
 
-    if (handler.type === ModelType.P) {
-        app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
-    } else if (handler.type === ModelType.G) {
-        app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
-    }
-
+    // register view
     const View = createView(handler, Component);
     return {View, actions};
 }
@@ -89,14 +93,14 @@ export function register<H extends BaseModel & {type: ModelType}>(handler: H, Co
 /**
  * Module extends Generator Model
  */
-export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {}
+export class GModel<State extends {} = {}> extends Model<State> {}
 
 /**
  * Module extends Promise Model
  */
-export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {}
+export class PModel<State extends {} = {}> extends Model<State> {}
 
-function listenGlobalError(onError: ErrorHandler) {
+function listenGlobalError(onError: (error: Exception) => any) {
     // 对客户端错误行为进行处理(超时/4**)
     ErrorUtils.setGlobalHandler((error, isFatal) => {
         if (isFatal) {

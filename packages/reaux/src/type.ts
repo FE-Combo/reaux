@@ -1,70 +1,47 @@
-import {Action, Store} from "redux";
+import {Action, Store, Reducer, ReducersMapObject} from "redux";
 
 export interface App {
+    modules: {};
     store: Store;
     actionPHandlers: {[type: string]: ActionHandler};
     actionGHandlers: {[type: string]: ActionHandler};
     actionHandlers: {[type: string]: ActionHandler};
-    modules: {};
     exceptionHandler: ExceptionHandler;
+    // Add a dictionary to keep track of the registered async reducers
+    asyncReducers: ReducersMapObject<State, any>;
+    // adds the async reducer, and creates a new combined reducer
+    injectReducer: (reducers: Reducer<State>) => any;
 }
 
 export interface State {
-    app: {};
-    helper: {
-        loading?: LoadingState;
-        lang?: string;
-        exception?: Exception;
-    };
+    [namespace: string]: ActionPayload;
 }
 
-export interface ActionType<P = any> extends Action {
-    name?: string; // marking, no effect
-    payload: P;
-}
+export type ActionPayload = {} | ErrorState | LoadingState;
 
-export interface ActionPayload<S = any> {
-    module: string;
-    state: S;
+export interface ErrorState {
+    runtimeException: any;
+    apiException: any;
 }
-
-export interface HelperLoadingPayload {
-    identifier: string;
-    hasShow: boolean;
-}
-
-export type HelperPayload = string | HelperLoadingPayload | Exception;
 
 export interface LoadingState {
     [loading: string]: number; // there may be multiple effects listen to it, hide loading component when status === 0
 }
 
+export interface ActionType<P = {}> extends Action {
+    payload: P;
+}
+
 // return Generator or Promise
 export type ActionHandler = (...args: any[]) => any;
 
-export interface ExceptionHandler {
-    onError?: ErrorHandler;
-}
-
-// return Generator or Promise
-export type ErrorHandler = (error: Exception) => any;
-
-export abstract class Exception {
-    protected constructor(public message: string) {}
-}
-
-export class RuntimeException extends Exception {
-    constructor(message: string, public error: Error | null = null) {
-        super(message);
-    }
-}
-
-abstract class ModelProperty<State = {}> {
+export abstract class ModelProperty<S> {
     abstract readonly moduleName: string;
-    abstract readonly initState: State;
-    abstract state: Readonly<State>;
+    abstract readonly initState: S;
+    abstract state: Readonly<S>;
     abstract rootState: Readonly<State>;
-    abstract setState(newState: Partial<State>): void;
+    abstract setState(newState: Partial<S>): void;
+    abstract restState(): void;
 }
 
 export abstract class ModelLifeCycle<R = any> {
@@ -74,9 +51,10 @@ export abstract class ModelLifeCycle<R = any> {
     abstract onHide(): R;
 }
 
-export enum ModelType {
-    P = "promise",
-    G = "generator",
+export abstract class Exception {
+    protected constructor(public message: string) {}
 }
 
-export type BaseModel<S = {}, R = any> = ModelProperty<S> & ModelLifeCycle<R>;
+export interface ExceptionHandler {
+    onError?: (error: Exception) => any;
+}

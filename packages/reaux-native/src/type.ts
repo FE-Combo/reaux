@@ -1,9 +1,9 @@
 import {ComponentType} from "react";
-import {ErrorHandler} from "reaux";
+import {Exception} from "reaux";
 
 export interface RenderOptions {
     name: string;
     Component: ComponentType<any>;
-    onError?: ErrorHandler;
+    onError?: (error: Exception) => any;
     onInitialized?: () => Promise<any>;
 }

@@ -25,7 +25,7 @@ class Main extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: any) => {
     return {
-        name: state.app.home.name,
+        name: state.home.name,
     };
 };
 

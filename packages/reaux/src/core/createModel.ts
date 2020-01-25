@@ -1,22 +1,5 @@
-import {State, ModelType, App} from "../type";
-import {setStateAction} from "./utils";
-import {SagaIterator} from "redux-saga";
-
-abstract class ModelProperty<S> {
-    abstract readonly moduleName: string;
-    abstract readonly initState: S;
-    abstract state: Readonly<S>;
-    abstract rootState: Readonly<State>;
-    abstract setState(newState: Partial<State>): void;
-    abstract restState(): void;
-}
-
-abstract class ModelLifeCycle<R = any> {
-    abstract onReady(): R;
-    abstract onLoad(): R;
-    abstract onUnload(): R;
-    abstract onHide(): R;
-}
+import {State, App, ModelProperty, ModelLifeCycle} from "../type";
+import {setModuleAction} from "./shared";
 
 let appCache: App | null = null;
 
@@ -27,29 +10,13 @@ export function modelInjection(app: App) {
 /**
  * Proxy store
  */
-export class Model<S> extends ModelProperty<S> {
+export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
     public constructor(readonly moduleName: string, readonly initState: S) {
         super();
         if (!appCache) {
             throw new Error("Execute the injection function before using Model only!!");
         }
-        appCache!.store.dispatch(setStateAction(moduleName, initState));
-    }
-
-    get state(): Readonly<S> {
-        return appCache!.store.getState().app[this.moduleName];
-    }
-
-    get rootState(): Readonly<State> {
-        return appCache!.store.getState();
-    }
-
-    setState(newState: Partial<S>) {
-        appCache!.store.dispatch(setStateAction(this.moduleName, newState, `@@${this.moduleName}/setState[${Object.keys(newState).join(",")}]`));
-    }
-
-    restState() {
-        appCache!.store.dispatch(setStateAction(this.moduleName, this.initState, `@@${this.moduleName}/resetState`));
+        appCache!.store.dispatch(setModuleAction(moduleName, initState));
     }
 
     // LifeCycle onReady/onLoad/onUnload/onHide
@@ -57,7 +24,7 @@ export class Model<S> extends ModelProperty<S> {
         // extends to be overrode
     }
 
-    onLoad() {
+    onLoad(didMount: boolean) {
         // extends to be overrode
     }
 
@@ -68,48 +35,20 @@ export class Model<S> extends ModelProperty<S> {
     onHide() {
         // extends to be overrode
     }
-}
 
-/**
- * Proxy Promise Model
- */
-export class BaseOnPromiseModel<State> extends Model<State> implements ModelLifeCycle {
-    type: ModelType = ModelType.P;
-    async onReady() {
-        // extends to be overrode
+    get state(): Readonly<S> {
+        return appCache!.store.getState()[this.moduleName];
     }
 
-    async onLoad() {
-        // extends to be overrode
+    get rootState(): Readonly<State> {
+        return appCache!.store.getState();
     }
 
-    async onUnload() {
-        // extends to be overrode
+    setState(newState: Partial<S>) {
+        appCache!.store.dispatch(setModuleAction(this.moduleName, newState));
     }
 
-    async onHide() {
-        // extends to be overrode
-    }
-}
-
-/**
- * Proxy Generator Model
- */
-export class BaseOnGeneratorModel<State> extends Model<State> implements ModelLifeCycle<SagaIterator> {
-    type: ModelType = ModelType.G;
-    *onReady(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onLoad(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onUnload(): SagaIterator {
-        // extends to be overrode
-    }
-
-    *onHide(): SagaIterator {
-        // extends to be overrode
+    restState() {
+        appCache!.store.dispatch(setModuleAction(this.moduleName, this.initState));
     }
 }

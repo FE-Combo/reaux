@@ -1,6 +1,6 @@
 import {ComponentType} from "react";
 import {RouterState} from "connected-react-router";
-import {State, ErrorHandler} from "reaux";
+import {State, Exception} from "reaux";
 
 export interface StateView extends State {
     router: RouterState;
@@ -8,6 +8,6 @@ export interface StateView extends State {
 
 export interface RenderOptions {
     Component: ComponentType<any>;
-    onError?: ErrorHandler;
+    onError?: (error: Exception) => any;
     onInitialized?: () => void;
 }

@@ -20,7 +20,7 @@ class Main extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: any): StateProps => {
     return {
-        name: state.app.about.name,
+        name: state.about.name,
     };
 };
 

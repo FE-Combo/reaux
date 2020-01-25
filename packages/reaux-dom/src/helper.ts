@@ -1,6 +1,6 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
-import {setHelperLoadingAction, setHelperLanguageAction, ModelLifeCycle} from "reaux";
+import {ModelLifeCycle, App, setModuleAction} from "reaux";
 import {StateView} from "./type";
 
 type ActionHandler = (...args: any[]) => SagaIterator;
@@ -24,30 +24,30 @@ function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S
     };
 }
 
-/**
- * 需要在事件的最顶部使用
- */
-function Lifecycle(): LifeCycleDecorator {
-    return (target, propertyKey, descriptor) => {
-        descriptor.value!.isLifecycle = true;
-        return descriptor;
-    };
-}
-
-export const helper = {
+export class Helper {
+    appCache: App;
+    constructor(app: App) {
+        this.appCache = app;
+    }
     loading(identifier: string = "global") {
+        const that = this;
         return handlerDecorator(function*(handler) {
             try {
-                yield put(setHelperLoadingAction(identifier, true));
+                const nextLoadingState = that.appCache.store.getState()["@loading"];
+                nextLoadingState[identifier] = nextLoadingState[identifier] + 1 || 1;
+                yield put(setModuleAction("@loading", nextLoadingState));
                 yield* handler() as any;
             } finally {
-                yield put(setHelperLoadingAction(identifier, false));
+                const nextLoadingState = that.appCache.store.getState()["@loading"];
+                nextLoadingState[identifier] = nextLoadingState[identifier] - 1 || 0;
+                yield put(setModuleAction("@loading", nextLoadingState));
             }
         });
-    },
-    setLang(lang: string) {
-        setHelperLanguageAction(lang);
-    },
-    Lifecycle,
-    handlerDecorator,
-};
+    }
+    Lifecycle(): LifeCycleDecorator {
+        return (target, propertyKey, descriptor) => {
+            descriptor.value!.isLifecycle = true;
+            return descriptor;
+        };
+    }
+}

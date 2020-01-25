@@ -4,7 +4,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "description": "Front-End framework base on react an redux",
+  "description": "Front-End application framework base on react an redux",
   "scripts": {
     "lerna": "lerna",
     "build": "node scripts/build.js",

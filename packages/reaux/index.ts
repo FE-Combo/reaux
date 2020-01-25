@@ -16,6 +16,6 @@ export * from "./src/core/createView";
 
 export * from "./src/core/reduxMiddleware";
 
-export * from "./src/core/utils";
+export * from "./src/core/shared";
 
 export * from "./src/type";

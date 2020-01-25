@@ -1,4 +1,5 @@
 import {createAction} from "../../src/core/createAction";
+import {createActionHandlerType} from "../../src/core/shared";
 
 test.only("Create Action", () => {
     class Model {
@@ -19,8 +20,8 @@ test.only("Create Action", () => {
     };
 
     const actionHandlers = {
-        "@@framework/actionHandler/moduleName/fn1": handler.fn1.bind(handler),
-        "@@framework/actionHandler/moduleName/fn2": handler.fn2.bind(handler),
+        [createActionHandlerType("moduleName", "fn1")]: handler.fn1.bind(handler),
+        [createActionHandlerType("moduleName", "fn2")]: handler.fn2.bind(handler),
     };
 
     // Why use JSON.stringify()? because exist anonymous function. ref: https://www.hellojava.com/a/70916.html
@@ -32,14 +33,14 @@ test.only("Create Action", () => {
     );
 
     expect(createAction(handler).actions.fn1()).toEqual({
-        type: "@@framework/actionHandler/moduleName/fn1",
+        type: createActionHandlerType("moduleName", "fn1"),
         payload: [],
     });
     expect(createAction(handler).actions.fn2(1, 2)).toEqual({
-        type: "@@framework/actionHandler/moduleName/fn2",
+        type: createActionHandlerType("moduleName", "fn2"),
         payload: [1, 2],
     });
 
-    expect(createAction(handler).actionHandlers["@@framework/actionHandler/moduleName/fn1"]()).toBe(undefined);
-    expect(createAction(handler).actionHandlers["@@framework/actionHandler/moduleName/fn2"](1, 2)).toEqual({a: 1, b: 2});
+    expect(createAction(handler).actionHandlers[createActionHandlerType("moduleName", "fn1")]()).toBe(undefined);
+    expect(createAction(handler).actionHandlers[createActionHandlerType("moduleName", "fn2")](1, 2)).toEqual({a: 1, b: 2});
 });

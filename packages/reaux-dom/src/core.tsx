@@ -6,7 +6,8 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, BaseOnGeneratorModel, BaseOnPromiseModel, BaseModel, ModelType, saga, App} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, BaseModel, Model, saga, App, createModuleReducer} from "reaux";
+import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
 console.time("[framework] initialized");
@@ -15,15 +16,20 @@ const history = createBrowserHistory();
 const app = generateApp();
 modelInjection(app);
 
+export const helper = new Helper(app);
+
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
  */
 function generateApp(): App {
-    const reducer: Reducer<StateView> = createReducer(reducers => ({...reducers, router: connectRouter(history)}));
+    const routerReducer = connectRouter(history);
+    const asyncReducer = {router: routerReducer};
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
+    const reducer: Reducer<StateView> = createReducer(asyncReducer as any) as any;
     const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
     const app = createApp(store);
+    app.asyncReducers = {...app.asyncReducers, ...asyncReducer} as any;
     sagaMiddleware.run(saga, app);
     // TODO:
     // pMiddleware.run(app);
@@ -70,28 +76,33 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param Component
  */
-export function register<H extends BaseModel & {type: ModelType}>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
     app.modules[handler.moduleName] = true;
+
+    // register reducer
+    const currentModuleReducer = createModuleReducer(handler.moduleName);
+    app.asyncReducers[handler.moduleName] = currentModuleReducer;
+    app.store.replaceReducer(createReducer(app.asyncReducers));
+
+    // register actions
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
+    app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
+    app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
 
-    if (handler.type === ModelType.P) {
-        app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
-    } else if (handler.type === ModelType.G) {
-        app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
-    }
-
+    // register view
     const View = createView(handler, Component);
+
     return {View, actions};
 }
 
 /**
  * Module extends Generator Model
  */
-export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {
+export class GModel<State extends {} = {}> extends Model<State> {
     setHistory(newURL: string) {
         app.store.dispatch(push(newURL));
     }
@@ -100,7 +111,7 @@ export class GModel<State extends {} = {}> extends BaseOnGeneratorModel<State> {
 /**
  * Module extends Promise Model
  */
-export class PModel<State extends {} = {}> extends BaseOnPromiseModel<State> {
+export class PModel<State extends {} = {}> extends Model<State> {
     setHistory(newURL: string) {
         app.store.dispatch(push(newURL));
     }

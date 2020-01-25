@@ -1,4 +1,5 @@
 import {ActionType, ModelLifeCycle, ExceptionHandler} from "../type";
+import {createActionHandlerType} from "./shared";
 
 type ActionCreator<H> = H extends (...args: infer P) => any ? ((...args: P) => ActionType<P>) : never;
 type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => any ? K : never}[Exclude<keyof H, keyof ModelLifeCycle | keyof ExceptionHandler>];
@@ -23,7 +24,7 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
     const actionHandlers = {} as ActionHandlers;
     keys.forEach(actionType => {
         const method = handler[actionType];
-        const qualifiedActionType = `@@framework/actionHandler/${moduleName}/${actionType}`;
+        const qualifiedActionType = createActionHandlerType(moduleName, actionType);
         actions[actionType] = (...payload: any[]) => ({type: qualifiedActionType, payload});
         actionHandlers[qualifiedActionType] = method.bind(handler);
     });
