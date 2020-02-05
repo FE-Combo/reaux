@@ -14,21 +14,17 @@ test.only("Create Action", () => {
     }
     const handler = new Model("moduleName");
 
-    const actions = {
-        fn1: (...payload: any[]) => ({type: "@@framework/actionHandler/moduleName/fn1", payload}),
-        fn2: (...payload: any[]) => ({type: "@@framework/actionHandler/moduleName/fn2", payload}),
-    };
-
-    const actionHandlers = {
-        [createActionHandlerType("moduleName", "fn1")]: handler.fn1.bind(handler),
-        [createActionHandlerType("moduleName", "fn2")]: handler.fn2.bind(handler),
-    };
-
     // Why use JSON.stringify()? because exist anonymous function. ref: https://www.hellojava.com/a/70916.html
     expect(JSON.stringify(createAction(handler))).toEqual(
         JSON.stringify({
-            actions,
-            actionHandlers,
+            actions: {
+                fn1: (...payload: any[]) => ({type: "@@framework/actionHandler/moduleName/fn1", payload}),
+                fn2: (...payload: any[]) => ({type: "@@framework/actionHandler/moduleName/fn2", payload}),
+            },
+            actionHandlers: {
+                [createActionHandlerType("moduleName", "fn1")]: handler.fn1.bind(handler),
+                [createActionHandlerType("moduleName", "fn2")]: handler.fn2.bind(handler),
+            },
         })
     );
 
