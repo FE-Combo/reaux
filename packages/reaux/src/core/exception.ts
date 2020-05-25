@@ -34,7 +34,3 @@ export interface ErrorListener {
 
 // return Generator or Promise
 export type ErrorHandler = (error: Exception) => any;
-
-export interface ExceptionHandler {
-    onError?: ErrorHandler;
-}

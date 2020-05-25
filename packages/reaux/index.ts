@@ -21,3 +21,5 @@ export * from "./src/core/shared";
 export * from "./src/type";
 
 export * from "./src/core/axios";
+
+export * from "./src/core/exception";

@@ -1,4 +1,4 @@
-import { call as sagaCall, CallEffect } from "redux-saga/effects";
+import {call as sagaCall, CallEffect} from "redux-saga/effects";
 
 interface CallWithResultEffect<R> extends CallEffect {
     result: () => R;
