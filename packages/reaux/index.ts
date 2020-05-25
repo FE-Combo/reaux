@@ -19,3 +19,5 @@ export * from "./src/core/reduxMiddleware";
 export * from "./src/core/shared";
 
 export * from "./src/type";
+
+export * from "./src/core/axios";

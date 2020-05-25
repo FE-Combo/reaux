@@ -5,3 +5,4 @@ export * from "./src/type";
 
 export {Async} from "reaux";
 export {ErrorBoundary} from "reaux";
+export {ajax} from "reaux";
