@@ -1,5 +1,6 @@
 import Main from "./component/Main";
 import {register, GModel} from "reaux-dom";
+import Detail from "./component/Detail";
 import {State} from "./type";
 // import {SagaIterator} from "redux-saga";
 
@@ -16,4 +17,8 @@ class ActionHandler extends GModel<State> {
     }
 }
 
-export const {View, actions} = register(new ActionHandler("home", initState), Main);
+const module = register(new ActionHandler("home", initState));
+
+export const actions = module.getActions();
+export const View = module.attachView(Main);
+export const View2 = module.attachView(Detail);

@@ -8,4 +8,6 @@ const initState: State = {
 
 class ActionHandler extends GModel<State> {}
 
-export const {View, actions} = register(new ActionHandler("main", initState), Main);
+const module = register(new ActionHandler("main", initState));
+export const actions = module.getActions();
+export const View = module.attachView(Main);

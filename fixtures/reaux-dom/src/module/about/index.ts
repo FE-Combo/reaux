@@ -12,4 +12,6 @@ class ActionHandler extends PModel<State> {
     }
 }
 
-export const {View, actions} = register(new ActionHandler("about", initState), Main);
+const module = register(new ActionHandler("main", initState));
+export const actions = module.getActions();
+export const View = module.attachView(Main);
