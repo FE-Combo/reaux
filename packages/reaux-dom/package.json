@@ -1,6 +1,6 @@
 {
   "name": "reaux-dom",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Front-End web framework",
   "main": "index.js",
   "module": "index.js",
