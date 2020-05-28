@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, BaseModel, Model, saga, App, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, viewInjection, BaseModel, Model, saga, App, createModuleReducer} from "reaux";
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
@@ -15,6 +15,7 @@ console.time("[framework] initialized");
 const history = createBrowserHistory();
 const app = generateApp();
 modelInjection(app);
+viewInjection(app);
 
 export const helper = new Helper(app);
 
@@ -87,18 +88,17 @@ export function register<H extends BaseModel>(handler: H) {
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
 
+    // register actions
+    const {actions, actionHandlers} = createAction(handler);
+    app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
+    app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
+    app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
+
     return {
-        getActions: () => {
-            // register actions
-            const {actions, actionHandlers} = createAction(handler);
-            app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
-            app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
-            app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
-            return actions;
-        },
-        attachView: (View: ComponentType<any>) => {
+        actions,
+        proxyView: (View: ComponentType<any>) => {
             // register view
-            const NextView = createView(handler, View);
+            const NextView = createView(handler, actions, View);
             return NextView;
         },
     };

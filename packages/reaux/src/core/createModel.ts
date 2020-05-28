@@ -40,6 +40,10 @@ export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
         return appCache!.store.getState()[this.moduleName];
     }
 
+    get initialState(): Readonly<S> {
+        return this.initState;
+    }
+
     get rootState(): Readonly<State> {
         return appCache!.store.getState();
     }

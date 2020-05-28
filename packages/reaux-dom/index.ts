@@ -1,8 +1,6 @@
 export * from "./src/core";
 export * from "./src/Route";
 export * from "./src/helper";
+export * from "./src/sagaCall";
 export * from "./src/type";
-
-export {Async} from "reaux";
-export {ErrorBoundary} from "reaux";
-export {ajax} from "reaux";
+export * from "reaux";

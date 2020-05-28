@@ -3,7 +3,7 @@ import {put} from "redux-saga/effects";
 import {ModelLifeCycle, App, setModuleAction} from "reaux";
 import {StateView} from "./type";
 
-type ActionHandler = (...args: any[]) => SagaIterator;
+type ActionHandler = (...args: any[]) => any;
 
 type HandlerDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => TypedPropertyDescriptor<ActionHandler>;
 
@@ -44,7 +44,7 @@ export class Helper {
             }
         });
     }
-    Lifecycle(): LifeCycleDecorator {
+    lifecycle(): LifeCycleDecorator {
         return (target, propertyKey, descriptor) => {
             descriptor.value!.isLifecycle = true;
             return descriptor;

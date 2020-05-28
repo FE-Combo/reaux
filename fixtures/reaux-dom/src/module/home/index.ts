@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import {register, GModel} from "reaux-dom";
+import {register, GModel, helper} from "reaux-dom";
 import Detail from "./component/Detail";
 import {State} from "./type";
 // import {SagaIterator} from "redux-saga";
@@ -9,6 +9,10 @@ const initState: State = {
 };
 
 class ActionHandler extends GModel<State> {
+    @helper.lifecycle()
+    *onReady(): any {
+        console.log("generator onReady");
+    }
     *test(): any {
         yield "1";
         yield "2";
@@ -19,6 +23,6 @@ class ActionHandler extends GModel<State> {
 
 const module = register(new ActionHandler("home", initState));
 
-export const actions = module.getActions();
-export const View = module.attachView(Main);
-export const View2 = module.attachView(Detail);
+export const actions = module.actions;
+export const View = module.proxyView(Main);
+export const View2 = module.proxyView(Detail);

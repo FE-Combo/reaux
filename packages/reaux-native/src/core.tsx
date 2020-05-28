@@ -86,7 +86,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
 
     // register view
-    const View = createView(handler, Component);
+    const View = createView(handler, actions, Component);
     return {View, actions};
 }
 

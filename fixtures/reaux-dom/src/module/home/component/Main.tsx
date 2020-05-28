@@ -1,6 +1,6 @@
 import React from "react";
-import {connect, DispatchProp} from "react-redux";
-import {actions} from "../index";
+import { connect, DispatchProp } from "react-redux";
+import { actions } from "../index";
 
 interface Props extends DispatchProp {
     name: string;

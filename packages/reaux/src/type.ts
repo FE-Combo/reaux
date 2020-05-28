@@ -58,3 +58,7 @@ export abstract class Exception {
 export interface ExceptionHandler {
     onError?: (error: Exception) => any;
 }
+
+type ActionCreator<H> = H extends (...args: infer P) => any ? ((...args: P) => ActionType<P>) : never;
+type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => any ? K : never}[Exclude<keyof H, keyof ModelLifeCycle | keyof ExceptionHandler>];
+export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};

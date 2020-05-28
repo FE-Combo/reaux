@@ -1,9 +1,5 @@
-import {ActionType, ModelLifeCycle, ExceptionHandler} from "../type";
+import {ActionType, ActionCreators} from "../type";
 import {createActionHandlerType} from "./shared";
-
-type ActionCreator<H> = H extends (...args: infer P) => any ? ((...args: P) => ActionType<P>) : never;
-type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => any ? K : never}[Exclude<keyof H, keyof ModelLifeCycle | keyof ExceptionHandler>];
-type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};
 
 export interface ActionsType {
     [key: string]: (...payload: any[]) => ActionType<any[]>;
