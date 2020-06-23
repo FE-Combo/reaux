@@ -8,19 +8,20 @@
   "author": "vocoWone",
   "license": "MIT",
   "dependencies": {
-    "reaux": "^2.0.0",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "4.3.4",
     "connected-react-router": "6.5.0",
+    "core-js": "^3.6.5",
     "react-dom": "16.8.6",
-    "react-router-dom": "5.0.1"
+    "react-router-dom": "5.0.1",
+    "reaux": "^2.0.0"
   },
   "peerDependencies": {
-    "reaux": "^2.0.0",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "4.3.4",
     "connected-react-router": "6.5.0",
     "react-dom": "16.8.6",
-    "react-router-dom": "5.0.1"
+    "react-router-dom": "5.0.1",
+    "reaux": "^2.0.0"
   }
 }
