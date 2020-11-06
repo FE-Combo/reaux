@@ -30,6 +30,7 @@ FE lightweight framework base on react + redux + axios, strict in TypeScript.
 | reaux-dom    | [![npm version](https://img.shields.io/npm/v/reaux-dom.svg?style=flat)](https://www.npmjs.com/package/reaux-dom)       | Base on reaux and react-dom applied to website |
 | reaux-native | [![npm version](https://img.shields.io/npm/v/reaux-native.svg?style=flat)](https://www.npmjs.com/package/reaux-native) | Base on reaux and react-native applied to app  |
 | reaux-next   | [![npm version](https://img.shields.io/npm/v/reaux-next.svg?style=flat)](https://www.npmjs.com/package/reaux-next)     | Fork from reaux applied to next.js             |
+| reaux-cli   | [![npm version](https://img.shields.io/npm/v/reaux-cli.svg?style=flat)](https://www.npmjs.com/package/reaux-cli)     | Project scaffolding |
 
 ## Core API
 
