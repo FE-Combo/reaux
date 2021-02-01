@@ -1,8 +1,12 @@
 import {Action, Store, Reducer, ReducersMapObject} from "redux";
 
 export interface App {
-    modules: {};
+    isServer: boolean;
+    serverRenderedModules: string[];
+    modules: {[key: string]: number};
     store: Store;
+    compileConfig?: CompileConfig;
+    runtimeConfig?: RuntimeConfig;
     actionPHandlers: {[type: string]: ActionHandler};
     actionGHandlers: {[type: string]: ActionHandler};
     actionHandlers: {[type: string]: ActionHandler};
@@ -59,6 +63,12 @@ export interface ExceptionHandler {
     onError?: (error: Exception) => any;
 }
 
-type ActionCreator<H> = H extends (...args: infer P) => any ? ((...args: P) => ActionType<P>) : never;
+type ActionCreator<H> = H extends (...args: infer P) => any ? (...args: P) => ActionType<P> : never;
 type HandlerKeys<H> = {[K in keyof H]: H[K] extends (...args: any[]) => any ? K : never}[Exclude<keyof H, keyof ModelLifeCycle | keyof ExceptionHandler>];
 export type ActionCreators<H> = {readonly [K in HandlerKeys<H>]: ActionCreator<H[K]>};
+
+export interface CompileConfig {
+    isSSR?: boolean;
+}
+
+export interface RuntimeConfig {}

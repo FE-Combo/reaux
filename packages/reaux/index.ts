@@ -23,3 +23,5 @@ export * from "./src/type";
 export * from "./src/core/axios";
 
 export * from "./src/core/exception";
+
+export * from "./src/core/dynamicMiddleware";

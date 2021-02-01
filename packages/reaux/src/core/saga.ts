@@ -40,7 +40,7 @@ function* run(handler: ActionHandler, payload: any[]): SagaIterator {
         yield* handler(...payload);
     } catch (error) {
         // 监听 actionHandler 发起的 error
-        console.error("Redux Saga Error");
+        console.error("Redux Saga Run Error");
         console.error(error);
         yield put(setErrorAction(error)); // 调用 takeEvery action.type === ERROR_ACTION_TYPE
     }

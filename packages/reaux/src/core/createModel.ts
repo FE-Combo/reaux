@@ -16,7 +16,15 @@ export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
         if (!appCache) {
             throw new Error("Execute the injection function before using Model only!!");
         }
-        appCache!.store.dispatch(setModuleAction(moduleName, initState));
+        console.log("model");
+        if (appCache.isServer) {
+            appCache!.store.dispatch(setModuleAction(moduleName, initState));
+        } else {
+            const moduleNameIndex = appCache.serverRenderedModules.indexOf(moduleName);
+            if (moduleNameIndex === -1) {
+                appCache!.store.dispatch(setModuleAction(moduleName, initState));
+            }
+        }
     }
 
     // LifeCycle onReady/onLoad/onUnload/onHide

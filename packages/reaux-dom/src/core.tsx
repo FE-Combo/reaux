@@ -1,75 +1,100 @@
-import "core-js/stable";
-import React, {ComponentType} from "react";
-import ReactDOM from "react-dom";
-import {withRouter} from "react-router-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import * as Loadable from "react-loadable";
+import {renderToString} from "react-dom/server";
+import {withRouter, StaticRouter} from "react-router-dom";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
-import {createBrowserHistory} from "history";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, viewInjection, BaseModel, Model, saga, App, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, modelInjection, viewInjection, BaseModel, Model, saga, createModuleReducer, dynamicMiddleware, addMiddleware, CompileConfig, RuntimeConfig, createActionType} from "reaux";
 import {Helper} from "./helper";
-import {StateView, RenderOptions} from "./type";
-
-console.time("[framework] initialized");
-
-const history = createBrowserHistory();
+import createHistory from "./routerHistory";
+import {StateView, RenderOptions, DOMApp, ServerStartReturn} from "./type";
+declare const REAUX_COMPILE_CONFIG: CompileConfig;
+declare const REAUX_RUNTIME_CONFIG: RuntimeConfig;
+const history = createHistory();
 const app = generateApp();
 modelInjection(app);
 viewInjection(app);
-
 export const helper = new Helper(app);
 
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
  */
-function generateApp(): App {
+function generateApp(): DOMApp {
     const routerReducer = connectRouter(history);
     const asyncReducer = {router: routerReducer};
     const historyMiddleware = routerMiddleware(history);
     const sagaMiddleware = createSagaMiddleware();
     const reducer: Reducer<StateView> = createReducer(asyncReducer as any) as any;
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, sagaMiddleware)));
+    const preloadedState = (typeof window !== "undefined" && (window as any)?.__REAUX_DATA__?.ReduxState) || {};
+    const store: Store<StateView> = createStore(reducer, preloadedState, devtools(applyMiddleware(historyMiddleware, dynamicMiddleware)));
     const app = createApp(store);
     app.asyncReducers = {...app.asyncReducers, ...asyncReducer} as any;
+    addMiddleware(sagaMiddleware);
     sagaMiddleware.run(saga, app);
     // TODO:
     // pMiddleware.run(app);
     // gMiddleware.run(app);
+    app.compileConfig = typeof REAUX_COMPILE_CONFIG === "object" ? REAUX_COMPILE_CONFIG : {};
+    app.runtimeConfig = typeof REAUX_RUNTIME_CONFIG === "object" ? REAUX_RUNTIME_CONFIG : {};
     return app;
 }
 
 /**
- * Start react-dom render.
+ * Start client react-dom render.
  * Project entry, trigger once. e.g: main module.
  * @param options
  */
-export function start(options: RenderOptions): void {
-    const {Component, onError, onInitialized} = options;
-    if (typeof onError === "function") {
-        app.exceptionHandler.onError = onError.bind(app);
-    }
-    listenGlobalError();
-    const rootElement: HTMLDivElement = document.createElement("div");
-    rootElement.id = "framework-app-root";
-    document.body.appendChild(rootElement);
-    const WithRouterComponent = withRouter(Component as any);
-    ReactDOM.render(
-        <Provider store={app.store}>
+export function start(options: RenderOptions): ServerStartReturn | undefined {
+    const {Component, onError, onInitialized, url = "/"} = options;
+    const WithRouterComponent = withRouter(Component);
+    const Application = () => (
+        <Provider store={app.store!}>
             <ErrorBoundary setErrorAction={setErrorAction}>
-                <ConnectedRouter history={history}>
-                    <WithRouterComponent />
-                </ConnectedRouter>
+                {app.isServer ? (
+                    <StaticRouter location={url} context={{}}>
+                        <WithRouterComponent />
+                    </StaticRouter>
+                ) : (
+                    <ConnectedRouter history={history}>
+                        <WithRouterComponent />
+                    </ConnectedRouter>
+                )}
             </ErrorBoundary>
-        </Provider>,
-        rootElement,
-        () => {
-            console.timeEnd("[framework] initialized");
+        </Provider>
+    );
+
+    if (app.isServer) {
+        const mainModuleName = (Component as any).moduleName;
+        if (!app.serverRenderedModules.includes(mainModuleName)) {
+            app.serverRenderedModules.push(mainModuleName);
+        }
+        const content = renderToString(<Application />);
+        const reduxState = app.store.getState();
+        reduxState.router.location.pathname = url;
+        return {content, serverRenderedModules: app.serverRenderedModules, reduxState};
+    } else {
+        if (typeof onError === "function") {
+            app.exceptionHandler.onError = onError.bind(app);
+        }
+        listenGlobalError();
+        const rootElement = document.getElementById("reaux-app-root");
+        const renderCallback = () => {
             if (typeof onInitialized === "function") {
                 onInitialized();
             }
+        };
+        if (app.compileConfig?.isSSR) {
+            Loadable.preloadReady().then(() => {
+                ReactDOM.hydrate(<Application />, rootElement, renderCallback);
+            });
+        } else {
+            ReactDOM.render(<Application />, rootElement, renderCallback);
         }
-    );
+    }
+    return;
 }
 
 /**
@@ -78,16 +103,21 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param view
  */
-export function register<H extends BaseModel>(handler: H) {
+export function register<H extends BaseModel>(handler: H): any {
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
-    app.modules[handler.moduleName] = true;
+    app.modules[handler.moduleName] = 0;
 
     // register reducer
     const currentModuleReducer = createModuleReducer(handler.moduleName);
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
+
+    // initState can store on the client, but it will be lost on the server
+    if (app.isServer) {
+        app.store.dispatch({type: createActionType(handler.moduleName), payload: handler.initState});
+    }
 
     // register actions
     const {actions, actionHandlers} = createAction(handler);
@@ -97,7 +127,7 @@ export function register<H extends BaseModel>(handler: H) {
 
     return {
         actions,
-        proxyView: (View: ComponentType<any>) => {
+        proxyView: (View: React.ComponentType<any>) => {
             // register view
             const NextView = createView(handler, actions, View);
             return NextView;
@@ -127,13 +157,15 @@ export class PModel<State extends {} = {}> extends Model<State> {
  * Listen global error
  */
 function listenGlobalError() {
-    window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
-        console.error("Window Global Error");
-        if (!error) {
-            error = new Error(message.toString());
-        }
-        app.store.dispatch(setErrorAction(error));
-    };
+    if (typeof window !== "undefined") {
+        window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
+            console.error("Window Global Error");
+            if (!error) {
+                error = new Error(message.toString());
+            }
+            app.store.dispatch(setErrorAction(error));
+        };
+    }
 }
 
 /**
@@ -142,12 +174,11 @@ function listenGlobalError() {
  * @param enhancer
  */
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
-    const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
-    if (extension) {
-        return compose(
-            enhancer,
-            extension({})
-        );
+    if (typeof window !== "undefined") {
+        const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
+        if (extension) {
+            return compose(enhancer, extension({}));
+        }
     }
     return enhancer;
 }

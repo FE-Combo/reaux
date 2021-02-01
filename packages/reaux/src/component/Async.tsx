@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 type ReactComponentKeyOf<T> = {[P in keyof T]: T[P] extends React.ComponentType<any> ? P : never}[keyof T];
 

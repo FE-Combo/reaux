@@ -113,7 +113,7 @@ function listenGlobalError(onError: (error: Exception) => any) {
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     let composeEnhancers = compose;
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
         const extension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
         if (extension) {
             composeEnhancers = extension({

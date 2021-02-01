@@ -12,7 +12,7 @@ export function ajax<Request, Response>(method: Method, path: string, pathParams
     return axios.request(config).then(response => response.data);
 }
 
-function url(pattern: string, params: object): string {
+export function url(pattern: string, params?: object): string {
     if (!params) {
         return pattern;
     }

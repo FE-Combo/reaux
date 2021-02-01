@@ -1,5 +1,5 @@
-import React from "react";
-import { connect, DispatchProp } from "react-redux";
+import * as React from "react";
+import {connect, DispatchProp} from "react-redux";
 
 interface Props extends DispatchProp {
     name: string;
@@ -7,9 +7,7 @@ interface Props extends DispatchProp {
 
 class Main extends React.PureComponent<Props> {
     render() {
-        return (
-            <div>Home Detail</div>
-        );
+        return <div>Home Detail</div>;
     }
 }
 

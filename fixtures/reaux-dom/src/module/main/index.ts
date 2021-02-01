@@ -8,7 +8,8 @@ const initState: State = {
 
 class ActionHandler extends GModel<State> {
     @helper.lifecycle()
-    onReady(): any {
+    *onReady(): any {
+        this.setState({name: "new main"});
         console.log("common onReady");
     }
 }

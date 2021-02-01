@@ -9,7 +9,7 @@ const initState: State = {
 class ActionHandler extends PModel<State> {
     @helper.lifecycle()
     async onReady() {
-        console.log("promise onReady");
+        console.log("about promise onReady");
     }
 
     async test() {

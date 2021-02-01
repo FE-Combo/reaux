@@ -11,7 +11,7 @@ const initState: State = {
 class ActionHandler extends GModel<State> {
     @helper.lifecycle()
     *onReady(): any {
-        console.log("generator onReady");
+        console.log("home generator onReady");
     }
     *test(): any {
         yield "1";

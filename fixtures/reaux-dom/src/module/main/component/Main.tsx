@@ -1,29 +1,54 @@
-import React from "react";
-import { Async } from "reaux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import * as React from "react";
+import {connect, DispatchProp} from "react-redux";
+import * as Loadable from "react-loadable";
+import {Async} from "reaux-dom";
+import {Route, Switch, withRouter, RouteComponentProps} from "react-router-dom";
 
-const HomeView = Async(() => import(/* webpackChunkName: "home" */ "../../home"), "View");
-const HomeDetailView = Async(() => import(/* webpackChunkName: "home" */ "../../home"), "View2");
-const AboutView = Async(() => import(/* webpackChunkName: "about" */ "../../about"), "View");
+const HomeView = Loadable({
+    loader: () => import(/* webpackChunkName: "home" */ "../../home").then(_ => _.View),
+    loading: () => null,
+    modules: ["HomeView"],
+});
+const HomeDetailView = Loadable({
+    loader: () => import(/* webpackChunkName: "home" */ "../../home").then(_ => _.View2),
+    loading: () => null,
+    modules: ["HomeDetailView"],
+});
+const AboutView = Loadable({
+    loader: () => import(/* webpackChunkName: "about" */ "../../about").then(_ => _.View),
+    loading: () => null,
+    modules: ["AboutView"],
+});
+interface Props extends DispatchProp, RouteComponentProps {
+    name: string;
+}
 
-class Main extends React.PureComponent {
+class Main extends React.PureComponent<Props> {
     render() {
+        const {history, name} = this.props;
         return (
             <div>
                 <div>
-                    <a onClick={() => (location.href = "/home")}>Home</a>
-                    <a onClick={() => (location.href = "/about")}>About</a>
+                    <a onClick={() => history.push("/home")}>Home</a>
+                    <a onClick={() => history.push("/about")}>About</a>
                 </div>
-                <Router>
-                    <Switch>
-                        <Route exact path="/home" render={props => <HomeView {...props} />} />
-                        <Route exact path="/home/detail" render={props => <HomeDetailView {...props} />} />
-                        <Route exact path="/about" render={props => <AboutView {...props} />} />
-                    </Switch>
-                </Router>
+                <br />
+                {name}
+                <br />
+                <Switch>
+                    <Route exact path="/home" render={() => <HomeView />} />
+                    <Route exact path="/home/detail" render={() => <HomeDetailView />} />
+                    <Route exact path="/about" render={() => <AboutView />} />
+                </Switch>
             </div>
         );
     }
 }
 
-export default Main;
+const mapStateToProps = (state: any) => {
+    return {
+        name: state.main.name,
+    };
+};
+
+export default connect(mapStateToProps)(withRouter(Main));

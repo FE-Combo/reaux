@@ -1,9 +1,9 @@
-import {start} from 'reaux-native/index';
-import {View} from './module/main';
+import {start} from "reaux-native/index";
+import {View} from "./module/main";
 
 export function startApp() {
     start({
-        name: 'AwesomeProject',
+        name: "AwesomeProject",
         Component: View,
     });
 }

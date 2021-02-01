@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import {connect, DispatchProp, ConnectedComponentClass} from "react-redux";
 import {ActionType, Exception} from "../type";
 

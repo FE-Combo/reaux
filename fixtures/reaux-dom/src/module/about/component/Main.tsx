@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import {actions} from "../index";
 import {connect, DispatchProp} from "react-redux";
 
