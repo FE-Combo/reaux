@@ -1,4 +1,4 @@
-<img src="./config/logo.png" alt="LOGO" style="zoom:30%" />
+<img src="./config/logo.png" alt="LOGO" />
 
 [![Build Status](https://travis-ci.com/vocoWone/reaux.svg?branch=master)](https://travis-ci.com/vocoWone/reaux)
 [![codecov](https://codecov.io/gh/vocoWone/reaux/branch/master/graph/badge.svg)](https://codecov.io/gh/vocoWone/reaux)
