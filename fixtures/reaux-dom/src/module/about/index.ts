@@ -1,22 +1,22 @@
-import Main from "./component/Main";
-import {register, PModel, helper} from "reaux-dom";
+import {register, Model, useHelper} from "reaux-dom";
 import {State} from "./type";
+import Main from "./component/Main";
 
+const helper = useHelper();
 const initState: State = {
     name: "about",
 };
 
-class ActionHandler extends PModel<State> {
+class ActionHandler extends Model<State> {
     @helper.lifecycle()
-    async onReady() {
+    *onReady() {
+        // TODO: promise暂时还不行
         console.log("about promise onReady");
     }
 
-    async test() {
+    *test() {
         this.setState({name: "new about"});
     }
 }
 
-const {actions, proxyView} = register(new ActionHandler("about", initState));
-const View = proxyView(Main);
-export {actions, View};
+export default register(new ActionHandler("about", initState), Main);

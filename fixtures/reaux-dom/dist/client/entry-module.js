@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
 
 /***/ 81:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -267,7 +267,7 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
 
 /***/ }),
 
-/***/ 84:
+/***/ 82:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -276,16 +276,17 @@ __webpack_require__.r(__webpack_exports__);
 // EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
 var tslib_es6 = __webpack_require__(81);
 
-// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/index.ts
-var reaux_dom = __webpack_require__(32);
-
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react/index.js
 var react = __webpack_require__(1);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-redux/es/index.js + 22 modules
 var es = __webpack_require__(18);
 
-// CONCATENATED MODULE: ./src/module/home/component/Main.tsx
+// EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-router/esm/react-router.js
+var react_router = __webpack_require__(20);
+
+// CONCATENATED MODULE: ./src/module/main/component/Main.tsx
 
 
 
@@ -296,55 +297,47 @@ var Main_Main = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Main.prototype.render = function () {
-        var _this = this;
-        var actions = home().actions;
-        return (react["createElement"]("div", null,
-            this.props.name,
-            react["createElement"]("button", { onClick: function () {
-                    _this.props.dispatch(actions.test());
-                } }, "Test")));
+        var _a = this.props, history = _a.history, name = _a.name, RouteComponent = _a.RouteComponent;
+        return (react_default.a.createElement("div", null,
+            react_default.a.createElement("div", null,
+                react_default.a.createElement("a", { onClick: function () { return history.push("/home"); } }, "Home"),
+                react_default.a.createElement("a", { onClick: function () { return history.push("/about"); } }, "About")),
+            react_default.a.createElement("br", null),
+            name,
+            react_default.a.createElement("br", null),
+            react_default.a.createElement(RouteComponent, null)));
     };
     return Main;
-}(react["PureComponent"]));
+}(react_default.a.PureComponent));
 var mapStateToProps = function (state) {
     var _a;
     return {
-        name: (_a = state === null || state === void 0 ? void 0 : state.home) === null || _a === void 0 ? void 0 : _a.name,
+        name: ((_a = state === null || state === void 0 ? void 0 : state.main) === null || _a === void 0 ? void 0 : _a.name) || "",
     };
 };
-/* harmony default export */ var component_Main = (Object(es["c" /* connect */])(mapStateToProps)(Main_Main));
+/* harmony default export */ var component_Main = (Object(es["c" /* connect */])(mapStateToProps)(Object(react_router["g" /* withRouter */])(Main_Main)));
 
-// CONCATENATED MODULE: ./src/module/home/index.ts
+// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/index.ts
+var reaux_dom = __webpack_require__(32);
+
+// CONCATENATED MODULE: ./src/module/main/index.ts
 
 
 
 var helper = Object(reaux_dom["useHelper"])();
 var initState = {
-    name: "home",
+    name: "main",
 };
-var home_ActionHandler = /** @class */ (function (_super) {
+var main_ActionHandler = /** @class */ (function (_super) {
     Object(tslib_es6["b" /* __extends */])(ActionHandler, _super);
     function ActionHandler() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ActionHandler.prototype.onReady = function () {
         return Object(tslib_es6["c" /* __generator */])(this, function (_a) {
-            console.log("home generator onReady");
+            this.setState({ name: "new main" });
+            console.log("common onReady");
             return [2 /*return*/];
-        });
-    };
-    ActionHandler.prototype.test = function () {
-        return Object(tslib_es6["c" /* __generator */])(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, "1"];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, "2"];
-                case 2:
-                    _a.sent();
-                    this.setState({ name: "new Name" });
-                    return [2 /*return*/, "3"];
-            }
         });
     };
     Object(tslib_es6["a" /* __decorate */])([
@@ -352,7 +345,7 @@ var home_ActionHandler = /** @class */ (function (_super) {
     ], ActionHandler.prototype, "onReady", null);
     return ActionHandler;
 }(reaux_dom["Model"]));
-/* harmony default export */ var home = __webpack_exports__["default"] = (Object(reaux_dom["register"])(new home_ActionHandler("home", initState), component_Main));
+/* harmony default export */ var main = __webpack_exports__["default"] = (Object(reaux_dom["register"])(new main_ActionHandler("main", initState), component_Main));
 
 
 /***/ })

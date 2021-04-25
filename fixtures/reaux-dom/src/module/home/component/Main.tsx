@@ -1,6 +1,6 @@
 import * as React from "react";
 import {connect, DispatchProp} from "react-redux";
-import {actions} from "../index";
+import useHomie from "../index";
 
 interface Props extends DispatchProp {
     name: string;
@@ -8,6 +8,7 @@ interface Props extends DispatchProp {
 
 class Main extends React.PureComponent<Props> {
     render() {
+        const {actions} = useHomie();
         return (
             <div>
                 {this.props.name}
@@ -25,7 +26,7 @@ class Main extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: any) => {
     return {
-        name: state.home.name,
+        name: state?.home?.name,
     };
 };
 

@@ -1,30 +1,13 @@
 import {State, App, ModelProperty, ModelLifeCycle} from "../type";
 import {setModuleAction} from "./shared";
 
-let appCache: App | null = null;
-
-export function modelInjection(app: App) {
-    appCache = app;
-}
-
 /**
  * Proxy store
  */
 export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
+    private app: App | null = null;
     public constructor(readonly moduleName: string, readonly initState: S) {
         super();
-        if (!appCache) {
-            throw new Error("Execute the injection function before using Model only!!");
-        }
-        console.log("model");
-        if (appCache.isServer) {
-            appCache!.store.dispatch(setModuleAction(moduleName, initState));
-        } else {
-            const moduleNameIndex = appCache.serverRenderedModules.indexOf(moduleName);
-            if (moduleNameIndex === -1) {
-                appCache!.store.dispatch(setModuleAction(moduleName, initState));
-            }
-        }
     }
 
     // LifeCycle onReady/onLoad/onUnload/onHide
@@ -45,7 +28,7 @@ export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
     }
 
     get state(): Readonly<S> {
-        return appCache!.store.getState()[this.moduleName];
+        return this.app!.store.getState()[this.moduleName];
     }
 
     get initialState(): Readonly<S> {
@@ -53,14 +36,19 @@ export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
     }
 
     get rootState(): Readonly<State> {
-        return appCache!.store.getState();
+        return this.app!.store.getState();
     }
 
     setState(newState: Partial<S>) {
-        appCache!.store.dispatch(setModuleAction(this.moduleName, newState));
+        this.app!.store.dispatch(setModuleAction(this.moduleName, newState));
     }
 
     restState() {
-        appCache!.store.dispatch(setModuleAction(this.moduleName, this.initState));
+        this.app!.store.dispatch(setModuleAction(this.moduleName, this.initState));
+    }
+
+    _injectApp(app: App) {
+        this.app = app;
+        this.app!.store.dispatch(setModuleAction(this.moduleName, this.initState));
     }
 }

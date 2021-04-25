@@ -3,7 +3,7 @@ import {createAction} from "../../src/core/createAction";
 import {createStore} from "redux";
 import {createReducer, createModuleReducer} from "../../src/core/createReducer";
 import {createApp} from "../../src/core/createApp";
-import {viewInjection, createView} from "../../src/core/createView";
+import {createView} from "../../src/core/createView";
 import {App} from "../../src/type";
 import renderer from "react-test-renderer";
 
@@ -15,7 +15,6 @@ test("Create Component View", () => {
         })
     );
     const app: App = createApp(store);
-    viewInjection(app);
 
     class Model {
         moduleName: string;
@@ -57,7 +56,7 @@ test("Create Component View", () => {
         }
     }
     const {actions} = createAction(handler);
-    const NewComponent = createView(handler, actions, Component);
+    const NewComponent = createView(app, handler, actions, Component);
     /* 
         Error: [test-renderer] Cannot read property `current` of undefined
         ref: https://github.com/facebook/react/issues/16323

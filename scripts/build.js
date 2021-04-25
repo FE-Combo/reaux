@@ -72,8 +72,8 @@ function distribute() {
 }
 
 function build() {
-    cleanup();
     checkCodeStyle();
+    cleanup();
     test();
     lint();
     compile();

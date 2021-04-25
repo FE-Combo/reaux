@@ -1,18 +1,18 @@
-import {View as AboutView} from "./module/about";
-import {View as HomeView} from "./module/home";
-import {View as MainView} from "./module/main";
-
 export default [
     {
-        path: "/about",
-        component: AboutView,
-    },
-    {
-        path: "/home",
-        component: HomeView,
-    },
-    {
+        namespace: "main",
         path: "/",
-        component: MainView,
+        module: () => import(/* webpackChunkName: "entry-module" */ "./module/main"),
+        entry: true,
+    },
+    {
+        namespace: "about",
+        path: "/about",
+        module: () => import(/* webpackChunkName: "about" */ "./module/about"),
+    },
+    {
+        namespace: "home",
+        path: "/home",
+        module: () => import(/* webpackChunkName: "home" */ "./module/home"),
     },
 ];

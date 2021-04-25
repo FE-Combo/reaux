@@ -3,13 +3,12 @@ import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, modelInjection, BaseModel, pMiddleware, gMiddleware, saga, Model, App, Exception, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, pMiddleware, gMiddleware, saga, Model, App, Exception, createModuleReducer} from "reaux";
 import {RenderOptions} from "./type";
 
 declare const window: any;
 
 const app = generateApp();
-modelInjection(app);
 
 /**
  * Create reducer, middleware, store, redux-saga, app cache
@@ -86,7 +85,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
 
     // register view
-    const View = createView(handler, actions, Component);
+    const View = createView(app, handler, actions, Component);
     return {View, actions};
 }
 

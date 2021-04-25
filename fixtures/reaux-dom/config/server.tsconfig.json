@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "baseUrl": "../server",
+    "baseUrl": "../src",
     "outDir": "build/dist",
     "module": "commonjs",
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
-    "noEmit": false,
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
@@ -18,8 +17,9 @@
     "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop":true
   },
-  "include": ["./server"],
+  "include": ["../src"],
   "exclude": ["node_modules"]
 }

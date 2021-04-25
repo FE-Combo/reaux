@@ -1,4 +1,4 @@
-import {View} from "./module/main";
 import {start} from "reaux-dom";
+import routes from "./route";
 
-start({Component: View});
+export default start({routes, isSSR: true});

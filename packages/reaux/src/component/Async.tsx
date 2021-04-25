@@ -1,12 +1,12 @@
 import * as React from "react";
 
-type ReactComponentKeyOf<T> = {[P in keyof T]: T[P] extends React.ComponentType<any> ? P : never}[keyof T];
+export type ReactComponentKeyOf<T> = {[P in keyof T]: T[P] extends React.ComponentType<any> ? P : never}[keyof T];
 
 interface State {
     Component: React.ComponentType<any> | null;
 }
 
-export function Async<T, K extends ReactComponentKeyOf<T>>(resolve: () => Promise<T>, component: K, loadingComponent: React.ReactNode = null): T[K] {
+export function Async<T extends {default: () => {component: React.ComponentType}}>(resolve: () => Promise<T>, loadingComponent: React.ReactNode = null): React.ComponentType {
     return class AsyncWrapperComponent extends React.PureComponent<{}, State> {
         state: State = {
             Component: null,
@@ -15,7 +15,7 @@ export function Async<T, K extends ReactComponentKeyOf<T>>(resolve: () => Promis
         componentDidMount() {
             const promise = resolve();
             promise.then(module => {
-                const Component = module[component] as any;
+                const Component = module.default().component;
                 this.setState({Component});
             });
         }
@@ -28,5 +28,5 @@ export function Async<T, K extends ReactComponentKeyOf<T>>(resolve: () => Promis
 }
 
 /**
- * TODO: 使用React.lazy/React.Suspense替代，但是目前React.Suspense无法用于数据获取的情况
+ * TODO: 使用React.lazy/React.Suspense替代，但是目前React.Suspense一样无法用于服务端数据获取的情况
  */

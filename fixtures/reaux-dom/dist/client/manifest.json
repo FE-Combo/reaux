@@ -1,5 +1,6 @@
 {
   "about.js": "/client/about.js",
+  "entry-module.js": "/client/entry-module.js",
   "home.js": "/client/home.js",
   "index.js": "/client/index.js",
   "runtime.js": "/client/runtime.js",

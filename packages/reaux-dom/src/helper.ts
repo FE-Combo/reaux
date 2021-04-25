@@ -1,7 +1,7 @@
 import {SagaIterator} from "redux-saga";
 import {put} from "redux-saga/effects";
 import {ModelLifeCycle, App, setModuleAction} from "reaux";
-import {StateView} from "./type";
+import {StateView, DOMApp} from "./type";
 
 type ActionHandler = (...args: any[]) => any;
 
@@ -21,6 +21,14 @@ function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S
             yield* interceptor(handler.bind(this, ...args), rootState) as any;
         };
         return descriptor;
+    };
+}
+
+export function genHelper() {
+    let helper: Helper;
+    return {
+        injectApp: (app: DOMApp) => (helper = new Helper(app)),
+        useHelper: () => helper,
     };
 }
 

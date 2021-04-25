@@ -3,18 +3,21 @@
   "private": true,
   "description": "Demo for reaux-dom",
   "scripts": {
-    "start:dev": "node scripts/start.js",
-    "start": "node dist/server.js",
+    "start": "ENV=production node dist/index.js",
+    "dev:server": "nodemon",
+    "dev:client": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "start:ts": "ts-node --project ./config/server.tsconfig.json server/index.tsx"
+    "build:client": "node scripts/build-client.js",
+    "build:server": "node scripts/build-server.js"
   },
   "devDependencies": {
     "@types/koa": "^2.11.6",
     "@types/koa-router": "^7.4.1",
     "@types/koa-static": "^4.0.1",
-    "@types/react-router-dom": "^5.1.7",
+    "cross-env": "^7.0.3",
     "html-webpack-plugin": "3.2.0",
     "ts-loader": "6.2.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
     "webpack": "4.28.3",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
@@ -24,7 +27,7 @@
     "koa": "^2.13.1",
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "tslib": "^2.0.3"
   }
