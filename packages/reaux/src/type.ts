@@ -1,8 +1,6 @@
 import {Action, Store, Reducer, ReducersMapObject} from "redux";
 
 export interface App {
-    isServer: boolean;
-    serverRenderedModules: string[];
     modules: Record<string, number>;
     store: Store;
     actionPHandlers: Record<string, ActionHandler>;

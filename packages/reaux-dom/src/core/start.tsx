@@ -6,7 +6,7 @@ import {renderToString} from "react-dom/server";
 import {History} from "history";
 import {ConnectedRouter} from "connected-react-router";
 import {ErrorBoundary, setErrorAction, Async} from "reaux";
-import {Route, Switch, withRouter, StaticRouter} from "react-router-dom";
+import {Route, Switch, withRouter, StaticRouter} from "react-router";
 import {StateView, RenderOptions, DOMApp, ServerStartReturn, Modules, RegisterReturn} from "./type";
 import {pathToRegexp} from "path-to-regexp";
 import {isServer, listenGlobalError} from "./kits";
@@ -67,17 +67,14 @@ export async function serverStart(options: RenderOptions, modules: Modules, app:
     const afterBindAppModules = bindModulesWithApp(app, modules);
     const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules);
     const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModuleName].component);
-    const modulesName = [mainModuleName];
     const application = (
-        <Loadable.Capture report={moduleName => modulesName.push(moduleName)}>
-            <Provider store={app.store}>
-                <ErrorBoundary setErrorAction={setErrorAction}>
-                    <StaticRouter location={url} context={{}}>
-                        <WithRouterComponent RouteComponent={RouteComponent} />
-                    </StaticRouter>
-                </ErrorBoundary>
-            </Provider>
-        </Loadable.Capture>
+        <Provider store={app.store}>
+            <ErrorBoundary setErrorAction={setErrorAction}>
+                <StaticRouter location={url} context={{}}>
+                    <WithRouterComponent RouteComponent={RouteComponent} />
+                </StaticRouter>
+            </ErrorBoundary>
+        </Provider>
     );
     const content = renderToString(application);
     const initialReduxState: StateView = app.store.getState();

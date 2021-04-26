@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const chalk = require("chalk");
-const webpackConfig = require("./webpack.config.build.client");
+const webpackConfig = require("../config/webpack.config.build.client");
 const fs = require("fs-extra")
 
 function build() {

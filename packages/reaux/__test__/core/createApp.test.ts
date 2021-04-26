@@ -8,8 +8,6 @@ test("Create App", () => {
     const app = createApp(store);
     expect(JSON.stringify(app)).toEqual(
         JSON.stringify({
-            isServer: false,
-            serverRenderedModules: [],
             store,
             actionPHandlers: {},
             actionGHandlers: {},

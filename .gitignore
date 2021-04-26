@@ -3,6 +3,7 @@
 /.gradle/
 output*/
 build*/
+dist*/
 *.iml
 /classes/
 .DS_Store

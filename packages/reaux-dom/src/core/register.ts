@@ -1,4 +1,5 @@
 import {createReducer, createView, createAction, createModuleReducer, createActionType} from "reaux";
+import {isServer} from "./kits";
 import {DOMApp, RegisterReturn} from "./type";
 
 /**
@@ -18,7 +19,7 @@ export default function register(paramApp: DOMApp): RegisterReturn<any> {
     paramApp.store.replaceReducer(createReducer(paramApp.asyncReducers));
 
     // initState can store on the client, but it will be lost on the server
-    if (paramApp.isServer) {
+    if (isServer) {
         paramApp.store.dispatch({type: createActionType(that.handler.moduleName), payload: that.handler.initState});
     }
 

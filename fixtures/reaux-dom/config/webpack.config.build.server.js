@@ -1,5 +1,4 @@
 const path = require("path");
-const nodeExternal = require('webpack-node-externals');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 function resolve(relativePath) {
@@ -8,7 +7,6 @@ function resolve(relativePath) {
 
 module.exports = {
     target: 'node',
-    devtool:"cheap-module-source-map",
     entry: {
       index: resolve("./src/server.ts"),
     },
@@ -29,7 +27,6 @@ module.exports = {
         configFile: resolve("config/server.tsconfig.json")
     })]
     },
-    externals: [nodeExternal()],
     module: {
       rules: [
         {

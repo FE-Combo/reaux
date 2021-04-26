@@ -1,6 +1,6 @@
 const chalk = require("chalk");
 const webpack = require("webpack");
-const webpackConfig = require("./webpack.config.dev");
+const webpackConfig = require("../config/webpack.config.dev");
 const DevServer = require("webpack-dev-server");
 
 function devServer(compiler) {

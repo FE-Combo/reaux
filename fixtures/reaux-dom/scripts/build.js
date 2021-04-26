@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const chalk = require("chalk");
-const webpackConfig = require("./webpack.config.build");
+const webpackConfig = require("../config/webpack.config.build");
 const fs = require("fs-extra")
 
 fs.emptyDirSync("dist");
