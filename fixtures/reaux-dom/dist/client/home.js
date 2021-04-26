@@ -1,6 +1,6 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
 
-/***/ 81:
+/***/ 80:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -267,23 +267,23 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
 
 /***/ }),
 
-/***/ 84:
+/***/ 83:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
-var tslib_es6 = __webpack_require__(81);
+var tslib_es6 = __webpack_require__(80);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/index.ts
-var reaux_dom = __webpack_require__(32);
+var reaux_dom = __webpack_require__(30);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react/index.js
 var react = __webpack_require__(1);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-redux/es/index.js + 22 modules
-var es = __webpack_require__(18);
+var es = __webpack_require__(17);
 
 // CONCATENATED MODULE: ./src/module/home/component/Main.tsx
 

@@ -8,6 +8,7 @@ import {isServer, devtools} from "./kits";
 
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
+ * @param history
  */
 export function genApp(history: History): DOMApp {
     const asyncReducer: any = {};

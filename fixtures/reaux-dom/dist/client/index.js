@@ -1,64 +1,44 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[3],{
 
-/***/ 12:
+/***/ 30:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isServer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return listenGlobalError; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return devtools; });
-/* harmony import */ var reaux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _src_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "register", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["a"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "start", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["b"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useHelper", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["c"]; });
+
+/* harmony import */ var _src_components_Route__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
+/* harmony import */ var _src_core_sagaCall__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var _src_core_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(43);
+/* harmony import */ var _src_core_type__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_src_core_type__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony reexport (checked) */ if(__webpack_require__.o(_src_core_type__WEBPACK_IMPORTED_MODULE_3__, "Model")) __webpack_require__.d(__webpack_exports__, "Model", function() { return _src_core_type__WEBPACK_IMPORTED_MODULE_3__["Model"]; });
+
+/* harmony import */ var reaux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return reaux__WEBPACK_IMPORTED_MODULE_4__["c"]; });
 
 
-var isServer = !(typeof window !== "undefined" && window.document && window.document.createElement);
-/**
- * Listen global error
- */
-function listenGlobalError(app) {
-    if (typeof window !== "undefined") {
-        window.onerror = function (message, source, line, column, error) {
-            console.error("Window Global Error");
-            if (!error) {
-                error = new Error(message.toString());
-            }
-            app.store.dispatch(Object(reaux__WEBPACK_IMPORTED_MODULE_0__[/* setErrorAction */ "k"])(error));
-        };
-    }
-}
-/**
- * Redux DevTools plug-in support
- * Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
- * @param enhancer
- */
-function devtools(enhancer) {
-    if (typeof window !== "undefined") {
-        var extension = window.__REDUX_DEVTOOLS_EXTENSION__;
-        if (extension) {
-            return Object(redux__WEBPACK_IMPORTED_MODULE_1__[/* compose */ "d"])(enhancer, extension({}));
-        }
-    }
-    return enhancer;
-}
+
+
+
+
 
 
 /***/ }),
 
-/***/ 25:
+/***/ 41:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export Route */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createHistory; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var reaux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _kits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
-
-
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
 
 
 
@@ -85,54 +65,17 @@ var Route = /** @class */ (function (_super) {
     return Route;
 }(react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"]));
 
-var createHistory = function (url) {
-    if (url === void 0) { url = "/"; }
-    return _kits__WEBPACK_IMPORTED_MODULE_5__[/* isServer */ "b"]
-        ? Object(history__WEBPACK_IMPORTED_MODULE_4__[/* createMemoryHistory */ "c"])({
-            initialEntries: [url],
-        })
-        : Object(history__WEBPACK_IMPORTED_MODULE_4__[/* createBrowserHistory */ "a"])();
-};
 
 
 /***/ }),
 
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _src_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "register", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["a"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "start", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["b"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useHelper", function() { return _src_core__WEBPACK_IMPORTED_MODULE_0__["c"]; });
-
-/* harmony import */ var _src_route__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
-/* harmony import */ var _src_sagaCall__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
-/* harmony import */ var _src_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
-/* harmony import */ var _src_type__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_src_type__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony reexport (checked) */ if(__webpack_require__.o(_src_type__WEBPACK_IMPORTED_MODULE_3__, "Model")) __webpack_require__.d(__webpack_exports__, "Model", function() { return _src_type__WEBPACK_IMPORTED_MODULE_3__["Model"]; });
-
-/* harmony import */ var reaux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return reaux__WEBPACK_IMPORTED_MODULE_4__["c"]; });
-
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ 43:
+/***/ 42:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export call */
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 
 
 var call = function (fn) {
@@ -165,14 +108,14 @@ var call = function (fn) {
 
 /***/ }),
 
-/***/ 44:
+/***/ 43:
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
 
-/***/ 45:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -180,40 +123,85 @@ var call = function (fn) {
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/tslib/tslib.es6.js
 var tslib_es6 = __webpack_require__(2);
 
-// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/kits.ts
-var kits = __webpack_require__(12);
+// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux/index.ts + 13 modules
+var reaux = __webpack_require__(7);
+
+// EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux/es/redux.js
+var redux = __webpack_require__(13);
+
+// EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/history/esm/history.js + 2 modules
+var esm_history = __webpack_require__(11);
+
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/kits.ts
+
+
+
+var isServer = !(typeof window !== "undefined" && window.document && window.document.createElement);
+/**
+ * Listen global error
+ */
+function listenGlobalError(app) {
+    if (typeof window !== "undefined") {
+        window.onerror = function (message, source, line, column, error) {
+            console.error("Window Global Error");
+            if (!error) {
+                error = new Error(message.toString());
+            }
+            app.store.dispatch(Object(reaux["k" /* setErrorAction */])(error));
+        };
+    }
+}
+/**
+ * Redux DevTools plug-in support
+ * Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+ * @param enhancer
+ */
+function devtools(enhancer) {
+    if (typeof window !== "undefined") {
+        var extension = window.__REDUX_DEVTOOLS_EXTENSION__;
+        if (extension) {
+            return Object(redux["d" /* compose */])(enhancer, extension({}));
+        }
+    }
+    return enhancer;
+}
+var createHistory = function (url) {
+    if (url === void 0) { url = "/"; }
+    return isServer
+        ? Object(esm_history["c" /* createMemoryHistory */])({
+            initialEntries: [url],
+        })
+        : Object(esm_history["a" /* createBrowserHistory */])();
+};
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react/index.js
 var react = __webpack_require__(1);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-redux/es/index.js + 22 modules
-var es = __webpack_require__(18);
+var es = __webpack_require__(17);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-dom/index.js
-var react_dom = __webpack_require__(21);
+var react_dom = __webpack_require__(20);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-loadable/lib/index.js
-var lib = __webpack_require__(29);
+var lib = __webpack_require__(27);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-dom/server.browser.js
-var server_browser = __webpack_require__(48);
+var server_browser = __webpack_require__(47);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/connected-react-router/esm/index.js + 5 modules
-var esm = __webpack_require__(26);
-
-// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux/index.ts + 13 modules
-var reaux = __webpack_require__(7);
+var esm = __webpack_require__(24);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-router/esm/react-router.js
-var react_router = __webpack_require__(20);
+var react_router = __webpack_require__(19);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/path-to-regexp/dist.es2015/index.js
-var dist_es2015 = __webpack_require__(50);
+var dist_es2015 = __webpack_require__(49);
 
-// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/start.tsx
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/start.tsx
 
 
 
@@ -228,6 +216,9 @@ var dist_es2015 = __webpack_require__(50);
 /**
  * Start client react-dom render.
  * @param options
+ * @param modules
+ * @param app
+ * @param history
  */
 function clientStart(options, modules, app, history) {
     return Object(tslib_es6["b" /* __awaiter */])(this, void 0, void 0, function () {
@@ -250,7 +241,7 @@ function clientStart(options, modules, app, history) {
                     if (typeof onError === "function") {
                         app.exceptionHandler.onError = onError.bind(app);
                     }
-                    Object(kits["c" /* listenGlobalError */])(app);
+                    listenGlobalError(app);
                     rootElement = document.getElementById("reaux-app-root");
                     renderCallback = function () {
                         if (typeof onInitialized === "function") {
@@ -273,6 +264,8 @@ function clientStart(options, modules, app, history) {
 /**
  * Start server react-dom render.
  * @param options
+ * @param modules
+ * @param app
  */
 function serverStart(options, modules, app) {
     return Object(tslib_es6["b" /* __awaiter */])(this, void 0, void 0, function () {
@@ -295,7 +288,7 @@ function serverStart(options, modules, app) {
                                     react_default.a.createElement(WithRouterComponent, { RouteComponent: RouteComponent }))))));
                     content = Object(server_browser["renderToString"])(application);
                     initialReduxState = app.store.getState();
-                    return [2 /*return*/, { content: content, serverRenderedModules: modulesName, reduxState: initialReduxState }];
+                    return [2 /*return*/, { content: content, reduxState: initialReduxState }];
             }
         });
     });
@@ -307,10 +300,9 @@ function initModules(routes, modules) {
         return Object(tslib_es6["d" /* __generator */])(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    mainModule = (_a = routes.find(function (_) { return _.entry; })) === null || _a === void 0 ? void 0 : _a.namespace;
+                    mainModule = (_a = routes.find(function (_) { return !_.path; })) === null || _a === void 0 ? void 0 : _a.namespace;
                     if (!mainModule) {
-                        // TODO:
-                        throw new Error("缺少入口module或者主入口namespace未命名");
+                        throw new Error("Missing entry module");
                     }
                     length = Object.keys(modules).length;
                     if (!(length <= 0)) return [3 /*break*/, 3];
@@ -329,18 +321,14 @@ function initModules(routes, modules) {
     });
 }
 function getRequiredRoutes(routes, url) {
-    var pathRegexps = routes.map(function (_) { var _a; return Object(dist_es2015["a" /* pathToRegexp */])(_.path, [], Object(tslib_es6["a" /* __assign */])({ strict: !!(_ === null || _ === void 0 ? void 0 : _.exact) }, ((_a = _ === null || _ === void 0 ? void 0 : _.pathToRegexpOptions) !== null && _a !== void 0 ? _a : {}))); });
+    var nextRoutes = routes.filter(function (_) { return _.path; });
+    var pathRegexps = nextRoutes.map(function (_) { var _a; return Object(dist_es2015["a" /* pathToRegexp */])(_.path, [], Object(tslib_es6["a" /* __assign */])({ strict: !!(_ === null || _ === void 0 ? void 0 : _.exact) }, ((_a = _ === null || _ === void 0 ? void 0 : _.pathToRegexpOptions) !== null && _a !== void 0 ? _a : {}))); });
     var routeIndex = pathRegexps.findIndex(function (_) { return _.test(url); });
-    var routeModuleName = routes[routeIndex].namespace;
-    if (routeIndex === -1 || !routeModuleName) {
-        throw new Error("未找到url对应module");
-    }
-    return [routes.find(function (_) { return _.entry; }), routes[routeIndex]].filter(function (_) { return _; });
+    return [routes.find(function (_) { return !_.path; }), nextRoutes === null || nextRoutes === void 0 ? void 0 : nextRoutes[routeIndex]].filter(function (_) { return _; });
 }
 function bindModulesWithApp(app, modules) {
     return Object.keys(modules).reduce(function (pre, key) {
         pre[key] = modules[key](app);
-        var a = modules[key](app);
         return pre;
     }, {});
 }
@@ -372,21 +360,20 @@ function createRouteComponent(routes, afterBindAppModules, modules, app) {
     return function () { return (react_default.a.createElement(react_router["e" /* Switch */], null,
         routes.map(function (route) {
             var _a;
-            var namespace = route.namespace, render = route.render, entry = route.entry, module = route.module, restProps = Object(tslib_es6["e" /* __rest */])(route, ["namespace", "render", "entry", "module"]);
+            var namespace = route.namespace, render = route.render, path = route.path, module = route.module, restProps = Object(tslib_es6["e" /* __rest */])(route, ["namespace", "render", "path", "module"]);
             var Component = (_a = afterBindAppModules === null || afterBindAppModules === void 0 ? void 0 : afterBindAppModules[namespace]) === null || _a === void 0 ? void 0 : _a.component;
-            return !entry && Component && react_default.a.createElement(react_router["b" /* Route */], Object(tslib_es6["a" /* __assign */])({ key: namespace }, restProps, { render: function () { return react_default.a.createElement(Component, null); } }));
+            return path && Component && react_default.a.createElement(react_router["b" /* Route */], Object(tslib_es6["a" /* __assign */])({ key: namespace, path: path }, restProps, { render: function () { return react_default.a.createElement(Component, null); } }));
         }),
-        !kits["b" /* isServer */] && clientToBeLoadedRoutes.map(function (_) { return react_default.a.createElement(react_router["b" /* Route */], Object(tslib_es6["a" /* __assign */])({ key: _.namespace }, _, { render: render(_.namespace) })); }))); };
+        !isServer && clientToBeLoadedRoutes.map(function (_) { return react_default.a.createElement(react_router["b" /* Route */], Object(tslib_es6["a" /* __assign */])({ key: _.namespace }, _, { render: render(_.namespace) })); }))); };
 }
 
-// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/register.ts
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/register.ts
 
 
 /**
  * Register module create View and actions.
  * Trigger in every module.
- * @param handler
- * @param view
+ * @param paramApp
  */
 function register(paramApp) {
     // @ts-ignore
@@ -412,9 +399,9 @@ function register(paramApp) {
 }
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js + 1 modules
-var redux_saga_effects_npm_proxy_esm = __webpack_require__(16);
+var redux_saga_effects_npm_proxy_esm = __webpack_require__(15);
 
-// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/helper.ts
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/helper.ts
 
 
 
@@ -494,19 +481,13 @@ var helper_Helper = /** @class */ (function () {
 }());
 
 
-// EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/route.tsx
-var src_route = __webpack_require__(25);
-
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js + 3 modules
-var redux_saga_core_npm_proxy_esm = __webpack_require__(51);
-
-// EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux/es/redux.js
-var redux = __webpack_require__(14);
+var redux_saga_core_npm_proxy_esm = __webpack_require__(50);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/connected-react-router/esm/middleware.js
-var middleware = __webpack_require__(42);
+var middleware = __webpack_require__(40);
 
-// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/app.ts
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/app.ts
 
 
 
@@ -515,6 +496,7 @@ var middleware = __webpack_require__(42);
 
 /**
  * Create history, reducer, middleware, store, redux-saga, app cache
+ * @param history
  */
 function genApp(history) {
     var _a, _b;
@@ -522,14 +504,14 @@ function genApp(history) {
     var preloadedState = (typeof window !== "undefined" && ((_b = (_a = window) === null || _a === void 0 ? void 0 : _a.__REAUX_DATA__) === null || _b === void 0 ? void 0 : _b.ReduxState)) || {};
     var sagaMiddleware = Object(redux_saga_core_npm_proxy_esm["a" /* default */])();
     var reduxMiddleware = [sagaMiddleware];
-    if (!kits["b" /* isServer */]) {
+    if (!isServer) {
         var routerReducer = Object(esm["b" /* connectRouter */])(history);
         asyncReducer.router = routerReducer;
         var historyMiddleware = Object(middleware["a" /* default */])(history);
         reduxMiddleware.push(historyMiddleware);
     }
     var reducer = Object(reaux["h" /* createReducer */])(asyncReducer);
-    var store = Object(redux["e" /* createStore */])(reducer, preloadedState, Object(kits["a" /* devtools */])(redux["a" /* applyMiddleware */].apply(void 0, reduxMiddleware)));
+    var store = Object(redux["e" /* createStore */])(reducer, preloadedState, devtools(redux["a" /* applyMiddleware */].apply(void 0, reduxMiddleware)));
     var app = Object(reaux["f" /* createApp */])(store);
     app.asyncReducers = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, app.asyncReducers), asyncReducer);
     sagaMiddleware.run(reaux["j" /* saga */], app);
@@ -539,7 +521,7 @@ function genApp(history) {
     return app;
 }
 
-// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core.tsx
+// CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux-dom/src/core/index.ts
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return start; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return core_register; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return useHelper; });
@@ -549,12 +531,11 @@ function genApp(history) {
 
 
 
-
 var helperCreator = genHelper();
 // TODO: move to genApp? cause lifecycle bug
-var core_history = Object(src_route["a" /* createHistory */])();
+var core_history = createHistory();
 /**
- * modules cache, when app started store all pre-register
+ * modules cache, store pre-register when app started
  */
 var core_modules = {};
 /**
@@ -571,7 +552,7 @@ function start(options) {
                 case 0:
                     app = genApp(core_history);
                     helperCreator.injectApp(app);
-                    if (!kits["b" /* isServer */]) return [3 /*break*/, 1];
+                    if (!isServer) return [3 /*break*/, 1];
                     _a = function (url) {
                         if (url === void 0) { url = "/"; }
                         return Object(tslib_es6["b" /* __awaiter */])(_this, void 0, void 0, function () { return Object(tslib_es6["d" /* __generator */])(this, function (_a) {
@@ -654,7 +635,7 @@ function Async(resolve, loadingComponent) {
  */
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/react-redux/es/index.js + 22 modules
-var es = __webpack_require__(18);
+var es = __webpack_require__(17);
 
 // CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux/src/type.ts
 var ModelProperty = /** @class */ (function () {
@@ -851,7 +832,7 @@ var createModel_Model = /** @class */ (function (_super) {
 
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux/es/redux.js
-var redux = __webpack_require__(14);
+var redux = __webpack_require__(13);
 
 // CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux/src/core/createReducer.ts
 
@@ -876,7 +857,7 @@ function createReducer(asyncReducers) {
 }
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js + 1 modules
-var redux_saga_effects_npm_proxy_esm = __webpack_require__(16);
+var redux_saga_effects_npm_proxy_esm = __webpack_require__(15);
 
 // CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux/src/core/saga.ts
 
@@ -1112,7 +1093,7 @@ var gMiddleware = createGeneratorMiddleware();
 
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/node_modules/axios/index.js
-var axios = __webpack_require__(47);
+var axios = __webpack_require__(46);
 var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
 
 // CONCATENATED MODULE: /Applications/project/own/reaux/packages/reaux/src/core/axios.ts
@@ -1235,32 +1216,30 @@ var exception_NetworkConnectionException = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 80:
+/***/ 79:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: /Applications/project/own/reaux/packages/reaux-dom/index.ts
-var reaux_dom = __webpack_require__(32);
+var reaux_dom = __webpack_require__(30);
 
 // CONCATENATED MODULE: ./src/route.ts
 /* harmony default export */ var route = ([
     {
         namespace: "main",
-        path: "/",
-        module: function () { return __webpack_require__.e(/* import() | entry-module */ 1).then(__webpack_require__.bind(null, 82)); },
-        entry: true,
+        module: function () { return __webpack_require__.e(/* import() | entry-module */ 1).then(__webpack_require__.bind(null, 81)); },
     },
     {
         namespace: "about",
         path: "/about",
-        module: function () { return __webpack_require__.e(/* import() | about */ 0).then(__webpack_require__.bind(null, 83)); },
+        module: function () { return __webpack_require__.e(/* import() | about */ 0).then(__webpack_require__.bind(null, 82)); },
     },
     {
         namespace: "home",
         path: "/home",
-        module: function () { return __webpack_require__.e(/* import() | home */ 2).then(__webpack_require__.bind(null, 84)); },
+        module: function () { return __webpack_require__.e(/* import() | home */ 2).then(__webpack_require__.bind(null, 83)); },
     },
 ]);
 
@@ -1272,4 +1251,4 @@ var reaux_dom = __webpack_require__(32);
 
 /***/ })
 
-},[[80,4,5]]]);
+},[[79,4,5]]]);

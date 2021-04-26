@@ -1,9 +1,7 @@
 export default [
     {
         namespace: "main",
-        path: "/",
         module: () => import(/* webpackChunkName: "entry-module" */ "./module/main"),
-        entry: true,
     },
     {
         namespace: "about",

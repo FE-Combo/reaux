@@ -2,8 +2,6 @@ import * as React from "react";
 import {RouteProps} from "react-router";
 import {ErrorBoundary, setErrorAction} from "reaux";
 import {Redirect, Route as ReactRoute} from "react-router-dom";
-import {createBrowserHistory, createMemoryHistory, History} from "history";
-import {isServer} from "./kits";
 
 type PickOptional<T> = Pick<T, {[K in keyof T]-?: {} extends {[P in K]: T[K]} ? K : never}[keyof T]>;
 
@@ -35,11 +33,3 @@ export class Route extends React.PureComponent<Props> {
         return withErrorBoundary ? <ErrorBoundary setErrorAction={setErrorAction}>{routeNode}</ErrorBoundary> : routeNode;
     }
 }
-
-export const createHistory = (url: string = "/"): History<any> => {
-    return isServer
-        ? createMemoryHistory({
-              initialEntries: [url],
-          })
-        : createBrowserHistory();
-};

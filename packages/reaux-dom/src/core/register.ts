@@ -4,8 +4,7 @@ import {DOMApp, RegisterReturn} from "./type";
 /**
  * Register module create View and actions.
  * Trigger in every module.
- * @param handler
- * @param view
+ * @param paramApp
  */
 export default function register(paramApp: DOMApp): RegisterReturn<any> {
     // @ts-ignore

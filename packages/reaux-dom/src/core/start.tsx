@@ -14,6 +14,9 @@ import {isServer, listenGlobalError} from "./kits";
 /**
  * Start client react-dom render.
  * @param options
+ * @param modules
+ * @param app
+ * @param history
  */
 export async function clientStart(options: RenderOptions, modules: Modules, app: DOMApp, history?: History): Promise<null> {
     const {routes, onError, onInitialized, isSSR} = options;
@@ -55,6 +58,8 @@ export async function clientStart(options: RenderOptions, modules: Modules, app:
 /**
  * Start server react-dom render.
  * @param options
+ * @param modules
+ * @param app
  */
 export async function serverStart(options: RenderOptions, modules: Modules, app: DOMApp): Promise<ServerStartReturn> {
     const {routes, url = "/"} = options;
@@ -76,17 +81,16 @@ export async function serverStart(options: RenderOptions, modules: Modules, app:
     );
     const content = renderToString(application);
     const initialReduxState: StateView = app.store.getState();
-    return {content, serverRenderedModules: modulesName, reduxState: initialReduxState};
+    return {content, reduxState: initialReduxState};
 }
 
 async function initModules(routes: RenderOptions["routes"], modules: Modules): Promise<string> {
     // init once
     // bind all modules in server
     // bind on demand in client
-    const mainModule = routes.find(_ => _.entry)?.namespace;
+    const mainModule = routes.find(_ => !_.path)?.namespace;
     if (!mainModule) {
-        // TODO:
-        throw new Error("缺少入口module或者主入口namespace未命名");
+        throw new Error("Missing entry module");
     }
     const length = Object.keys(modules).length;
     if (length <= 0) {
@@ -100,19 +104,15 @@ async function initModules(routes: RenderOptions["routes"], modules: Modules): P
 }
 
 function getRequiredRoutes(routes: RenderOptions["routes"], url: string): RenderOptions["routes"] {
-    const pathRegexps = routes.map(_ => pathToRegexp(_.path, [], {strict: !!_?.exact, ...(_?.pathToRegexpOptions ?? {})}));
+    const nextRoutes = routes.filter(_ => _.path);
+    const pathRegexps = nextRoutes.map(_ => pathToRegexp(_.path!, [], {strict: !!_?.exact, ...(_?.pathToRegexpOptions ?? {})}));
     const routeIndex = pathRegexps.findIndex(_ => _.test(url));
-    const routeModuleName = routes[routeIndex].namespace;
-    if (routeIndex === -1 || !routeModuleName) {
-        throw new Error("未找到url对应module");
-    }
-    return [routes.find(_ => _.entry)!, routes[routeIndex]].filter(_ => _);
+    return [routes.find(_ => !_.path)!, nextRoutes?.[routeIndex]].filter(_ => _);
 }
 
 function bindModulesWithApp(app: DOMApp, modules: Modules) {
     return Object.keys(modules).reduce((pre, key) => {
         pre[key] = modules[key](app);
-        const a = modules[key](app);
         return pre;
     }, {} as Record<string, RegisterReturn<any>>);
 }
@@ -146,9 +146,9 @@ function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModul
     return () => (
         <Switch>
             {routes.map(route => {
-                const {namespace, render, entry, module, ...restProps} = route;
+                const {namespace, render, path, module, ...restProps} = route;
                 const Component = afterBindAppModules?.[namespace]?.component;
-                return !entry && Component && <Route key={namespace} {...restProps} render={() => <Component />} />;
+                return path && Component && <Route key={namespace} path={path} {...restProps} render={() => <Component />} />;
             })}
             {!isServer && clientToBeLoadedRoutes.map(_ => <Route key={_.namespace} {..._} render={render(_.namespace)} />)}
         </Switch>

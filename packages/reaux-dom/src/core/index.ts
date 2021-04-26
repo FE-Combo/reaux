@@ -1,11 +1,10 @@
 import React from "react";
 import {BaseModel} from "reaux";
 import {RenderOptions, ServerStartReturn, Modules, RegisterReturn} from "./type";
-import {isServer} from "./kits";
+import {isServer, createHistory} from "./kits";
 import {serverStart, clientStart} from "./start";
 import realRegister from "./register";
 import {genHelper} from "./helper";
-import {createHistory} from "./route";
 import {genApp} from "./app";
 
 const helperCreator = genHelper();
@@ -14,7 +13,7 @@ const helperCreator = genHelper();
 const history = createHistory();
 
 /**
- * modules cache, when app started store all pre-register
+ * modules cache, store pre-register when app started
  */
 const modules: Modules = {};
 

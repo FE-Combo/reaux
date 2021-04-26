@@ -10,9 +10,8 @@ export interface StateView extends State {
 interface Route extends RouteProps {
     namespace: string;
     module: () => Promise<any>;
-    entry?: boolean;
-    path: string;
-    // TODO:
+    path?: string;
+    // ref: https://github.com/pillarjs/path-to-regexp
     pathToRegexpOptions?: PathToRegexpOptions;
 }
 
@@ -41,7 +40,6 @@ export interface DOMApp extends App {
 
 export interface ServerStartReturn {
     content: string;
-    serverRenderedModules: string[];
     reduxState: StateView;
 }
 

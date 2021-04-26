@@ -1,6 +1,7 @@
 import {DOMApp} from "./type";
 import {setErrorAction} from "reaux";
 import {compose, StoreEnhancer} from "redux";
+import {createBrowserHistory, createMemoryHistory, History} from "history";
 
 export const isServer = !(typeof window !== "undefined" && window.document && window.document.createElement);
 
@@ -33,3 +34,11 @@ export function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     }
     return enhancer;
 }
+
+export const createHistory = (url: string = "/"): History<any> => {
+    return isServer
+        ? createMemoryHistory({
+              initialEntries: [url],
+          })
+        : createBrowserHistory();
+};
