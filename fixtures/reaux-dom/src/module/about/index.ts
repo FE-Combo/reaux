@@ -1,8 +1,8 @@
 import {register, Model, useHelper} from "reaux-dom";
 import {State} from "./type";
 import Main from "./component/Main";
-
 const helper = useHelper();
+
 const initState: State = {
     name: "about",
 };

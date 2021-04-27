@@ -17,7 +17,7 @@ function build() {
                 console.error(chalk`{red.bold ${statsJSON.errors.join("\n\n")}}`);
                 process.exit(1);
             }
-            console.info(chalk`{white.bold Build successfully}`);
+            console.info(chalk`{white.bold Build client successfully}`);
         }
     });
 

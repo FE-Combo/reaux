@@ -1,4 +1,5 @@
 import * as React from "react";
+import {ModuleReturn} from "../type";
 
 export type ReactComponentKeyOf<T> = {[P in keyof T]: T[P] extends React.ComponentType<any> ? P : never}[keyof T];
 
@@ -6,7 +7,11 @@ interface State {
     Component: React.ComponentType<any> | null;
 }
 
-export function Async<T extends {default: () => {component: React.ComponentType}}>(resolve: () => Promise<T>, loadingComponent: React.ReactNode = null): React.ComponentType {
+export interface AsyncPromiseWrap {
+    default: ModuleReturn<any>;
+}
+
+export function Async<T extends AsyncPromiseWrap>(resolve: () => Promise<T>, loadingComponent: React.ReactNode = null): React.ComponentType {
     return class AsyncWrapperComponent extends React.PureComponent<{}, State> {
         state: State = {
             Component: null,
@@ -15,7 +20,7 @@ export function Async<T extends {default: () => {component: React.ComponentType}
         componentDidMount() {
             const promise = resolve();
             promise.then(module => {
-                const Component = module.default().component;
+                const Component = module.default?.component;
                 this.setState({Component});
             });
         }

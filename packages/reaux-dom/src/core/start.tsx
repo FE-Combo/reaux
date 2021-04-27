@@ -5,9 +5,9 @@ import Loadable from "react-loadable";
 import {renderToString} from "react-dom/server";
 import {History} from "history";
 import {ConnectedRouter} from "connected-react-router";
-import {ErrorBoundary, setErrorAction, Async} from "reaux";
+import {ErrorBoundary, setErrorAction, Async, BaseModel, AsyncPromiseWrap, ModuleReturn} from "reaux";
 import {Route, Switch, withRouter, StaticRouter} from "react-router";
-import {StateView, RenderOptions, DOMApp, ServerStartReturn, Modules, RegisterReturn} from "./type";
+import {StateView, RenderOptions, DOMApp, ServerStartReturn, Modules} from "./type";
 import {pathToRegexp} from "path-to-regexp";
 import {isServer, listenGlobalError} from "./kits";
 
@@ -111,11 +111,11 @@ function bindModulesWithApp(app: DOMApp, modules: Modules) {
     return Object.keys(modules).reduce((pre, key) => {
         pre[key] = modules[key](app);
         return pre;
-    }, {} as Record<string, RegisterReturn<any>>);
+    }, {} as Record<string, ModuleReturn<BaseModel>>);
 }
 
-function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModules: Record<string, RegisterReturn<any>>, modules: Modules, app?: DOMApp) {
-    const clientAfterBindAppModule: Record<string, Promise<{default: () => RegisterReturn<any>}>> = {};
+function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModules: Record<string, ModuleReturn<any>>, modules: Modules, app?: DOMApp) {
+    const clientAfterBindAppModule: Record<string, Promise<AsyncPromiseWrap>> = {};
     const keys = Object.keys(afterBindAppModules);
     const clientToBeLoadedRoutes = routes.reduce((pre, next) => {
         if (!keys.includes(next.namespace)) {

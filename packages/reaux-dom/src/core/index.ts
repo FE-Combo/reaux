@@ -1,6 +1,6 @@
 import React from "react";
-import {BaseModel} from "reaux";
-import {RenderOptions, ServerStartReturn, Modules, RegisterReturn} from "./type";
+import {BaseModel, ActionCreators, ModuleReturn} from "reaux";
+import {RenderOptions, ServerStartReturn, Modules} from "./type";
 import {isServer, createHistory} from "./kits";
 import {serverStart, clientStart} from "./start";
 import realRegister from "./register";
@@ -33,13 +33,16 @@ export async function start(options: RenderOptions): Promise<((...args: any[]) =
  * @param handler
  * @param view
  */
-export function register<H extends BaseModel>(handler: H, component: React.ComponentType) {
+export function register<H extends BaseModel>(handler: H, component: React.ComponentType): ModuleReturn<H> {
     if (modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
-    const result = {} as RegisterReturn<H>;
+    const result = {
+        actions: {} as ActionCreators<H>,
+        component: () => null,
+    } as ModuleReturn<H>;
     modules[handler.moduleName] = realRegister.bind({handler, component, result});
-    return () => result;
+    return result;
 }
 
 export const useHelper = () => helperCreator.useHelper();

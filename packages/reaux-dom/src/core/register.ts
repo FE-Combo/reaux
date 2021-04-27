@@ -1,13 +1,13 @@
-import {createReducer, createView, createAction, createModuleReducer, createActionType} from "reaux";
+import {createReducer, createView, createAction, createModuleReducer, createActionType, ModuleReturn, BaseModel} from "reaux";
 import {isServer} from "./kits";
-import {DOMApp, RegisterReturn} from "./type";
+import {DOMApp} from "./type";
 
 /**
  * Register module create View and actions.
  * Trigger in every module.
  * @param paramApp
  */
-export default function register(paramApp: DOMApp): RegisterReturn<any> {
+export default function register(paramApp: DOMApp): ModuleReturn<BaseModel> {
     // @ts-ignore
     const that = this;
     paramApp.modules[that.handler.moduleName] = 0;

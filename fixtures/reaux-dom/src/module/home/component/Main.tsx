@@ -1,6 +1,6 @@
 import * as React from "react";
 import {connect, DispatchProp} from "react-redux";
-import useHomie from "../index";
+import homeModule from "../index";
 
 interface Props extends DispatchProp {
     name: string;
@@ -8,13 +8,12 @@ interface Props extends DispatchProp {
 
 class Main extends React.PureComponent<Props> {
     render() {
-        const {actions} = useHomie();
         return (
             <div>
                 {this.props.name}
                 <button
                     onClick={() => {
-                        this.props.dispatch(actions.test());
+                        this.props.dispatch(homeModule.actions.test());
                     }}
                 >
                     Test

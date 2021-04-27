@@ -1,8 +1,6 @@
 import React from "react";
-import {Async} from "reaux-dom";
-import Loadable from "react-loadable";
 import {connect, DispatchProp} from "react-redux";
-import {Route, Switch, withRouter, RouteComponentProps} from "react-router-dom";
+import {withRouter, RouteComponentProps} from "react-router-dom";
 
 // const HomeView = Async(() => import(/* webpackChunkName: "home" */ "../../home"));
 // const AboutView = Async(() => import(/* webpackChunkName: "about" */ "../../about"));

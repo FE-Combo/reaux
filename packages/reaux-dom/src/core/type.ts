@@ -1,6 +1,6 @@
 import {RouteProps} from "react-router-dom";
 import {RouterState} from "connected-react-router";
-import {State, Exception, App, ActionCreators} from "reaux";
+import {State, Exception, App, ModuleReturn, BaseModel} from "reaux";
 import {History} from "history";
 
 export interface StateView extends State {
@@ -43,9 +43,4 @@ export interface ServerStartReturn {
     reduxState: StateView;
 }
 
-export interface RegisterReturn<H> {
-    actions: ActionCreators<H>;
-    component: React.ComponentType;
-}
-
-export type Modules = Record<string, (app: DOMApp) => RegisterReturn<any>>;
+export type Modules = Record<string, (app: DOMApp) => ModuleReturn<BaseModel>>;

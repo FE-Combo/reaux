@@ -68,3 +68,8 @@ export interface DomCache {
     initialAllRedux?: object;
     serverRenderedModules?: string[];
 }
+
+export interface ModuleReturn<H> {
+    actions: ActionCreators<H>;
+    component: React.ComponentType | null;
+}

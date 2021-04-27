@@ -1,6 +1,6 @@
 {
   "watch": ["src"],
-  "ext": "ts",
+  "ext": "ts, tsx",
   "ignore": ["src/**/*.test.ts"],
-  "exec": "ts-node --project config/server.tsconfig.json ./src/server.ts"
+  "exec": "yarn build:client && ts-node --project config/server.tsconfig.json ./src/server.ts"
 }

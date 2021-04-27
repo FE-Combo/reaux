@@ -1,6 +1,6 @@
 import * as React from "react";
 import {connect, DispatchProp} from "react-redux";
-import useModule from "../index";
+import aboutModule from "../index";
 
 interface StateProps {
     name: string;
@@ -10,11 +10,10 @@ interface Props extends StateProps, DispatchProp {}
 class Main extends React.PureComponent<Props> {
     render() {
         const {dispatch} = this.props;
-        const {actions} = useModule();
         return (
             <div>
                 {this.props.name}
-                <button onClick={() => dispatch(actions.test())}>change</button>
+                <button onClick={() => dispatch(aboutModule.actions.test())}>change</button>
             </div>
         );
     }
