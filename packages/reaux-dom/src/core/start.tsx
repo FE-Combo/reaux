@@ -1,7 +1,6 @@
 import React from "react";
 import {Provider} from "react-redux";
 import ReactDOM from "react-dom";
-import Loadable from "react-loadable";
 import {renderToString} from "react-dom/server";
 import {History} from "history";
 import {ConnectedRouter} from "connected-react-router";
@@ -46,9 +45,7 @@ export async function clientStart(options: RenderOptions, modules: Modules, app:
         }
     };
     if (isSSR) {
-        Loadable.preloadReady().then(() => {
-            ReactDOM.hydrate(application, rootElement, renderCallback);
-        });
+        ReactDOM.hydrate(application, rootElement, renderCallback);
     } else {
         ReactDOM.render(application, rootElement, renderCallback);
     }

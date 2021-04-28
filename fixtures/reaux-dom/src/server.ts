@@ -1,7 +1,6 @@
 import Koa from "koa";
 import koaRouter from "koa-router";
 import koaStatic from "koa-static";
-import Loadable from "react-loadable";
 import * as reauxDom from "reaux-dom";
 import routes from "./route";
 import start from "./index";
@@ -51,8 +50,6 @@ router.get("(.*)", async function(ctx) {
 
 app.use(router.routes()).use(router.allowedMethods());
 
-Loadable.preloadAll().then(() => {
-    app.listen(port, () => {
-        console.info(`> server start, port: ${port}`);
-    });
+app.listen(port, () => {
+    console.info(`> server start, port: ${port}`);
 });
