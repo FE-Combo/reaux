@@ -11,8 +11,9 @@ import {isServer, devtools} from "./kits";
  * @param history
  */
 export function genApp(history: History): DOMApp {
-    const asyncReducer: any = {};
-    const preloadedState = (typeof window !== "undefined" && (window as any)?.__REAUX_DATA__?.ReduxState) || {};
+    const clientReauxData = (!isServer && (window as any)?.__REAUX_DATA__) || {};
+    const asyncReducer: Record<string, Reducer<any, any>> = {};
+    const preloadedState = clientReauxData?.ReduxState;
     const sagaMiddleware = createSagaMiddleware();
     const reduxMiddleware: Middleware[] = [sagaMiddleware];
     if (!isServer) {
@@ -23,11 +24,15 @@ export function genApp(history: History): DOMApp {
     }
     const reducer: Reducer<StateView> = createReducer(asyncReducer as any) as any;
     const store: Store<StateView> = createStore(reducer, preloadedState, devtools(applyMiddleware(...reduxMiddleware)));
-    const app = createApp(store);
+    const app: DOMApp = createApp(store);
     app.asyncReducers = {...app.asyncReducers, ...asyncReducer} as any;
     sagaMiddleware.run(saga, app);
     // TODO:
     // pMiddleware.run(app);
     // gMiddleware.run(app);
+
+    app.serverRenderedModules = clientReauxData?.serverRenderedModules || [];
+
+    // Attentions: Don't use {...app, xxx}
     return app;
 }

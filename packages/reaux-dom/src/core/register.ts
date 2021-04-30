@@ -1,4 +1,4 @@
-import {createReducer, createView, createAction, createModuleReducer, createActionType, ModuleReturn, BaseModel} from "reaux";
+import {createReducer, createView, createAction, createModuleReducer, createActionType, ModuleReturn, BaseModel, CreateViewOptions} from "reaux";
 import {isServer} from "./kits";
 import {DOMApp} from "./type";
 
@@ -11,7 +11,7 @@ export default function register(paramApp: DOMApp): ModuleReturn<BaseModel> {
     // @ts-ignore
     const that = this;
     paramApp.modules[that.handler.moduleName] = 0;
-    (that.handler as any)._injectApp(paramApp);
+    (that.handler as any)._injectApp(paramApp, !isServer && paramApp.serverRenderedModules?.includes(that.handler.moduleName));
 
     // register reducer
     const currentModuleReducer = createModuleReducer(that.handler.moduleName);
@@ -29,6 +29,16 @@ export default function register(paramApp: DOMApp): ModuleReturn<BaseModel> {
     paramApp.actionPHandlers = {...paramApp.actionPHandlers, ...actionHandlers};
     paramApp.actionGHandlers = {...paramApp.actionGHandlers, ...actionHandlers};
     that.result.actions = actions;
-    that.result.component = createView(paramApp, that.handler, actions, that.component);
+
+    const lifecycleOptions: CreateViewOptions = {};
+    const serverRenderedModuleIndex = paramApp.serverRenderedModules?.indexOf(that.handler.moduleName);
+    if (!isServer && typeof serverRenderedModuleIndex === "number" && serverRenderedModuleIndex > -1) {
+        lifecycleOptions.disableExecuteOnReadyTimes = 1;
+        lifecycleOptions.afterOnReady = state => {
+            paramApp.serverRenderedModules?.splice(serverRenderedModuleIndex, 1);
+            return state;
+        };
+    }
+    that.result.component = createView(paramApp, that.handler, actions, that.component, lifecycleOptions);
     return that.result;
 }

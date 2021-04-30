@@ -68,7 +68,7 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param Component
  */
-export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel>(handler: H, Component: ComponentType) {
     if (app.modules.hasOwnProperty(handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }

@@ -35,12 +35,14 @@ export interface RenderOptions {
 
 export interface DOMApp extends App {
     // use in client not server
+    serverRenderedModules?: string[];
     history?: History;
 }
 
 export interface ServerStartReturn {
     content: string;
     reduxState: StateView;
+    serverRenderedModules: string[];
 }
 
 export type Modules = Record<string, (app: DOMApp) => ModuleReturn<BaseModel>>;

@@ -61,8 +61,9 @@ export async function clientStart(options: RenderOptions, modules: Modules, app:
 export async function serverStart(options: RenderOptions, modules: Modules, app: DOMApp): Promise<ServerStartReturn> {
     const {routes, url = "/"} = options;
     const mainModuleName = await initModules(routes, modules);
+    const serverRenderedModules: string[] = [mainModuleName];
     const afterBindAppModules = bindModulesWithApp(app, modules);
-    const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules);
+    const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules, app, serverRenderedModules);
     const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModuleName].component);
     const application = (
         <Provider store={app.store}>
@@ -75,7 +76,7 @@ export async function serverStart(options: RenderOptions, modules: Modules, app:
     );
     const content = renderToString(application);
     const initialReduxState: StateView = app.store.getState();
-    return {content, reduxState: initialReduxState};
+    return {content, reduxState: initialReduxState, serverRenderedModules};
 }
 
 async function initModules(routes: RenderOptions["routes"], modules: Modules): Promise<string> {
@@ -111,7 +112,7 @@ function bindModulesWithApp(app: DOMApp, modules: Modules) {
     }, {} as Record<string, ModuleReturn<BaseModel>>);
 }
 
-function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModules: Record<string, ModuleReturn<any>>, modules: Modules, app?: DOMApp) {
+function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModules: Record<string, ModuleReturn<any>>, modules: Modules, app: DOMApp, serverRenderedModules?: string[]) {
     const clientAfterBindAppModule: Record<string, Promise<AsyncPromiseWrap>> = {};
     const keys = Object.keys(afterBindAppModules);
     const clientToBeLoadedRoutes = routes.reduce((pre, next) => {
@@ -142,7 +143,20 @@ function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModul
             {routes.map(route => {
                 const {namespace, render, path, module, ...restProps} = route;
                 const Component = afterBindAppModules?.[namespace]?.component;
-                return path && Component && <Route key={namespace} path={path} {...restProps} render={() => <Component />} />;
+                return (
+                    path &&
+                    Component && (
+                        <Route
+                            key={namespace}
+                            path={path}
+                            {...restProps}
+                            render={() => {
+                                isServer && serverRenderedModules!.push(namespace);
+                                return <Component />;
+                            }}
+                        />
+                    )
+                );
             })}
             {!isServer && clientToBeLoadedRoutes.map(_ => <Route key={_.namespace} {..._} render={render(_.namespace)} />)}
         </Switch>

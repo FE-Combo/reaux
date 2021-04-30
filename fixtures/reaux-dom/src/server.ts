@@ -18,7 +18,7 @@ const port = 8080;
 app.use(koaStatic("./dist"));
 
 const generateHtml = (options: HTMLOptions) => {
-    const {content, reduxState = {}} = options;
+    const {content, reduxState = {}, serverRenderedModules = []} = options;
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,7 @@ const generateHtml = (options: HTMLOptions) => {
     <body>
     <div id="reaux-app-root">${content}</div>
     <script>
-        window.__REAUX_DATA__ = {"ReduxState":${JSON.stringify(reduxState)},"page":"/","query":{ },"env":"development"}
+        window.__REAUX_DATA__ = {"ReduxState":${JSON.stringify(reduxState)},"serverRenderedModules":${JSON.stringify(serverRenderedModules)}}
     </script>
     <script src="client/index.js"></script>
     <script src="client/runtime.js"></script>
@@ -44,7 +44,7 @@ router.get("(.*)", async function(ctx) {
     const index = routes.findIndex(_ => _.path === ctx.req.url);
     if (index >= 0) {
         const options = await (await start)!(ctx.req.url);
-        ctx.body = generateHtml({content: options?.content, reduxState: options?.reduxState || ({} as any)});
+        ctx.body = generateHtml({content: options?.content, reduxState: options?.reduxState, serverRenderedModules: options?.serverRenderedModules});
     }
 });
 
