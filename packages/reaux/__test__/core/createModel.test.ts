@@ -20,7 +20,7 @@ test("Generate Base On Promise Model And Generator Model ", () => {
         async test() {}
     }
     const model = new PromiseModel("main", {a: 1, b: "2"});
-    model._injectApp(app);
+    model["@@injectApp"](app);
     const promise = async () => {};
     const p = promise();
     expect(model.initState).toEqual({a: 1, b: "2"});
@@ -50,7 +50,7 @@ test("Generate Base On Promise Model And Generator Model ", () => {
         *test() {}
     }
     const model2 = new GeneratorModel("main2", {a: 11, b: 22});
-    model2._injectApp(app);
+    model2["@@injectApp"](app);
     const generator = function*(): any {};
     const g = generator();
     expect(model2.initState).toEqual({a: 11, b: 22});

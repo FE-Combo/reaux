@@ -47,7 +47,7 @@ export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
         this.app!.store.dispatch(setModuleAction(this.moduleName, this.initState));
     }
 
-    _injectApp(app: App, disabledInitState: boolean = false) {
+    private "@@injectApp"(app: App, disabledInitState: boolean = false) {
         this.app = app;
         !disabledInitState && this.app!.store.dispatch(setModuleAction(this.moduleName, this.initState));
     }

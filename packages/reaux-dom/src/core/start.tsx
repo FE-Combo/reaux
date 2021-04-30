@@ -18,7 +18,7 @@ import {isServer, listenGlobalError} from "./kits";
  * @param history
  */
 export async function clientStart(options: RenderOptions, modules: Modules, app: DOMApp, history?: History): Promise<null> {
-    const {routes, onError, onInitialized, isSSR} = options;
+    const {routes, onError, onInitialized} = options;
     const mainModule = findMainModule(routes);
     const renderDOM = () => {
         const afterBindAppModules = bindModulesWithApp(app, modules);
@@ -43,20 +43,20 @@ export async function clientStart(options: RenderOptions, modules: Modules, app:
                 onInitialized();
             }
         };
-        if (isSSR) {
+        if (app.isSSR) {
             ReactDOM.hydrate(application, rootElement, renderCallback);
         } else {
             ReactDOM.render(application, rootElement, renderCallback);
         }
-    }
-    if(isSSR) {
+    };
+    if (app.isSSR) {
         const requiredRoutes = getRequiredRoutes(routes, location.pathname);
         await initModules(requiredRoutes, modules);
-        renderDOM()
+        renderDOM();
     } else {
-        mainModule?.module().then(_=>renderDOM())
+        mainModule?.module().then(_ => renderDOM());
     }
-   
+
     return null;
 }
 
@@ -168,10 +168,10 @@ function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModul
     );
 }
 
-function findMainModule(routes: RenderOptions["routes"]):RenderOptions["routes"][number] {
+function findMainModule(routes: RenderOptions["routes"]): RenderOptions["routes"][number] {
     const mainModule = routes.find(_ => !_.path);
     if (!mainModule) {
         throw new Error("Missing entry module");
     }
-    return mainModule
+    return mainModule;
 }

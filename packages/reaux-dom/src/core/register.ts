@@ -11,7 +11,7 @@ export default function register(paramApp: DOMApp): ModuleReturn<BaseModel> {
     // @ts-ignore
     const that = this;
     paramApp.modules[that.handler.moduleName] = 0;
-    (that.handler as any)._injectApp(paramApp, !isServer && paramApp.serverRenderedModules?.includes(that.handler.moduleName));
+    (that.handler as any)["@@injectApp"](paramApp, !isServer && paramApp.serverRenderedModules?.includes(that.handler.moduleName));
 
     // register reducer
     const currentModuleReducer = createModuleReducer(that.handler.moduleName);

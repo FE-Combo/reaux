@@ -1,8 +1,6 @@
 import {Store, ReducersMapObject, Reducer} from "redux";
 import {App, State} from "../type";
 
-declare const window: any;
-
 /**
  * App cache.
  * Create store, actionHandler, actionPHandlers(promise handler), actionGHandlers(generator handler), modulesName, exceptionHandler.

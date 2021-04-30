@@ -26,14 +26,14 @@ export interface CreateViewOptions {
  */
 export function createView<A extends App, H extends BaseModel<{}, any>>(app: A, handler: H, actions: ActionCreators<H>, Comp: React.ComponentType, lifecycleOptions: CreateViewOptions = {}): React.ComponentType<any> {
     const {disableExecuteOnReadyTimes, disableExecuteOnLoadTimes, disableExecuteOnUnloadTimes, afterOnReady, afterOnLoad, afterOnUnload} = lifecycleOptions;
-    
+
     // TODO: why not store in component
-    const cache:LifecycleTimesCache = {
+    const cache: LifecycleTimesCache = {
         disableExecuteOnReadyTimes: disableExecuteOnReadyTimes || 0,
         disableExecuteOnLoadTimes: disableExecuteOnLoadTimes || 0,
         disableExecuteOnUnloadTimes: disableExecuteOnUnloadTimes || 0,
-    }
-    
+    };
+
     return class View<P = {}> extends React.PureComponent<P> {
         static moduleName: string = handler.moduleName;
         constructor(props: P) {

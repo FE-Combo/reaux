@@ -30,13 +30,13 @@ export interface RenderOptions {
     onError?: (error: Exception) => any;
     onInitialized?: () => void;
     url?: string;
-    isSSR?: boolean;
 }
 
 export interface DOMApp extends App {
     // use in client not server
     serverRenderedModules?: string[];
     history?: History;
+    isSSR?: boolean;
 }
 
 export interface ServerStartReturn {
