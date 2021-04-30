@@ -19,36 +19,44 @@ import {isServer, listenGlobalError} from "./kits";
  */
 export async function clientStart(options: RenderOptions, modules: Modules, app: DOMApp, history?: History): Promise<null> {
     const {routes, onError, onInitialized, isSSR} = options;
-    const requiredRoutes = getRequiredRoutes(routes, location.pathname);
-    const mainModuleName = await initModules(requiredRoutes, modules);
-    const afterBindAppModules = bindModulesWithApp(app, modules);
-    const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules, app);
-    const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModuleName].component);
-    const application = (
-        <Provider store={app.store!}>
-            <ErrorBoundary setErrorAction={setErrorAction}>
-                <ConnectedRouter history={history!}>
-                    <WithRouterComponent RouteComponent={RouteComponent} />
-                </ConnectedRouter>
-            </ErrorBoundary>
-        </Provider>
-    );
-
-    if (typeof onError === "function") {
-        app.exceptionHandler.onError = onError.bind(app);
-    }
-    listenGlobalError(app);
-    const rootElement = document.getElementById("reaux-app-root");
-    const renderCallback = () => {
-        if (typeof onInitialized === "function") {
-            onInitialized();
+    const mainModule = findMainModule(routes);
+    const renderDOM = () => {
+        const afterBindAppModules = bindModulesWithApp(app, modules);
+        const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules, app);
+        const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModule?.namespace!].component);
+        const application = (
+            <Provider store={app.store!}>
+                <ErrorBoundary setErrorAction={setErrorAction}>
+                    <ConnectedRouter history={history!}>
+                        <WithRouterComponent RouteComponent={RouteComponent} />
+                    </ConnectedRouter>
+                </ErrorBoundary>
+            </Provider>
+        );
+        if (typeof onError === "function") {
+            app.exceptionHandler.onError = onError.bind(app);
         }
-    };
-    if (isSSR) {
-        ReactDOM.hydrate(application, rootElement, renderCallback);
-    } else {
-        ReactDOM.render(application, rootElement, renderCallback);
+        listenGlobalError(app);
+        const rootElement = document.getElementById("reaux-app-root");
+        const renderCallback = () => {
+            if (typeof onInitialized === "function") {
+                onInitialized();
+            }
+        };
+        if (isSSR) {
+            ReactDOM.hydrate(application, rootElement, renderCallback);
+        } else {
+            ReactDOM.render(application, rootElement, renderCallback);
+        }
     }
+    if(isSSR) {
+        const requiredRoutes = getRequiredRoutes(routes, location.pathname);
+        await initModules(requiredRoutes, modules);
+        renderDOM()
+    } else {
+        mainModule?.module().then(_=>renderDOM())
+    }
+   
     return null;
 }
 
@@ -60,11 +68,12 @@ export async function clientStart(options: RenderOptions, modules: Modules, app:
  */
 export async function serverStart(options: RenderOptions, modules: Modules, app: DOMApp): Promise<ServerStartReturn> {
     const {routes, url = "/"} = options;
-    const mainModuleName = await initModules(routes, modules);
-    const serverRenderedModules: string[] = [mainModuleName];
+    const mainModule = findMainModule(routes);
+    await initModules(routes, modules);
+    const serverRenderedModules: string[] = [mainModule.namespace];
     const afterBindAppModules = bindModulesWithApp(app, modules);
     const RouteComponent = createRouteComponent(routes, afterBindAppModules, modules, app, serverRenderedModules);
-    const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModuleName].component);
+    const WithRouterComponent = withRouter<any, any>(afterBindAppModules[mainModule.namespace].component);
     const application = (
         <Provider store={app.store}>
             <ErrorBoundary setErrorAction={setErrorAction}>
@@ -79,14 +88,11 @@ export async function serverStart(options: RenderOptions, modules: Modules, app:
     return {content, reduxState: initialReduxState, serverRenderedModules};
 }
 
-async function initModules(routes: RenderOptions["routes"], modules: Modules): Promise<string> {
+async function initModules(routes: RenderOptions["routes"], modules: Modules) {
     // init once
     // bind all modules in server
-    // bind on demand in client
-    const mainModule = routes.find(_ => !_.path)?.namespace;
-    if (!mainModule) {
-        throw new Error("Missing entry module");
-    }
+    // bind on demand in ssr client
+    // bind main module in spa client
     const length = Object.keys(modules).length;
     if (length <= 0) {
         let i = 0;
@@ -95,7 +101,6 @@ async function initModules(routes: RenderOptions["routes"], modules: Modules): P
             i++;
         }
     }
-    return mainModule;
 }
 
 function getRequiredRoutes(routes: RenderOptions["routes"], url: string): RenderOptions["routes"] {
@@ -161,4 +166,12 @@ function createRouteComponent(routes: RenderOptions["routes"], afterBindAppModul
             {!isServer && clientToBeLoadedRoutes.map(_ => <Route key={_.namespace} {..._} render={render(_.namespace)} />)}
         </Switch>
     );
+}
+
+function findMainModule(routes: RenderOptions["routes"]):RenderOptions["routes"][number] {
+    const mainModule = routes.find(_ => !_.path);
+    if (!mainModule) {
+        throw new Error("Missing entry module");
+    }
+    return mainModule
 }

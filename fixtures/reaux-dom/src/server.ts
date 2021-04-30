@@ -4,7 +4,6 @@ import koaStatic from "koa-static";
 import * as reauxDom from "reaux-dom";
 import routes from "./route";
 import start from "./index";
-const {ENV = "development"} = process.env;
 export interface HTMLOptions {
     content: string;
     serverRenderedModules?: string[];

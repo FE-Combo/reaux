@@ -24,7 +24,7 @@ export interface CreateViewOptions {
  * @param actions
  * @param Comp
  */
-export function createView<A extends App, H extends BaseModel<{}, any>>(app: A, handler: H, actions: ActionCreators<H>, Comp: React.ComponentType, lifecycleOptions: CreateViewOptions = {}): React.ComponentType {
+export function createView<A extends App, H extends BaseModel<{}, any>>(app: A, handler: H, actions: ActionCreators<H>, Comp: React.ComponentType, lifecycleOptions: CreateViewOptions = {}): React.ComponentType<any> {
     const {disableExecuteOnReadyTimes, disableExecuteOnLoadTimes, disableExecuteOnUnloadTimes, afterOnReady, afterOnLoad, afterOnUnload} = lifecycleOptions;
     
     // TODO: why not store in component
