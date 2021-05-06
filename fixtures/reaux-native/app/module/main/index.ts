@@ -1,13 +1,13 @@
 import Component from "./component/Main";
-import {register, GModel} from "reaux-native/index";
+import {register, Model} from "reaux-native";
 import {State} from "./type";
-import {SagaIterator} from "redux-saga/index";
+import {SagaIterator} from "redux-saga";
 
 const initialState: State = {
     name: "main",
 };
 
-class ActionHandler extends GModel<State> {
+class ActionHandler extends Model<State> {
     *test(): SagaIterator {
         this.setState({name: "new main"});
     }

@@ -1,5 +1,3 @@
 declare interface RootState {
-    app: {
-        main: any;
-    };
+    main: any;
 }

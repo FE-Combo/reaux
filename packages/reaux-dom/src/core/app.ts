@@ -32,7 +32,7 @@ export function genApp(history: History): DOMApp {
     // gMiddleware.run(app);
 
     app.serverRenderedModules = clientReauxData?.serverRenderedModules || [];
-    app.isSSR = !!clientReauxData?.isSSR
+    app.isSSR = !!clientReauxData?.isSSR;
     // Attentions: Don't use {...app, xxx}
     return app;
 }

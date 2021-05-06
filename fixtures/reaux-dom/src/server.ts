@@ -8,7 +8,7 @@ export interface HTMLOptions {
     content: string;
     serverRenderedModules?: string[];
     reduxState?: reauxDom.StateView;
-    isSSR: boolean
+    isSSR: boolean;
 }
 
 const router = new koaRouter();
@@ -44,7 +44,7 @@ router.get("(.*)", async function(ctx) {
     const index = routes.findIndex(_ => _.path === ctx.req.url);
     if (index >= 0) {
         const options = await (await start)!(ctx.req.url);
-        ctx.body = generateHtml({isSSR:true, content: options?.content, reduxState: options?.reduxState, serverRenderedModules: options?.serverRenderedModules});
+        ctx.body = generateHtml({isSSR: true, content: options?.content, reduxState: options?.reduxState, serverRenderedModules: options?.serverRenderedModules});
     }
 });
 

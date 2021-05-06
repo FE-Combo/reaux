@@ -1,6 +1,7 @@
 import React from "react";
-import {Platform, StyleSheet, Text, View} from "react-native";
+import {Platform, StyleSheet, Text, View, Button} from "react-native";
 import {connect, DispatchProp} from "react-redux";
+import {actions} from "../index"
 
 interface StateProps {
     name: string;
@@ -8,9 +9,14 @@ interface StateProps {
 
 interface Props extends StateProps, DispatchProp {}
 class Main extends React.PureComponent<Props> {
+
+    handlePress = () => this.props.dispatch(actions.test())
+
     render() {
         return (
             <View style={styles.container}>
+                <Text>Redux: {this.props.name}</Text>
+                <Button title="测试" onPress={this.handlePress} />
                 <Text style={styles.welcome}>Welcome to React Native!</Text>
                 <Text style={styles.instructions}>To get started, edit App.js</Text>
                 <Text style={styles.instructions}>{instructions}</Text>
@@ -21,7 +27,7 @@ class Main extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): StateProps => {
     return {
-        name: state.app.main.name,
+        name: state.main.name,
     };
 };
 

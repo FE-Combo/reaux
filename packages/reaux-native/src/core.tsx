@@ -1,12 +1,11 @@
 import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
-import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
+import {Reducer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, pMiddleware, gMiddleware, saga, Model, App, Exception, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, pMiddleware, gMiddleware, saga, App, createModuleReducer} from "reaux";
+import {listenGlobalError, devtools} from "./kits";
 import {RenderOptions} from "./type";
-
-declare const window: any;
 
 const app = generateApp();
 
@@ -58,7 +57,7 @@ export function start(options: RenderOptions): void {
     }
     AppRegistry.registerComponent(name, () => WrappedAppComponent);
     if (typeof onError === "function") {
-        listenGlobalError(onError);
+        listenGlobalError(app, onError);
     }
 }
 
@@ -78,6 +77,8 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
 
+    (handler as any)["@@injectApp"](app);
+
     // register actions
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
@@ -87,39 +88,4 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     // register view
     const View = createView(app, handler, actions, Component);
     return {View, actions};
-}
-
-/**
- * Module extends Generator Model
- */
-export class GModel<State extends {} = {}> extends Model<State> {}
-
-/**
- * Module extends Promise Model
- */
-export class PModel<State extends {} = {}> extends Model<State> {}
-
-function listenGlobalError(onError: (error: Exception) => any) {
-    // 对客户端错误行为进行处理(超时/4**)
-    ErrorUtils.setGlobalHandler((error, isFatal) => {
-        if (isFatal) {
-            console.info("***** Fatal Error *****");
-        }
-        app.store.dispatch(setErrorAction(error));
-    });
-    app.exceptionHandler.onError = onError.bind(app);
-}
-
-function devtools(enhancer: StoreEnhancer): StoreEnhancer {
-    let composeEnhancers = compose;
-    if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
-        const extension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-        if (extension) {
-            composeEnhancers = extension({
-                // Ref: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
-                actionsBlacklist: [],
-            });
-        }
-    }
-    return composeEnhancers(enhancer);
 }

@@ -11,6 +11,11 @@ function generate() {
         .replace(/index.js/g, 'index.ts');
     fs.writeFileSync('node_modules/reaux/package.json', reauxPackage);
 
+    fs.mkdirsSync('node_modules/reaux/node_modules/axios');
+    fs.copySync('../../node_modules/axios', 'node_modules/reaux/node_modules/axios', {
+        dereference: true,
+    });
+
     fs.mkdirsSync('node_modules/reaux-native');
     fs.copySync('../../packages/reaux-native', 'node_modules/reaux-native', {
         dereference: true,
