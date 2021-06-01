@@ -5,26 +5,24 @@ function resolve(relativePath) {
     return path.resolve(__dirname, `../${relativePath}`);
 }
 
-module.exports = {
+function createConfig (config) {
+  return {
     target: 'node',
     entry: {
-      index: resolve("./src/server.ts"),
+      index: config.serverEntry,
     },
     output: {
-      path: resolve("./dist"),
-      filename: "[name].js",
-      publicPath: "/",
+      path: config.serverOutputPath,
+      filename: config.serverOutputFilename,
+      publicPath: config.serverOutputPublicPath,
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".scss"],
-      modules: [resolve("src"), "node_modules"],
-      alias:{
-        reaux: resolve( "../../packages/reaux"),
-        "reaux-dom": resolve( "../../packages/reaux-dom")
-      },
+      modules: [config.baseUrl, "node_modules"],
+      alias: {},
       plugins:[new TsconfigPathsPlugin({
         extensions: [".js", ".jsx",".ts", ".tsx"],
-        configFile: resolve("config/server.tsconfig.json")
+        configFile: config.serverTSConfig
     })]
     },
     module: {
@@ -34,11 +32,14 @@ module.exports = {
           exclude: /node_modules/,
           loader: "ts-loader",
           options: {
-            configFile: resolve("config/server.tsconfig.json")
+            configFile: config.serverTSConfig
           },
         }
       ]
     },
-  };
+  }
+}
+
+module.exports = createConfig;
 
 

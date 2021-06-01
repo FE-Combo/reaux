@@ -1,0 +1,49 @@
+{
+  "name": "reaux-scripts",
+  "version": "0.0.1",
+  "description": "script and configuration of reaux",
+  "author": "vocoWone",
+  "homepage": "https://github.com/vocoWone/reaux/tree/master/packages/reaux-scripts#readme",
+  "license": "MIT",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
+  "bin": {
+    "reaux-scripts": "./src/index.js"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.taobao.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vocoWone/reaux.git"
+  },
+  "scripts": {
+    "reaux-scripts": "ts-node ./src/index.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/vocoWone/reaux/issues"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.1",
+    "commander": "^7.2.0",
+    "eslint": "^7.25.0",
+    "fs-extra": "^10.0.0",
+    "html-webpack-plugin": "3.2.0",
+    "nodemon": "^2.0.7",
+    "ts-loader": "6.2.0",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "webpack": "^4",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-manifest-plugin": "2.0.4"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.11",
+    "@types/nodemon": "^1.19.0",
+    "@types/webpack": "^4",
+    "@types/webpack-dev-server": "^3.11.4",
+    "nodemon": "^2.0.7"
+  }
+}

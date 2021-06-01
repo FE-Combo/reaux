@@ -1,7 +1,7 @@
 import React from "react";
 import {Platform, StyleSheet, Text, View, Button} from "react-native";
 import {connect, DispatchProp} from "react-redux";
-import {actions} from "../index"
+import {actions} from "../index";
 
 interface StateProps {
     name: string;
@@ -9,8 +9,7 @@ interface StateProps {
 
 interface Props extends StateProps, DispatchProp {}
 class Main extends React.PureComponent<Props> {
-
-    handlePress = () => this.props.dispatch(actions.test())
+    handlePress = () => this.props.dispatch(actions.test());
 
     render() {
         return (

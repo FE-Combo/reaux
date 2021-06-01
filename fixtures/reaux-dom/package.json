@@ -3,12 +3,12 @@
   "private": true,
   "description": "Demo for reaux-dom",
   "scripts": {
-    "start": "ENV=production node dist/index.js",
-    "dev:server": "nodemon",
-    "dev:client": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "dev:spa": "node scripts/dev-spa.js",
+    "dev:ssr": "node scripts/dev-ssr.js",
     "build:client": "node scripts/build-client.js",
-    "build:server": "node scripts/build-server.js"
+    "build:server": "node scripts/build-server.js",
+    "start": "ENV=production node dist/index.js",
+    "build": "node scripts/build.js"
   },
   "devDependencies": {
     "@types/koa": "^2.11.6",
