@@ -11,12 +11,12 @@
     "reaux": "^2.0.0",
     "@types/react-native": "0.60.19",
     "@types/react-navigation": "3.0.8",
-    "react-native": "0.60.6"
+    "react-native": "0.62.3"
   },
   "peerDependencies": {
     "reaux": "^2.0.0",
     "@types/react-native": "0.60.19",
     "@types/react-navigation": "3.0.8",
-    "react-native": "0.60.6"
+    "react-native": "0.62.3"
   }
 }
