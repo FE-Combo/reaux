@@ -1,6 +1,14 @@
+/// <reference path="./reference.d.ts" />
+import Koa from "koa";
+import koaRouter from "koa-router";
+import koaStatic from "koa-static";
 import path from "path";
 import chalk from "chalk";
 import nodemon from "nodemon";
+import webpack from "webpack";
+import webpackDevMiddleware from "koa-webpack-dev-middleware";
+import webpackHotMiddleware from "koa-webpack-hot-middleware";
+import server from "../server";
 
 const createConfig = require("../../config");
 const customNodemonConfigFile = path.join(process.cwd(), "nodemon.json");
@@ -12,18 +20,18 @@ export default async () => {
         ext: "ts, tsx",
         ignore: ["src/**/*.test.ts"],
         // TODO: hmr
-        exec: `yarn build:client && ts-node --project ${config.baseConfig.serverTSConfig} ${config.baseConfig.serverEntry}`,
+        exec: `ts-node --project ${config.baseConfig.serverTSConfig} ${config.baseConfig.serverEntry}`,
     });
 
     nodemon
         .on("start", function() {
-            console.log(`> App started, port: ${config.baseConfig.port}`);
+            console.log(chalk`> App started, port: ${config.baseConfig.port}`);
         })
         .on("quit", function() {
-            console.log("App has quit");
+            console.log(chalk`App has quit`);
             process.exit();
         })
         .on("restart", function(files) {
-            console.log("App restarted due to: ", files);
+            console.log(chalk`App restarted due to: ${files}`);
         });
 };

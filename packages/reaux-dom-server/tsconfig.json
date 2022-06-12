@@ -1,0 +1,3 @@
+{
+  "extends": "../../config/tsconfig.reaux-dom-server.json"
+}

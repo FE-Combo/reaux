@@ -1,55 +1,5 @@
-import Koa from "koa";
-import koaRouter from "koa-router";
-import koaStatic from "koa-static";
-import * as reauxDom from "reaux-dom";
 import routes from "./route";
 import start from "./index";
-export interface HTMLOptions {
-    content: string;
-    serverRenderedModules?: string[];
-    reduxState?: reauxDom.StateView;
-    isSSR: boolean;
-}
+const server = require("../../../build/reaux-scripts/dist/src/server");
 
-const router = new koaRouter();
-const app = new Koa();
-const port = 8080;
-
-app.use(koaStatic("./dist"));
-
-const generateHtml = (options: HTMLOptions) => {
-    const {content, reduxState = {}, serverRenderedModules = [], isSSR} = options;
-    return `
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-    <meta charset="UTF-8" />
-    <title>reaux-dom</title>
-    </head>
-    <body>
-    <div id="reaux-app-root">${content}</div>
-    <script>
-        window.__REAUX_DATA__ = {isSSR:${isSSR} ,"ReduxState":${JSON.stringify(reduxState)},"serverRenderedModules":${JSON.stringify(serverRenderedModules)}}
-    </script>
-    <script src="client/index.js"></script>
-    <script src="client/runtime.js"></script>
-    <script src="client/vendors~index.js"></script>
-    </body>
-</html>
-`;
-};
-
-// '*' => '(.*)'
-router.get("(.*)", async function(ctx) {
-    const index = routes.findIndex(_ => _.path === ctx.req.url);
-    if (index >= 0) {
-        const options = await (await start)!(ctx.req.url);
-        ctx.body = generateHtml({isSSR: true, content: options?.content, reduxState: options?.reduxState, serverRenderedModules: options?.serverRenderedModules});
-    }
-});
-
-app.use(router.routes()).use(router.allowedMethods());
-
-app.listen(port, () => {
-    console.info(`> server start, port: ${port}`);
-});
+server.default({isSSR: true, routes, startApp: start});

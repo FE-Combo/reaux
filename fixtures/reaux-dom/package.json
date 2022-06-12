@@ -8,7 +8,8 @@
     "build:client": "node scripts/build-client.js",
     "build:server": "node scripts/build-server.js",
     "start": "ENV=production node dist/index.js",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "test": "ts-node  --project ./config/server.tsconfig.json src/server.ts"
   },
   "devDependencies": {
     "@types/koa": "^2.11.6",
