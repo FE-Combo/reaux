@@ -18,7 +18,7 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
     const keys = getPrototypeOfExceptBuildinKeys(handler);
     const actions = {} as Omit<ActionCreators<H>, BuildinActionKeys>;
     const actionHandlers = {} as ActionHandlers;
-    keys.forEach(actionType => {
+    keys.forEach((actionType) => {
         const method = handler[actionType] as (...args: any[]) => any;
         const qualifiedActionType = createActionHandlerType(moduleName, actionType);
         actions[actionType] = (...payload: any[]) => ({
@@ -36,5 +36,5 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
 }
 
 function getPrototypeOfExceptBuildinKeys(object: object): string[] {
-    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter(key => !buildinKeys.includes(key as BuildinActionKeys));
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
 }

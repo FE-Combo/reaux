@@ -22,7 +22,15 @@ function generateApp(): App {
     const asyncReducer = {router: routerReducer};
     const historyMiddleware = routerMiddleware(history);
     const reducer: Reducer<StateView> = createReducer(asyncReducer) as any;
-    const store: Store<StateView> = createStore(reducer, devtools(applyMiddleware(historyMiddleware, reduxMiddleware(() => app.actionHandlers))));
+    const store: Store<StateView> = createStore(
+        reducer,
+        devtools(
+            applyMiddleware(
+                historyMiddleware,
+                reduxMiddleware(() => app.actionHandlers)
+            )
+        )
+    );
     const app = createApp(store);
     app.asyncReducers = {...app.asyncReducers, ...asyncReducer};
     return app;
@@ -117,10 +125,7 @@ function listenGlobalError() {
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
     if (extension) {
-        return compose(
-            enhancer,
-            extension({})
-        );
+        return compose(enhancer, extension({}));
     }
     return enhancer;
 }

@@ -18,7 +18,7 @@ interface Options {
 export function handlerDecorator<S extends StateView>(interceptor: HandlerInterceptor<S>, options?: Options): HandlerDecorator {
     return (target, name, descriptor) => {
         const fn = descriptor.value;
-        descriptor.value = async function(...args: any[]) {
+        descriptor.value = async function (...args: any[]) {
             const rootState: S = (target as any).rootState;
             await interceptor(fn!.bind(this, ...args), rootState);
         };
@@ -41,7 +41,7 @@ export class Helper {
     loading(identifier = "global") {
         // eslint-disable-next-line
         const that = this;
-        return handlerDecorator(async function(handler) {
+        return handlerDecorator(async function (handler) {
             try {
                 const nextLoadingState = that.appCache.store.getState()["@loading"];
                 nextLoadingState[identifier] = nextLoadingState[identifier] + 1 || 1;
@@ -70,12 +70,12 @@ export class Helper {
         };
     }
 
-    isLoading(identifier: string = "global"): boolean {
+    isLoading(identifier = "global"): boolean {
         const loading = this.appCache.store.getState()["@loading"];
         return !!(loading && loading[identifier] > 0);
     }
 
     async delay(ms: number) {
-        await new Promise(resolve => setTimeout(resolve, ms));
+        await new Promise((resolve) => setTimeout(resolve, ms));
     }
 }

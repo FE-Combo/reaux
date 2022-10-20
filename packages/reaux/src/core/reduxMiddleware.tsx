@@ -3,7 +3,7 @@ import {createActionType} from "../core/shared";
 import {ActionType, ActionHandlers} from "../type";
 
 export function middleware(callback: () => ActionHandlers): Middleware {
-    const middleware: Middleware = (api: MiddlewareAPI) => next => async (actions: ActionType) => {
+    const middleware: Middleware = (api: MiddlewareAPI) => (next) => async (actions: ActionType) => {
         const actionHandlers = callback();
         if (actionHandlers[actions.type]) {
             try {

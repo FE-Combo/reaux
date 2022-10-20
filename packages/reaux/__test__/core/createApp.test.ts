@@ -3,7 +3,7 @@ import {Store} from "redux";
 
 test("Create App", () => {
     const store = {
-        replaceReducer: reducers => {},
+        replaceReducer: (reducers) => {},
     } as Store;
     const app = createApp(store);
     expect(JSON.stringify(app)).toEqual(

@@ -27,7 +27,7 @@ export class Route extends React.PureComponent<Props> {
         const routeNode = (
             <ReactRoute
                 {...restProps}
-                render={props => {
+                render={(props) => {
                     return accessCondition ? <TargetComponent {...props} /> : <Redirect to={{pathname: unauthorizedRedirectTo}} />;
                 }}
             />

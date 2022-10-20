@@ -1,6 +1,6 @@
 import {ActionType} from "../type";
 
-const ERROR_ACTION_TYPE: string = "@@framework/error";
+const ERROR_ACTION_TYPE = "@@framework/error";
 
 export function createActionType(namespace: string): string {
     return `@@framework/actionType/${namespace}`;

@@ -1,3 +1,3 @@
 export interface RootState {
-    main: any;    
+    main: any;
 }

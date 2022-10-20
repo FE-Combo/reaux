@@ -9,7 +9,7 @@ function handlerDecorator<S extends State>(interceptor: HandlerInterceptor<S>): 
     return (target: any) => {
         const descriptor = target.descriptor;
         const fn: ActionHandler = descriptor.value;
-        descriptor.value = async function(...args: any[]) {
+        descriptor.value = async function (...args: any[]) {
             const rootState: S = (target as any).rootState;
             (await interceptor(fn.bind(this, ...args), rootState)) as any;
         };

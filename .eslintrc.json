@@ -2,6 +2,11 @@
   "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+   },
   "rules": {
     "@typescript-eslint/ban-types": "off",
     "require-yield": "off",
@@ -18,10 +23,6 @@
     "build/*",
     "prettier.config.js",
     "packages/reaux/__test__/*",
-    "fixtures/reaux-dom/start.js",
-    "fixtures/reaux-dom/webpack.config.js",
-    "fixtures/reaux-native/android/*",
-    "fixtures/reaux-native/ios/*",
-    "fixtures/reaux-native/.eslintrc.js"
+    "fixtures/*"
   ]
 }
