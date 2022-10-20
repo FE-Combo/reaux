@@ -5,7 +5,7 @@
   ],
   "dist": "xenial",
   "node_js": [
-    "node"
+    "18"
   ],
   "cache": {
     "yarn": true
