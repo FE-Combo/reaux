@@ -5,12 +5,12 @@
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/context:javascript)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/vocoWone/reaux.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vocoWone/reaux/alerts/)
 
-FE lightweight framework base on react + redux + axios, strict in TypeScript.
+FE lightweight framework base on react + redux, strict in TypeScript.
 
 ## Motivation
 
 - **Learn Once, Write Anywhere:** Base on react and redux, no mutation.
-- **Multi-End isomorphism:** Unifies the application of `Model/View/Action`.
+- **Multi-End isomorphism:** Data flow isomorphism.
 - **High Readability:** Clear code structure, easier for development and maintenance.
 
 ## Feature

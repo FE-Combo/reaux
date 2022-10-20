@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "../packages/reaux-native",
-    "outDir": "../build/reaux-native/output",
+    "outDir": "../build/reaux-native",
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -18,7 +18,8 @@
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
     "downlevelIteration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useUnknownInCatchVariables": false
   },
   "include": ["../packages/reaux-native"],
   "exclude": ["node_modules", "../packages/reaux-native/__test__"]

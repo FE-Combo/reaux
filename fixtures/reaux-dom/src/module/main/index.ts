@@ -1,15 +1,14 @@
 import Main from "./component/Main";
-import {register, GModel, helper} from "reaux-dom";
+import {register, Model} from "reaux-dom";
 import {State} from "./type";
 
 const initState: State = {
     name: "main",
 };
 
-class ActionHandler extends GModel<State> {
-    @helper.lifecycle()
-    onReady(): any {
-        console.log("common onReady");
+class ActionHandler extends Model<State> {
+    onReady() {
+        console.info("main onReady");
     }
 }
 

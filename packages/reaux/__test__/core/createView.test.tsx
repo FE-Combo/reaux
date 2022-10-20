@@ -1,11 +1,11 @@
 import React from "react";
-import {createAction} from "../../src/core/createAction";
 import {createStore} from "redux";
 import {createReducer, createModuleReducer} from "../../src/core/createReducer";
+import {createModel} from "../../src/core/createModel";
 import {createApp} from "../../src/core/createApp";
-import {viewInjection, createView} from "../../src/core/createView";
+import {createView} from "../../src/core/createView";
 import {App} from "../../src/type";
-import renderer from "react-test-renderer";
+import renderer, {ReactTestRendererJSON} from "react-test-renderer";
 
 test("Create Component View", () => {
     const store = createStore(
@@ -15,24 +15,9 @@ test("Create Component View", () => {
         })
     );
     const app: App = createApp(store);
-    viewInjection(app);
 
-    class Model {
-        moduleName: string;
-        initState: any;
-        state: any;
-        rootState: any;
-        setState: any;
-        restState: any;
-        constructor(moduleName: string, state: any) {
-            this.moduleName = moduleName;
-            this.state = state;
-        }
-        onReady() {}
-        onLoad() {}
-        onUnload() {}
-        onHide() {}
-    }
+    const Model = createModel(app);
+
     const handler = new Model("module", {});
     class DIV extends React.PureComponent {
         render() {
@@ -56,17 +41,16 @@ test("Create Component View", () => {
             );
         }
     }
-    const {actions} = createAction(handler);
-    const NewComponent = createView(handler, actions, Component);
+    const NewComponent = createView(handler, Component);
     /* 
         Error: [test-renderer] Cannot read property `current` of undefined
         ref: https://github.com/facebook/react/issues/16323
         react and react-test-renderer must be same version
      */
     const newComponent = renderer.create(<NewComponent name="name" age={18} />);
-    let tree = newComponent.toJSON()!;
+    let tree: ReactTestRendererJSON | ReactTestRendererJSON[] = newComponent.toJSON()! as ReactTestRendererJSON;
     const newDIV = renderer.create(<DIV />);
-    let divTree = newDIV.toJSON()!;
+    const divTree = newDIV.toJSON()!;
     expect(tree).toMatchSnapshot();
     expect(tree.type).toBe("div");
     expect(tree.children).toEqual(["component", divTree]);

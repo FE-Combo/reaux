@@ -2,13 +2,14 @@ import {Reducer, combineReducers, ReducersMapObject} from "redux";
 import {createActionType} from "./shared";
 import {State, ActionType, ActionPayload} from "../type";
 
-export function createModuleReducer(namespace: string): Reducer<ActionPayload, ActionType<ActionPayload>> {
-    return (state: ActionPayload = {}, action: ActionType<ActionPayload>) => {
+export function createModuleReducer(namespace: string, initialState: Record<string, unknown> = {}): Reducer<ActionPayload, ActionType<ActionPayload>> {
+    return (state: ActionPayload = initialState, action: ActionType<ActionPayload>) => {
         const actionType = createActionType(namespace);
         switch (action.type) {
-            case actionType:
+            case actionType: {
                 const nextState = {...state, ...action.payload};
                 return nextState;
+            }
             default:
                 return state;
         }

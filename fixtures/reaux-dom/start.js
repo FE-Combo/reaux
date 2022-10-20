@@ -5,17 +5,15 @@ const DevServer = require("webpack-dev-server");
 
 function devServer(compiler) {
   return new DevServer(compiler, {
-    contentBase: "./src/static",
+    static: "./src/static",
     historyApiFallback: true,
-    hot: true,
     compress: true,
-    overlay: {
-      warnings: true,
-      errors: true
+    client: {
+      overlay: {
+        warnings: true,
+        errors: true
+      },
     },
-    stats: {
-      colors: true
-    }
   });
 }
 

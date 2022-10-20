@@ -9,9 +9,6 @@ import {App, State} from "../type";
 export function createApp(store: Store): App {
     return {
         store,
-        actionPHandlers: {},
-        actionGHandlers: {},
-        // TODO: delete in v3.0
         actionHandlers: {},
         modules: {},
         exceptionHandler: {},

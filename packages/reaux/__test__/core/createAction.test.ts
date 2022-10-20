@@ -1,18 +1,30 @@
 import {createAction} from "../../src/core/createAction";
+import {createModel} from "../../src/core/createModel";
 import {createActionHandlerType} from "../../src/core/shared";
+import {createStore} from "redux";
+import {createReducer, createModuleReducer} from "../../src/core/createReducer";
+import {createApp} from "../../src/core/createApp";
+import {App} from "../../src/type";
 
 test.only("Create Action", () => {
-    class Model {
-        moduleName: string;
-        constructor(moduleName: string) {
-            this.moduleName = moduleName;
-        }
+    const store = createStore(
+        createReducer({
+            main: createModuleReducer("main"),
+            main2: createModuleReducer("main2"),
+        })
+    );
+    const app: App = createApp(store);
+
+    const ReauxModel = createModel(app);
+
+    class Model extends ReauxModel<any> {
         fn1() {}
         fn2(a: any, b: any) {
             return {a, b};
         }
     }
-    const handler = new Model("moduleName");
+
+    const handler = new Model("moduleName", {});
 
     // Why use JSON.stringify()? because exist anonymous function. ref: https://www.hellojava.com/a/70916.html
     expect(JSON.stringify(createAction(handler))).toEqual(

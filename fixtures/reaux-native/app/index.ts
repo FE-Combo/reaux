@@ -3,7 +3,7 @@ import {View} from './module/main';
 
 export function startApp() {
     start({
-        name: 'AwesomeProject',
+        name: 'AwesomeTSProject',
         Component: View,
     });
 }

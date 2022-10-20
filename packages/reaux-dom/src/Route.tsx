@@ -5,11 +5,13 @@ import {ErrorBoundary, setErrorAction} from "reaux";
 
 type PickOptional<T> = Pick<T, {[K in keyof T]-?: {} extends {[P in K]: T[K]} ? K : never}[keyof T]>;
 
-interface Props extends RouteProps {
+interface OwnProps {
     withErrorBoundary?: boolean;
     accessCondition?: boolean;
     unauthorizedRedirectTo?: string;
 }
+
+type Props = OwnProps & RouteProps;
 
 export class Route extends React.PureComponent<Props> {
     public static defaultProps: PickOptional<Props> = {
@@ -30,6 +32,6 @@ export class Route extends React.PureComponent<Props> {
                 }}
             />
         );
-        return withErrorBoundary ? <ErrorBoundary setErrorAction={setErrorAction}>{routeNode}</ErrorBoundary> : routeNode;
+        return withErrorBoundary ? <ErrorBoundary onError={setErrorAction}>{routeNode}</ErrorBoundary> : routeNode;
     }
 }

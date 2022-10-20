@@ -1,15 +1,14 @@
 import Main from "./component/Main";
-import {register, PModel, helper} from "reaux-dom";
+import {register, Model} from "reaux-dom";
 import {State} from "./type";
 
 const initState: State = {
     name: "about",
 };
 
-class ActionHandler extends PModel<State> {
-    @helper.lifecycle()
+class ActionHandler extends Model<State> {
     async onReady() {
-        console.log("promise onReady");
+        console.info("about onReady");
     }
 
     async test() {

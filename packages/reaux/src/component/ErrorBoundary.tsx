@@ -1,5 +1,5 @@
 import React from "react";
-import {connect, DispatchProp, ConnectedComponentClass} from "react-redux";
+import {connect, DispatchProp, ConnectedComponent} from "react-redux";
 import {ActionType, Exception} from "../type";
 
 class ReactLifecycleException extends Exception {
@@ -11,7 +11,7 @@ class ReactLifecycleException extends Exception {
 interface Props extends DispatchProp<any> {
     render: (exception: ReactLifecycleException) => React.ReactNode;
     children: React.ReactNode;
-    setErrorAction: (exception: ReactLifecycleException) => ActionType<ReactLifecycleException>;
+    onError: (exception: ReactLifecycleException) => ActionType<ReactLifecycleException>;
 }
 
 interface State {
@@ -30,7 +30,7 @@ class Component extends React.PureComponent<Props, State> {
     }
 
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-        const {dispatch, setErrorAction} = this.props;
+        const {dispatch, onError: setErrorAction} = this.props;
         const exception = new ReactLifecycleException(error.message, errorInfo.componentStack);
         dispatch(setErrorAction(exception));
         this.setState({exception});
@@ -41,4 +41,4 @@ class Component extends React.PureComponent<Props, State> {
     }
 }
 
-export const ErrorBoundary: ConnectedComponentClass<typeof Component, Pick<Props, "render" | "children" | "setErrorAction">> = connect()(Component);
+export const ErrorBoundary: ConnectedComponent<typeof Component, Pick<Props, "children" | "onError">> = connect()(Component);

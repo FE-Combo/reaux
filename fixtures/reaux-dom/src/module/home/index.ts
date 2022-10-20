@@ -1,23 +1,18 @@
 import Main from "./component/Main";
-import {register, GModel, helper} from "reaux-dom";
+import {register, Model} from "reaux-dom";
 import Detail from "./component/Detail";
 import {State} from "./type";
-// import {SagaIterator} from "redux-saga";
 
 const initState: State = {
     name: "home",
 };
 
-class ActionHandler extends GModel<State> {
-    @helper.lifecycle()
-    *onReady(): any {
-        console.log("generator onReady");
+class ActionHandler extends Model<State> {
+    onReady() {
+        console.info("home onReady");
     }
-    *test(): any {
-        yield "1";
-        yield "2";
+    test() {
         this.setState({name: "new Name"});
-        return "3";
     }
 }
 

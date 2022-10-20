@@ -1,5 +1,6 @@
 import React from "react";
 import {actions} from "../index";
+import {AllState} from "../../../utils/state"
 import {connect, DispatchProp} from "react-redux";
 
 interface StateProps {
@@ -18,7 +19,7 @@ class Main extends React.PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any): StateProps => {
+const mapStateToProps = (state: AllState): StateProps => {
     return {
         name: state.about.name,
     };

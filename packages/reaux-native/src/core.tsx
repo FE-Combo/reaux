@@ -2,26 +2,20 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, modelInjection, BaseModel, pMiddleware, gMiddleware, saga, Model, App, Exception, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, Exception, createModuleReducer} from "reaux";
 import {RenderOptions} from "./type";
 
-declare const window: any;
+declare const window: {__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any};
 
 const app = generateApp();
-modelInjection(app);
 
 /**
- * Create reducer, middleware, store, redux-saga, app cache
+ * Create reducer, middleware, store, app cache
  */
 function generateApp(): App {
     const reducer: Reducer<State> = createReducer();
-    const sagaMiddleware = createSagaMiddleware();
-    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(sagaMiddleware, pMiddleware, gMiddleware)));
+    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(reduxMiddleware(() => app.actionHandlers))));
     const app = createApp(store);
-    sagaMiddleware.run(saga, app);
-    pMiddleware.run(app);
-    gMiddleware.run(app);
     return app;
 }
 
@@ -49,7 +43,7 @@ export function start(options: RenderOptions): void {
             return (
                 this.state.initialized && (
                     <Provider store={app.store}>
-                        <ErrorBoundary setErrorAction={setErrorAction}>
+                        <ErrorBoundary onError={setErrorAction}>
                             <Component />
                         </ErrorBoundary>
                     </Provider>
@@ -70,35 +64,29 @@ export function start(options: RenderOptions): void {
  * @param Component
  */
 export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
-    if (app.modules.hasOwnProperty(handler.moduleName)) {
+    // ref: https://stackoverflow.com/questions/39282873/object-hasownproperty-yields-the-eslint-no-prototype-builtins-error-how-to
+    if (Object.prototype.hasOwnProperty.call(app.modules, handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
     }
 
     // register reducer
-    const currentModuleReducer = createModuleReducer(handler.moduleName);
+    const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initState);
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
 
     // register actions
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
-    app.actionPHandlers = {...app.actionPHandlers, ...actionHandlers};
-    app.actionGHandlers = {...app.actionGHandlers, ...actionHandlers};
 
     // register view
-    const View = createView(handler, actions, Component);
+    const View = createView(handler, Component);
     return {View, actions};
 }
 
 /**
- * Module extends Generator Model
+ * Module extends Model
  */
-export class GModel<State extends {} = {}> extends Model<State> {}
-
-/**
- * Module extends Promise Model
- */
-export class PModel<State extends {} = {}> extends Model<State> {}
+export class Model<State extends {} = {}> extends createModel(app)<State> {}
 
 function listenGlobalError(onError: (error: Exception) => any) {
     // 对客户端错误行为进行处理(超时/4**)

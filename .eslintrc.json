@@ -1,0 +1,27 @@
+{
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
+  "rules": {
+    "@typescript-eslint/ban-types": "off",
+    "require-yield": "off",
+    "import/no-anonymous-default-export": "off",
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-console": ["error", { "allow": ["warn", "error", "info", "time", "timeEnd"] }]
+  },
+  "ignorePatterns": [
+    "node_modules/*",
+    "config/*",
+    "scripts/*",
+    "build/*",
+    "prettier.config.js",
+    "packages/reaux/__test__/*",
+    "fixtures/reaux-dom/start.js",
+    "fixtures/reaux-dom/webpack.config.js",
+    "fixtures/reaux-native/android/*",
+    "fixtures/reaux-native/ios/*",
+    "fixtures/reaux-native/.eslintrc.js"
+  ]
+}

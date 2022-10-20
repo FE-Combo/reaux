@@ -1,58 +1,64 @@
 import {State, App, ModelProperty, ModelLifeCycle} from "../type";
+import {AnyAction} from "redux";
 import {setModuleAction} from "./shared";
-
-let appCache: App | null = null;
-
-export function modelInjection(app: App) {
-    appCache = app;
-}
 
 /**
  * Proxy store
  */
-export class Model<S> extends ModelProperty<S> implements ModelLifeCycle<any> {
-    public constructor(readonly moduleName: string, readonly initState: S) {
-        super();
-        if (!appCache) {
-            throw new Error("Execute the injection function before using Model only!!");
+
+export function createModel(appCache: App) {
+    return class Model<S extends {}> extends ModelProperty<S> implements ModelLifeCycle<any> {
+        public constructor(readonly moduleName: string, readonly initState: S) {
+            super();
         }
-        appCache!.store.dispatch(setModuleAction(moduleName, initState));
-    }
 
-    // LifeCycle onReady/onLoad/onUnload/onHide
-    onReady() {
-        // extends to be overrode
-    }
+        // LifeCycle onReady/onLoad/onUnload/onHide
+        onReady() {
+            // extends to be overrode
+        }
 
-    onLoad(didMount: boolean) {
-        // extends to be overrode
-    }
+        onLoad() {
+            // extends to be overrode
+        }
 
-    onUnload() {
-        // extends to be overrode
-    }
+        onUpdate() {
+            // extends to be overrode
+        }
 
-    onHide() {
-        // extends to be overrode
-    }
+        onUnload() {
+            // extends to be overrode
+        }
 
-    get state(): Readonly<S> {
-        return appCache!.store.getState()[this.moduleName];
-    }
+        onShow() {
+            // extends to be overrode
+        }
 
-    get initialState(): Readonly<S> {
-        return this.initState;
-    }
+        onHide() {
+            // extends to be overrode
+        }
 
-    get rootState(): Readonly<State> {
-        return appCache!.store.getState();
-    }
+        get state(): Readonly<S> {
+            return appCache.store.getState()[this.moduleName];
+        }
 
-    setState(newState: Partial<S>) {
-        appCache!.store.dispatch(setModuleAction(this.moduleName, newState));
-    }
+        get initialState(): Readonly<S> {
+            return this.initState;
+        }
 
-    restState() {
-        appCache!.store.dispatch(setModuleAction(this.moduleName, this.initState));
-    }
+        get rootState(): Readonly<State> {
+            return appCache.store.getState();
+        }
+
+        setState(newState: Partial<S>) {
+            appCache.store.dispatch(setModuleAction(this.moduleName, newState));
+        }
+
+        restState() {
+            appCache.store.dispatch(setModuleAction(this.moduleName, this.initState));
+        }
+
+        dispatch(action: AnyAction) {
+            appCache.store.dispatch(action);
+        }
+    };
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import {AllState} from "../../../utils/state"
 import { connect, DispatchProp } from "react-redux";
 
 interface Props extends DispatchProp {
@@ -13,7 +14,7 @@ class Main extends React.PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AllState) => {
     return {
         name: state.home.name,
     };

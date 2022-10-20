@@ -1,12 +1,13 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import {connect, DispatchProp} from 'react-redux';
+import {connect} from 'react-redux';
+import {RootState} from "../../../utils/state"
 
 interface StateProps {
     name: string;
 }
 
-interface Props extends StateProps, DispatchProp {}
+interface Props extends StateProps {}
 class Main extends React.PureComponent<Props> {
     render() {
         return (
@@ -23,7 +24,7 @@ class Main extends React.PureComponent<Props> {
 
 const mapStateToProps = (state: RootState): StateProps => {
     return {
-        name: state.app.main.name,
+        name: state.main.name,
     };
 };
 

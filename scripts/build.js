@@ -3,7 +3,6 @@ const childProcess = require("child_process");
 const fs = require("fs-extra");
 const targetPath = "packages/**/src/*.{ts,tsx,js}";
 const jestConfig = "config/jest.json";
-const tsLintConfig = "config/tslint.json";
 const prettierConfig = "config/prettier.json";
 const reauxTSConfig = "config/tsconfig.reaux.json";
 const reauxDOMTSConfig = "config/tsconfig.reaux-dom.json";
@@ -35,7 +34,7 @@ function test() {
 
 function lint() {
     console.info(chalk`{green.bold [task]} {white.bold lint}`);
-    return spawn("tslint", ["-c", tsLintConfig, targetPath], "lint failed, please fix");
+    return spawn("eslint", [], "lint failed, please fix");
 }
 
 function cleanup() {
@@ -56,19 +55,13 @@ function compile() {
 
 function distribute() {
     console.info(chalk`{green.bold [task]} {white.bold distribute reaux}`);
-    fs.mkdirsSync("build/reaux/dist");
-    fs.copySync("build/reaux/output", "build/reaux/dist", {dereference: true});
-    fs.copySync("packages/reaux/package.json", "build/reaux/dist/package.json", {dereference: true});
+    fs.copySync("packages/reaux/package.json", "build/reaux/package.json", {dereference: true});
 
     console.info(chalk`{green.bold [task]} {white.bold distribute reaux-dom}`);
-    fs.mkdirsSync("build/reaux-dom/dist");
-    fs.copySync("build/reaux-dom/output", "build/reaux-dom/dist", {dereference: true});
-    fs.copySync("packages/reaux-dom/package.json", "build/reaux-dom/dist/package.json", {dereference: true});
+    fs.copySync("packages/reaux-dom/package.json", "build/reaux-dom/package.json", {dereference: true});
 
     console.info(chalk`{green.bold [task]} {white.bold distribute reaux-native}`);
-    fs.mkdirsSync("build/reaux-native/dist");
-    fs.copySync("build/reaux-native/output", "build/reaux-native/dist", {dereference: true});
-    fs.copySync("packages/reaux-native/package.json", "build/reaux-native/dist/package.json", {dereference: true});
+    fs.copySync("packages/reaux-native/package.json", "build/reaux-native/package.json", {dereference: true});
 }
 
 function build() {

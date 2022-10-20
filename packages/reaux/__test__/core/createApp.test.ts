@@ -9,8 +9,6 @@ test("Create App", () => {
     expect(JSON.stringify(app)).toEqual(
         JSON.stringify({
             store,
-            actionPHandlers: {},
-            actionGHandlers: {},
             actionHandlers: {},
             modules: {},
             exceptionHandler: {},

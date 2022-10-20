@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "../packages/reaux-dom",
-    "outDir": "../build/reaux-dom/output",
+    "outDir": "../build/reaux-dom",
     "module": "esnext",
     "target": "es5",
     "moduleResolution": "node",
@@ -19,7 +19,8 @@
     "esModuleInterop": true,
     "inlineSources": true,
     "declaration": true, // 所有function都需要返回返回类型
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useUnknownInCatchVariables": false
   },
   "include": ["../packages/reaux-dom"],
   "exclude": ["node_modules", "../packages/reaux-dom/__test__"]

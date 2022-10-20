@@ -9,14 +9,9 @@
   "license": "MIT",
   "dependencies": {
     "reaux": "^2.0.0",
-    "@types/react-native": "0.60.19",
-    "@types/react-navigation": "3.0.8",
-    "react-native": "0.60.6"
-  },
-  "peerDependencies": {
-    "reaux": "^2.0.0",
-    "@types/react-native": "0.60.19",
-    "@types/react-navigation": "3.0.8",
-    "react-native": "0.60.6"
+    "@types/react-native": "~0.70.6",
+    "@types/react-navigation": "~3.4.0",
+    "react-native": "~0.70.3",
+    "tslib": "~2.4.0"
   }
 }
