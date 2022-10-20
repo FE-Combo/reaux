@@ -3,14 +3,11 @@
   "useWorkspaces": true,
   "packages": ["packages/*"],
   "command": {
-    "version": {
-      "exact": true
-    },
     "publish": {
       "npmClient": "npm",
       "allowBranch": ["master"],
       "registry": "https://registry.npmjs.org/"
     }
   },
-  "version": "0.0.0"
+  "version": "independent"
 }
