@@ -4,8 +4,10 @@
   "useWorkspaces": true,
   "packages": ["packages/*"],
   "command": {
+    "version": {
+      "message": "chore(release): %s"
+    },
     "publish": {
-      "message": "chore(release): %s",
       "npmClient": "npm",
       "allowBranch": ["master"],
       "registry": "https://registry.npmjs.org/"
