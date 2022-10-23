@@ -16,8 +16,6 @@ class ActionHandler extends Model<State> {
     }
 }
 
-const module = register(new ActionHandler("home", initState));
+export const {actions, View, proxyLifeCycle} = register(new ActionHandler("home", initState), Main);
 
-export const actions = module.actions;
-export const View = module.proxyView(Main);
-export const View2 = module.proxyView(Detail);
+export const View2 = proxyLifeCycle(Detail);

@@ -80,7 +80,19 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
 
     // register view
     const View = createView(handler, Component);
-    return {View, actions};
+
+    // execute lifecycle onReady
+    app.store.dispatch(actions.onReady());
+
+    return {
+        View,
+        actions,
+        proxyLifeCycle: (View: ComponentType) => {
+            // register next view
+            const NextView = createView(handler, View);
+            return NextView;
+        },
+    };
 }
 
 /**
