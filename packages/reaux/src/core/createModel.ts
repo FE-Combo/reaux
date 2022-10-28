@@ -6,8 +6,9 @@ import {setModuleAction} from "./shared";
  * Proxy store
  */
 
-export function createModel(appCache: App) {
-    return class Model<S extends {}> extends ModelProperty<S> implements ModelLifeCycle<any> {
+export function createModel(appCache: App | (() => App)) {
+    const cache = typeof appCache === "function" ? appCache() : appCache;
+    return class Model<S extends {}, R extends State = State> extends ModelProperty<S> implements ModelLifeCycle<any> {
         public constructor(readonly moduleName: string, readonly initState: S) {
             super();
         }
@@ -38,27 +39,27 @@ export function createModel(appCache: App) {
         }
 
         get state(): Readonly<S> {
-            return appCache.store.getState()[this.moduleName];
+            return cache.store.getState()[this.moduleName];
         }
 
         get initialState(): Readonly<S> {
             return this.initState;
         }
 
-        get rootState(): Readonly<State> {
-            return appCache.store.getState();
+        get rootState(): Readonly<R> {
+            return cache.store.getState();
         }
 
         setState(newState: Partial<S>) {
-            appCache.store.dispatch(setModuleAction(this.moduleName, newState));
+            cache.store.dispatch(setModuleAction(this.moduleName, newState));
         }
 
-        restState() {
-            appCache.store.dispatch(setModuleAction(this.moduleName, this.initState));
+        resetState() {
+            cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
         }
 
         dispatch(action: AnyAction) {
-            appCache.store.dispatch(action);
+            cache.store.dispatch(action);
         }
     };
 }

@@ -44,7 +44,7 @@ export abstract class ModelProperty<S> {
     abstract state: Readonly<S>;
     abstract rootState: Readonly<State>;
     abstract setState(newState: Partial<S>): void;
-    abstract restState(): void;
+    abstract resetState(): void;
 }
 
 export abstract class ModelLifeCycle<R = any> {

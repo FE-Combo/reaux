@@ -68,7 +68,7 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param view
  */
-export function register<H extends BaseModel>(handler: H, Component: ComponentType) {
+export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
     // ref: https://stackoverflow.com/questions/39282873/object-hasownproperty-yields-the-eslint-no-prototype-builtins-error-how-to
     if (Object.prototype.hasOwnProperty.call(app.modules, handler.moduleName)) {
         throw new Error(`module is already registered, module=${handler.moduleName}`);
@@ -94,7 +94,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     return {
         actions,
         View,
-        proxyLifeCycle: (View: ComponentType) => {
+        proxyLifeCycle: (View: ComponentType<any>) => {
             // register next view
             const NextView = createView(handler, View);
             return NextView;

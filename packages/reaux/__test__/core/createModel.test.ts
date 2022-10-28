@@ -39,6 +39,6 @@ test("Generate Base On Model ", () => {
     expect(model.onUnload()).toEqual(p);
     expect(model.onHide()).toEqual(p);
     expect(model.test()).toEqual(p);
-    model.restState();
+    model.resetState();
     expect(model.state).toEqual({a: 1, b: "2"});
 });

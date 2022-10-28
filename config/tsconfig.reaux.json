@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": "../packages/reaux",
     "outDir": "../build/reaux",
-    "module": "esnext",
-    "target": "es5",
+    "target": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "jsx": "react",

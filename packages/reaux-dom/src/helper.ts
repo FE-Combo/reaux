@@ -38,7 +38,7 @@ export class Helper {
     private put<T extends AnyAction>(action: T) {
         this.appCache.store.dispatch(action);
     }
-    loading(identifier = "global") {
+    loading(identifier = "global"): HandlerDecorator {
         // eslint-disable-next-line
         const that = this;
         return handlerDecorator(async function (handler) {

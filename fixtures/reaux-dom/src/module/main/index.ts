@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import {register, Model} from "reaux-dom";
+import {register, Model, helper} from "reaux-dom";
 import {State} from "./type";
 
 const initState: State = {
@@ -7,6 +7,7 @@ const initState: State = {
 };
 
 class ActionHandler extends Model<State> {
+    @helper.loading()
     onReady() {
         console.info("main onReady");
     }
