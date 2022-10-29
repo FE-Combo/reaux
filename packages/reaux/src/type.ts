@@ -48,12 +48,12 @@ export abstract class ModelProperty<S> {
 }
 
 export abstract class ModelLifeCycle<R = any> {
-    abstract onReady(): R;
-    abstract onLoad(): R;
-    abstract onUpdate(): R;
-    abstract onUnload(): R;
-    abstract onShow(): R;
-    abstract onHide(): R;
+    abstract onReady(...args: any[]): R;
+    abstract onLoad(...args: any[]): R;
+    abstract onUpdate(...args: any[]): R;
+    abstract onUnload(...args: any[]): R;
+    abstract onShow(...args: any[]): R;
+    abstract onHide(...args: any[]): R;
 }
 
 export abstract class Exception {
