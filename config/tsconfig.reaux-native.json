@@ -3,7 +3,7 @@
     "baseUrl": "../packages/reaux-native",
     "outDir": "../build/reaux-native",
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "inlineSources": true,
