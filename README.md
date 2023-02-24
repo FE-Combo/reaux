@@ -34,6 +34,30 @@ FE lightweight framework base on react + redux, strict in TypeScript.
 | reaux-cli    | [![npm version](https://img.shields.io/npm/v/reaux-cli.svg?style=flat)](https://www.npmjs.com/package/reaux-cli)       | Project scaffolding                            |
 
 ## Core API
+- start：launch application
+    - Component：entrance component
+    - onError：exception catching
+
+- register：register module
+    - handler：model instance
+    - Component：module component
+
+- helper：help funcitons
+  - delay: sleep
+  - loading: decorator, unified management of loading state
+  - isLoading: determine whether the loading state is active
+
+- Model：generate model instance
+  - onReady: executed before the component is rendered
+  - onLoad: similar to componentDidMount, the top-level module will be executed after the child module is loaded
+  - onUpdate: similar to componentDidUpdate
+  - onUnLoad: similar to componentWillUnmount
+  - onShow: The current module is triggered in the viewport (TODO)
+  - onHide: The current module is not triggered in the viewport (TODO)
+  - state: current module state
+  - rootState: root state
+  - resetState: reset state
+  - setState: update state
 
 ### Model
 
@@ -47,7 +71,7 @@ const initialState: State = {
     name: "name",
 };
 class ActionHandler extends Model<State> {
-    *test(): SagaIterator {
+    async test() {
         this.setState({name: "new name"});
     }
 }
@@ -59,7 +83,7 @@ const initialState: State = {
     name: "name",
 };
 class ActionHandler extends Model<State> {
-    *test(): SagaIterator {
+    async test() {
         this.setState({name: "new name"});
     }
 }
@@ -78,7 +102,7 @@ const initialState: State = {
     name: "name",
 };
 class ActionHandler extends Model<State> {
-    *test(): SagaIterator {
+    async test() {
         this.setState({name: "new name"});
     }
 }
@@ -92,7 +116,7 @@ const initialState: State = {
     name: "name",
 };
 class ActionHandler extends Model<State> {
-    *test(): SagaIterator {
+    async test() {
         this.setState({name: "new name"});
     }
 }
@@ -126,11 +150,8 @@ start({
 
 ## Documentation
 
-See detail [on the website](http://www.vocowone.com/note/5d0a0885e0bc093273281464).
+(TO BE DONE)
 
 ## TODO
-
-- SSR
-- User behavior tracking
 - Integrate H5, mini-app, electron
 - PWA

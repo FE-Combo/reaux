@@ -9,5 +9,4 @@ export interface StateView extends State {
 export interface RenderOptions {
     Component: ComponentType<any>;
     onError?: (error: Exception) => any;
-    onInitialized?: () => void;
 }
