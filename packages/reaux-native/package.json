@@ -11,7 +11,7 @@
     "@types/react-native": "~0.70.6",
     "@types/react-navigation": "~3.4.0",
     "react-native": "~0.70.3",
-    "reaux": "^2.1.0-alpha.2",
+    "reaux": "^2.1.0",
     "tslib": "~2.4.0"
   }
 }

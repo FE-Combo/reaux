@@ -52,3 +52,24 @@ test.only("Create Action", () => {
     expect(createAction(handler).actionHandlers[createActionHandlerType("moduleName", "fn1")]()).toBe(undefined);
     expect(createAction(handler).actionHandlers[createActionHandlerType("moduleName", "fn2")](1, 2)).toEqual({a: 1, b: 2});
 });
+
+test.only("Create error Action", () => {
+    const store = createStore(
+        createReducer({
+            main: createModuleReducer("main"),
+            main2: createModuleReducer("main2"),
+        })
+    );
+    const app: App = createApp(store);
+
+    const ReauxModel = createModel(app);
+
+    class Model extends ReauxModel<any> {
+        fn2 = function (a: any, b: any) {
+            return {a, b};
+        };
+    }
+
+    const handler = new Model("moduleName", {});
+    // expect(createAction(handler)).toThrowError("123");
+});

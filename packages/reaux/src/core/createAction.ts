@@ -28,7 +28,7 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
         if (typeof method === "function") {
             actionHandlers[qualifiedActionType] = method.bind(handler);
         } else {
-            console.warn(`variable [${method}] is not a function`);
+            console.warn(`variable handler.[${method}] is not a function`);
         }
     });
 
