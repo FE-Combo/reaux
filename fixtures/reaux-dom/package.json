@@ -9,7 +9,7 @@
   "devDependencies": {
     "html-webpack-plugin": "^4.5.2",
     "ts-loader": "^9.4.1",
-    "webpack": "^5.74.0",
+    "webpack": "^5.76.0",
     "webpack-dev-server": "^4.11.1"
   }
 }
