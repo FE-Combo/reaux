@@ -82,7 +82,9 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     const View = createView(handler, Component);
 
     // execute lifecycle onReady
-    app.store.dispatch(actions.onReady());
+    if (actions.onReady) {
+        app.store.dispatch(actions.onReady());
+    }
 
     return {
         View,

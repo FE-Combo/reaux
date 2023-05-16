@@ -5,7 +5,7 @@ import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} fr
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
 import {createBrowserHistory} from "history";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware} from "reaux";
+import {State as ReauxState, createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware} from "reaux";
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
@@ -89,7 +89,9 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     const View = createView(handler, Component);
 
     // execute lifecycle onReady
-    app.store.dispatch(actions.onReady());
+    if (actions.onReady) {
+        app.store.dispatch(actions.onReady());
+    }
 
     return {
         actions,
@@ -105,7 +107,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
 /**
  * Module extends Model
  */
-export class Model<State extends {} = {}> extends createModel(app)<State> {
+export class Model<State extends {} = {}, R extends ReauxState = StateView> extends createModel(app)<State, R> {
     setHistory(newURL: string) {
         app.store.dispatch(push(newURL));
     }
