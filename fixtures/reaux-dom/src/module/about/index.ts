@@ -8,7 +8,7 @@ const initState: State = {
     name: "about",
 };
 
-class ActionHandler extends Model<State> {
+class ActionHandler extends Model<State, AllState> {
     async onReady() {
         console.info("about onReady");
         // this.setState({name: "new about"+new Date().getTime()}); // 无法更新onUpdate

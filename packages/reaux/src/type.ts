@@ -19,7 +19,7 @@ export interface State {
     [namespace: string]: ActionPayload;
 }
 
-export type ActionPayload = {} | ErrorState | LoadingState | any;
+export type ActionPayload = any;
 
 export interface ErrorState {
     runtimeException: any;
