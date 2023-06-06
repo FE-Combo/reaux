@@ -48,7 +48,7 @@ FE lightweight framework base on react + redux, strict in TypeScript.
   - isLoading: determine whether the loading state is active
 
 - Model：generate model instance
-  - onReady: executed before the component is rendered
+  - onReady: executed before the component is rendered, execute only once
   - onLoad: similar to componentDidMount, the top-level module will be executed after the child module is loaded
   - onUpdate: similar to componentDidUpdate
   - onUnLoad: similar to componentWillUnmount
@@ -147,6 +147,10 @@ start({
 
 - Base on react-dom project: `yarn add reaux-dom --save or npm install reaux-dom --save`
 - Base on react-native project:`yarn add reaux-native --save or npm install reaux-native --save`
+
+## Attention
+- When using react-router for routing jumps, the status of redux.router is not updated？
+    - Detect whether to create additional BrowserRouter, HashRouter, etc. The framework has built-in BrowserRouter without manual creation.
 
 ## Documentation
 
