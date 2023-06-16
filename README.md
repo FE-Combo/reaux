@@ -46,14 +46,16 @@ FE lightweight framework base on react + redux, strict in TypeScript.
   - delay: sleep
   - loading: decorator, unified management of loading state
   - isLoading: determine whether the loading state is active
+  - interval: for onTick() only, to specify to tick interval in second.
 
 - Model：generate model instance
   - onReady: executed before the component is rendered, execute only once
   - onLoad: similar to componentDidMount, the top-level module will be executed after the child module is loaded
   - onUpdate: similar to componentDidUpdate
   - onUnLoad: similar to componentWillUnmount
-  - onShow: The current module is triggered in the viewport (TODO)
-  - onHide: The current module is not triggered in the viewport (TODO)
+  - onShow: The current module is triggered in the viewport
+  - onHide: The current module is not triggered in the viewport
+  - onTick: Periodic call (default 1s), can use the @helper.interval decorator to specify the period (in seconds)
   - state: current module state
   - rootState: root state
   - resetState: reset state

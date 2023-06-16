@@ -2,8 +2,9 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, Exception, createModuleReducer} from "reaux";
+import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, Exception, createModuleReducer, hasOwnLifecycle, ActionType} from "reaux";
 import {RenderOptions} from "./type";
+import {IOScrollView, InView} from "react-native-intersection-observer";
 
 declare const window: {__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any};
 
@@ -42,11 +43,13 @@ export function start(options: RenderOptions): void {
         render() {
             return (
                 this.state.initialized && (
-                    <Provider store={app.store}>
-                        <ErrorBoundary onError={setErrorAction}>
-                            <Component />
-                        </ErrorBoundary>
-                    </Provider>
+                    <IOScrollView>
+                        <Provider store={app.store}>
+                            <ErrorBoundary onError={setErrorAction}>
+                                <Component />
+                            </ErrorBoundary>
+                        </Provider>
+                    </IOScrollView>
                 )
             );
         }
@@ -64,9 +67,8 @@ export function start(options: RenderOptions): void {
  * @param Component
  */
 export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
-    // ref: https://stackoverflow.com/questions/39282873/object-hasownproperty-yields-the-eslint-no-prototype-builtins-error-how-to
-    if (Object.prototype.hasOwnProperty.call(app.modules, handler.moduleName)) {
-        throw new Error(`module is already registered, module=${handler.moduleName}`);
+    if (["@error", "@loading"].includes(handler.moduleName)) {
+        throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
     }
 
     // register reducer
@@ -78,11 +80,20 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
-    // register view
-    const View = createView(handler, Component);
+    // register view, attach lifecycle and viewport observer
+    let View;
+    if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
+        View = withIntersectionObserver(
+            createView(handler, Component),
+            () => app.store.dispatch(actions.onShow()),
+            () => app.store.dispatch(actions.onHide())
+        );
+    } else {
+        View = createView(handler, Component);
+    }
 
     // execute lifecycle onReady
-    if (actions.onReady) {
+    if (hasOwnLifecycle(handler, "onReady")) {
         app.store.dispatch(actions.onReady());
     }
 
@@ -125,4 +136,28 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
         }
     }
     return composeEnhancers(enhancer);
+}
+
+export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: () => ActionType<any[]>, onHide: () => ActionType<any[]>) {
+    return class View extends React.PureComponent<T> {
+        constructor(props: T) {
+            super(props);
+        }
+
+        handleChange = (inView: boolean) => {
+            if (inView) {
+                onShow();
+            } else {
+                onHide();
+            }
+        };
+
+        render() {
+            return (
+                <InView onChange={this.handleChange}>
+                    <Component {...this.props} />
+                </InView>
+            );
+        }
+    };
 }

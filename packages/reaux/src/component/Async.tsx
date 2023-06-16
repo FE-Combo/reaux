@@ -15,7 +15,7 @@ export function Async<T, K extends ReactComponentKeyOf<T>>(resolve: () => Promis
         componentDidMount() {
             const promise = resolve();
             promise.then((module) => {
-                const Component = module[component] as any;
+                const Component = module[component] as React.ComponentType;
                 this.setState({Component});
             });
         }

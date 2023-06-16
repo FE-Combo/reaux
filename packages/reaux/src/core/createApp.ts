@@ -10,7 +10,6 @@ export function createApp(store: Store): App {
     return {
         store,
         actionHandlers: {},
-        modules: {},
         exceptionHandler: {},
         asyncReducers: {} as ReducersMapObject<State, any>,
         injectReducer: (reducers: Reducer<State>) => store.replaceReducer(reducers),

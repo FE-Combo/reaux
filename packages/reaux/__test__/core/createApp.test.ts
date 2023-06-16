@@ -10,7 +10,6 @@ test("Create App", () => {
         JSON.stringify({
             store,
             actionHandlers: {},
-            modules: {},
             exceptionHandler: {},
             asyncReducers: {} as any,
             injectReducer: (reducers: any) => store.replaceReducer(reducers),

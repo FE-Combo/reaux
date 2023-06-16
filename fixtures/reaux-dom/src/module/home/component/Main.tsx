@@ -1,7 +1,8 @@
 import React from "react";
-import { connect, DispatchProp } from "react-redux";
-import {AllState} from "../../../utils/state"
-import { actions } from "../index";
+import {connect, DispatchProp} from "react-redux";
+import {AllState} from "../../../utils/state";
+import {View} from "../../about";
+import {actions} from "../index";
 
 interface Props extends DispatchProp {
     name: string;
@@ -10,7 +11,7 @@ interface Props extends DispatchProp {
 class Main extends React.PureComponent<Props> {
     render() {
         return (
-            <div>
+            <div style={{height: "200vh"}}>
                 {this.props.name}
                 <button
                     onClick={() => {
@@ -19,6 +20,7 @@ class Main extends React.PureComponent<Props> {
                 >
                     Test
                 </button>
+                <View />
             </div>
         );
     }

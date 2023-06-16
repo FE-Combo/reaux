@@ -13,28 +13,33 @@ export function createModel(appCache: App | (() => App)) {
             super();
         }
 
-        // LifeCycle onReady/onLoad/onUnload/onHide
-        onReady() {
+        // LifeCycle
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onReady(...args: any[]) {
             // extends to be overrode
         }
-
-        onLoad() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onLoad(...args: any[]) {
             // extends to be overrode
         }
-
-        onUpdate() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onUpdate(...args: any[]) {
             // extends to be overrode
         }
-
-        onUnload() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onUnload(...args: any[]) {
             // extends to be overrode
         }
-
-        onShow() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onShow(...args: any[]) {
             // extends to be overrode
         }
-
-        onHide() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onHide(...args: any[]) {
+            // extends to be overrode
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        onTick(...args: any[]) {
             // extends to be overrode
         }
 

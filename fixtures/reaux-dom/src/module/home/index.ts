@@ -1,5 +1,5 @@
 import Main from "./component/Main";
-import {register, Model} from "reaux-dom";
+import {register, Model, helper} from "reaux-dom";
 import Detail from "./component/Detail";
 import {AllState} from "../../utils/state";
 import {State} from "./type";
@@ -12,6 +12,12 @@ class ActionHandler extends Model<State, AllState> {
     onReady() {
         console.info("home onReady");
     }
+
+    @helper.interval(3)
+    onTick() {
+        console.log("home onTick");
+    }
+
     test() {
         this.setState({name: "new Name"});
     }

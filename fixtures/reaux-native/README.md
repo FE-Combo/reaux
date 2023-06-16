@@ -19,6 +19,9 @@
 - https://stackoverflow.com/questions/72872203/unrecognized-command-link-when-linking-fonts-in-react-native
 
 
+## 无法打开 Open React Devtools？
+- https://github.com/facebook/react-native/issues/34615#issuecomment-1594181112
+
 ## 初始化模板报错：Your Ruby version is 2.7.6, but your Gemfile specified 2.7.5?
 - 切换ruby版本2.7.5
 - brew install rbenv ruby-build

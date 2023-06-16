@@ -9,21 +9,23 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@types/react": "../../node_modules/@types/react",
+    "@types/react-native": "../../node_modules/@types/react-native",
+    "@types/react-redux": "../../node_modules/@types/react-redux",
     "react": "../../node_modules/react",
     "react-native": "../../node_modules/react-native",
-    "@types/react-redux": "../../node_modules/@types/react-redux",
+    "react-native-intersection-observer": "../../node_modules/react-native-intersection-observer",
     "react-redux": "../../node_modules/react-redux",
-    "redux": "../../node_modules/redux",
-    "@types/react": "../../node_modules/@types/react",
-    "@types/react-native": "../../node_modules/@types/react-native"
+    "redux": "../../node_modules/redux"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
+    "@babel/plugin-proposal-decorators": "^7.22.5",
     "@babel/runtime": "^7.19.4",
     "@react-native-community/eslint-config": "^3.1.0",
     "@tsconfig/react-native": "^2.0.2",
+    "@typescript-eslint/parser": "../../node_modules/@typescript-eslint/parser",
     "metro-react-native-babel-preset": "0.72.3",
-    "typescript": "../../node_modules/typescript",
-    "@typescript-eslint/parser": "../../node_modules/@typescript-eslint/parser"
+    "typescript": "../../node_modules/typescript"
   }
 }

@@ -8,7 +8,7 @@ type HandlerDecorator = (target: object, name: string | symbol, descriptor: Type
 
 type HandlerInterceptor<S> = (handler: ActionHandler, state: Readonly<S>) => any;
 
-type LifeCycleDecorator = (target: object, propertyKey: keyof ModelLifeCycle, descriptor: TypedPropertyDescriptor<ActionHandler & {isLifecycle?: boolean}>) => TypedPropertyDescriptor<ActionHandler>;
+type LifeCycleDecorator = (target: object, propertyKey: keyof ModelLifeCycle, descriptor: TypedPropertyDescriptor<ActionHandler & {isLifecycle?: boolean; interval?: number}>) => TypedPropertyDescriptor<ActionHandler>;
 
 interface Options {
     callback: (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => void;
@@ -66,6 +66,13 @@ export class Helper {
     lifecycle(): LifeCycleDecorator {
         return (target, propertyKey, descriptor) => {
             descriptor.value!.isLifecycle = true;
+            return descriptor;
+        };
+    }
+
+    interval(value = 1): LifeCycleDecorator {
+        return (target, propertyKey, descriptor) => {
+            descriptor.value!.interval = value * 1000;
             return descriptor;
         };
     }

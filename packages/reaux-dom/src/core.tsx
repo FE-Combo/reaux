@@ -4,8 +4,9 @@ import {createRoot} from "react-dom/client";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
-import {createBrowserHistory} from "history";
-import {State as ReauxState, createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware} from "reaux";
+import {LocationDescriptorObject, createBrowserHistory} from "history";
+import {InView, ObserverInstanceCallback} from "react-intersection-observer";
+import {State as ReauxState, createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware, hasOwnLifecycle, ActionType} from "reaux";
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
@@ -69,11 +70,9 @@ export function start(options: RenderOptions): void {
  * @param view
  */
 export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
-    // ref: https://stackoverflow.com/questions/39282873/object-hasownproperty-yields-the-eslint-no-prototype-builtins-error-how-to
-    if (Object.prototype.hasOwnProperty.call(app.modules, handler.moduleName)) {
-        throw new Error(`module is already registered, module=${handler.moduleName}`);
+    if (["@error", "@loading", "router"].includes(handler.moduleName)) {
+        throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
     }
-    app.modules[handler.moduleName] = true;
 
     // register reducer
     const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initState);
@@ -85,11 +84,20 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     const {actions, actionHandlers} = createAction(handler);
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
-    // attach lifecycle
-    const View = createView(handler, Component);
+    // register view, attach lifecycle and viewport observer
+    let View;
+    if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
+        View = withIntersectionObserver(
+            createView(handler, Component),
+            (entry: Parameters<ObserverInstanceCallback>[1]) => app.store.dispatch(actions.onShow(entry)),
+            (entry: Parameters<ObserverInstanceCallback>[1]) => app.store.dispatch(actions.onHide(entry))
+        );
+    } else {
+        View = createView(handler, Component);
+    }
 
     // execute lifecycle onReady
-    if (actions.onReady) {
+    if (hasOwnLifecycle(handler, "onReady")) {
         app.store.dispatch(actions.onReady());
     }
 
@@ -108,8 +116,12 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
  * Module extends Model
  */
 export class Model<State extends {} = {}, R extends ReauxState = StateView> extends createModel(app)<State, R> {
-    setHistory(newURL: string) {
-        app.store.dispatch(push(newURL));
+    push(path: LocationDescriptorObject<unknown> | string, state?: unknown) {
+        if (typeof path === "string") {
+            app.store.dispatch(push(path, state));
+        } else {
+            app.store.dispatch(push(path));
+        }
     }
 }
 
@@ -137,4 +149,32 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
         return compose(enhancer, extension({}));
     }
     return enhancer;
+}
+
+export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>) {
+    return class View extends React.PureComponent<T> {
+        constructor(props: T) {
+            super(props);
+        }
+
+        handleChange: ObserverInstanceCallback = (inView, entry) => {
+            if (inView) {
+                onShow(entry);
+            } else {
+                onHide(entry);
+            }
+        };
+
+        render() {
+            return (
+                <InView onChange={this.handleChange}>
+                    {({ref}) => (
+                        <div ref={ref}>
+                            <Component {...this.props} />
+                        </div>
+                    )}
+                </InView>
+            );
+        }
+    };
 }

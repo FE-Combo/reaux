@@ -1,4 +1,4 @@
-import {ActionType} from "../type";
+import {ActionType, BaseModel} from "../type";
 
 const ERROR_ACTION_TYPE = "@@framework/error";
 
@@ -22,4 +22,9 @@ export function setErrorAction<Error>(error: Error): ActionType<Error> {
         type: ERROR_ACTION_TYPE,
         payload: error,
     };
+}
+
+export function hasOwnLifecycle<H extends BaseModel>(handler: H, name: string): boolean {
+    // ref: https://stackoverflow.com/questions/39282873/object-hasownproperty-yields-the-eslint-no-prototype-builtins-error-how-to
+    return Object.prototype.hasOwnProperty.call(Object.getPrototypeOf(handler), name);
 }

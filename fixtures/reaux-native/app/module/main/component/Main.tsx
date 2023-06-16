@@ -1,6 +1,7 @@
 import React from "react";
 import {Platform, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
+import {View as HomeView} from "../../home";
 import {RootState} from "../../../utils/state";
 
 interface StateProps {
@@ -13,8 +14,48 @@ class Main extends React.PureComponent<Props> {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
+                <Text style={styles.welcome}>Welcome to React Native!</Text>
                 <Text style={styles.instructions}>To get started, edit App.js</Text>
                 <Text style={styles.instructions}>{instructions}</Text>
+                <HomeView />
             </View>
         );
     }

@@ -1,14 +1,11 @@
 const webpack = require("webpack");
-
 const HTMLPlugin = require("html-webpack-plugin");
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshTypeScript = require('react-refresh-typescript');
 
 const config = {
   mode: "development",
-  entry: [
-    "webpack-dev-server/client?https://0.0.0.0:3000",
-    "webpack/hot/dev-server",
-    `./src/index.ts`
-  ],
+  entry: "./src/index.ts",
   output: {
     filename: "static/js/[name].js",
     publicPath: "/"
@@ -23,7 +20,13 @@ const config = {
       {
         test: /(\.tsx|\.ts)$/,
         exclude: /node_modules/,
-        loader: "ts-loader"
+        loader: "ts-loader",
+        options: {
+          getCustomTransformers: () => ({
+            before: [ReactRefreshTypeScript()],
+          }),
+          transpileOnly: true,
+        },
       }
     ]
   },
@@ -31,7 +34,7 @@ const config = {
     new HTMLPlugin({
       template: `./src/index.html`
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin(),
     new webpack.ProgressPlugin()
   ]
 };

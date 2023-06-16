@@ -5,7 +5,6 @@ export interface ActionHandlers {
 }
 
 export interface App {
-    modules: {};
     store: Store;
     actionHandlers: {[type: string]: ActionHandler};
     exceptionHandler: ExceptionHandler;
@@ -54,6 +53,7 @@ export abstract class ModelLifeCycle<R = any> {
     abstract onUnload(...args: any[]): R;
     abstract onShow(...args: any[]): R;
     abstract onHide(...args: any[]): R;
+    abstract onTick: ((...args: any[]) => R) & {interval?: number};
 }
 
 export abstract class Exception {
@@ -67,3 +67,5 @@ export interface ExceptionHandler {
 type ActionCreator<H> = H extends (...args: infer P) => any ? (...args: P) => ActionType<P> : never;
 
 export type ActionCreators<H> = {readonly [K in keyof H]: ActionCreator<H[K]>};
+
+export type BaseModel<S = {}, R = any> = ModelProperty<S> & ModelLifeCycle<R>;
