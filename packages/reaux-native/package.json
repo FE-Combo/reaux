@@ -1,6 +1,6 @@
 {
   "name": "reaux-native",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Front-End app framework",
   "main": "index.js",
   "module": "index.js",
@@ -12,7 +12,7 @@
     "@types/react-navigation": "~3.4.0",
     "react-native": "~0.70.3",
     "react-native-intersection-observer": "^0.0.9",
-    "reaux": "^2.1.1",
+    "reaux": "^2.2.0",
     "tslib": "~2.4.0"
   }
 }
