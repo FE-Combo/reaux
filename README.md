@@ -53,8 +53,8 @@ FE lightweight framework base on react + redux, strict in TypeScript.
   - onLoad: similar to componentDidMount, the top-level module will be executed after the child module is loaded
   - onUpdate: similar to componentDidUpdate
   - onUnLoad: similar to componentWillUnmount
-  - onShow: The current module is triggered in the viewport
-  - onHide: The current module is not triggered in the viewport
+  - onShow: The current module is triggered in the viewport, unable to use proxyLifeCycle component
+  - onHide: The current module is not triggered in the viewport, unable to use proxyLifeCycle component
   - onTick: Periodic call (default 1s), can use the @helper.interval decorator to specify the period (in seconds)
   - state: current module state
   - rootState: root state
