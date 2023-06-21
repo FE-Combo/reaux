@@ -1,6 +1,6 @@
 import {State, App, ModelProperty, ModelLifeCycle} from "../type";
 import {AnyAction} from "redux";
-import {setModuleAction} from "./shared";
+import {setModuleAction, resetModuleAction} from "./shared";
 
 /**
  * Proxy store
@@ -60,7 +60,7 @@ export function createModel(appCache: App | (() => App)) {
         }
 
         resetState() {
-            cache.store.dispatch(setModuleAction(this.moduleName, this.initState));
+            cache.store.dispatch(resetModuleAction(this.moduleName, this.initState));
         }
 
         dispatch(action: AnyAction) {

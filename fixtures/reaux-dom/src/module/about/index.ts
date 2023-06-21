@@ -32,7 +32,11 @@ class ActionHandler extends Model<State, AllState> {
     }
 
     async test() {
-        this.setState({name: "new about" + new Date().getTime()});
+        this.setState({name: "new about" + new Date().getTime(), test: "test"});
+    }
+
+    async reset() {
+        this.resetState();
     }
 }
 

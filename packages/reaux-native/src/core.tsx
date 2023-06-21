@@ -71,7 +71,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
         throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
     }
 
-    // register reducer
+    // register reducer and init module state
     const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initState);
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
