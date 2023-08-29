@@ -39,7 +39,7 @@ export type ActionHandler = (...args: any[]) => any;
 
 export abstract class ModelProperty<S> {
     abstract readonly moduleName: string;
-    abstract readonly initState: S;
+    abstract readonly initialState: S;
     abstract state: Readonly<S>;
     abstract rootState: Readonly<State>;
     abstract setState(newState: Partial<S>): void;

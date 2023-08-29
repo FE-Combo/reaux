@@ -43,14 +43,20 @@ function generateApp(): App {
  * @param options
  */
 export function start(options: RenderOptions): void {
-    const {Component, onError} = options;
+    const {name = "app", Component, onError, container} = options;
     if (typeof onError === "function") {
         app.exceptionHandler.onError = onError.bind(app);
     }
+
     listenGlobalError();
-    const rootElement: HTMLDivElement = document.createElement("div");
-    rootElement.id = "framework-app-root";
-    document.body.appendChild(rootElement);
+
+    let rootElement: Element | DocumentFragment | undefined = container;
+    if (!rootElement) {
+        rootElement = document.createElement("div");
+        rootElement.id = "framework-app-root";
+        document.body.appendChild(rootElement);
+    }
+
     const root = createRoot(rootElement);
     root.render(
         <Provider store={app.store}>
@@ -61,6 +67,11 @@ export function start(options: RenderOptions): void {
             </ErrorBoundary>
         </Provider>
     );
+
+    window.addEventListener("unmount", function () {
+        console.info(`【${name}】 unmounted`);
+        root.unmount();
+    });
 }
 
 /**
@@ -75,7 +86,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     }
 
     // register reducer and init module state
-    const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initState);
+    const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initialState);
 
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
@@ -116,6 +127,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
  * Module extends Model
  */
 export class Model<State extends {} = {}, R extends ReauxState = StateView> extends createModel(app)<State, R> {
+    // todo: remove push
     push(path: LocationDescriptorObject<unknown> | string, state?: unknown) {
         if (typeof path === "string") {
             app.store.dispatch(push(path, state));

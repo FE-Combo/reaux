@@ -3,7 +3,7 @@ import {register, Model, helper} from "reaux-dom";
 import {AllState} from "../../utils/state";
 import {State} from "./type";
 
-const initState: State = {
+const initialState: State = {
     name: "main",
 };
 
@@ -14,4 +14,4 @@ class ActionHandler extends Model<State, AllState> {
     }
 }
 
-export const {actions, View} = register(new ActionHandler("main", initState), Main);
+export const {actions, View} = register(new ActionHandler("main", initialState), Main);

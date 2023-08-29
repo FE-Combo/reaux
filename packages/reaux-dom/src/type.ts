@@ -9,6 +9,8 @@ export interface StateView extends State {
 }
 
 export interface RenderOptions {
+    name?: string;
     Component: ComponentType<any>;
     onError?: (error: Exception) => any;
+    container?: Element | DocumentFragment;
 }

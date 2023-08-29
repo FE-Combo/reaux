@@ -5,7 +5,7 @@ import {State} from "./type";
 import {AllState} from "utils/state";
 import {ObserverInstanceCallback} from "react-intersection-observer";
 
-const initState: State = {
+const initialState: State = {
     name: "about",
 };
 
@@ -34,13 +34,9 @@ class ActionHandler extends Model<State, AllState> {
     async test() {
         this.setState({name: "new about" + new Date().getTime(), test: "test"});
     }
-
-    async reset() {
-        this.resetState();
-    }
 }
 
-const {actions, View: PreView} = register(new ActionHandler("about", initState), Main);
+const {actions, View: PreView} = register(new ActionHandler("about", initialState), Main);
 
 const View = connect((state: AllState) => ({about: state.about}))(PreView);
 

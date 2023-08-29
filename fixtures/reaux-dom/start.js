@@ -8,6 +8,7 @@ function devServer(compiler) {
     static: "./src/static",
     historyApiFallback: true,
     compress: true,
+    headers: {"Access-Control-Allow-Origin": "*"},
     client: {
       overlay: {
         warnings: true,

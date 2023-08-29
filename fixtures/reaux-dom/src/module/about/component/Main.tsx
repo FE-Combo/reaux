@@ -14,7 +14,7 @@ class Main extends React.PureComponent<Props> {
             <div>
                 {this.props.name}
                 <button onClick={() => this.props.dispatch(actions.test())}>change</button>
-                <button onClick={() => this.props.dispatch(actions.reset())}>reset</button>
+                <button onClick={() => this.props.dispatch(actions.resetState(["name"]))}>reset name</button>
             </div>
         );
     }

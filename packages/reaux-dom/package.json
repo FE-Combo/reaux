@@ -19,5 +19,18 @@
     "react-router-dom": "~5.3.4",
     "reaux": "^2.2.1",
     "tslib": "~2.4.0"
+  },
+  "peerDependencies": {
+    "@types/history": "~4.7.11",
+    "@types/react-dom": "~18.0.6",
+    "@types/react-router-dom": "~5.3.3",
+    "connected-react-router": "~6.9.3",
+    "core-js": "^3.25.5",
+    "history": "~4.7.2",
+    "react-dom": "~18.2.0",
+    "react-intersection-observer": "^9.4.4",
+    "react-router-dom": "~5.3.4",
+    "reaux": "^2.2.1",
+    "tslib": "~2.4.0"
   }
 }

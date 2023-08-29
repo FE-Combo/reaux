@@ -1,6 +1,6 @@
 import {ActionHandlers, ActionCreators} from "../type";
 
-const buildinKeys = ["constructor", "dispatch", "setState", "rootState", "state", "resetState", "initState", "moduleName", "initialState"] as const;
+const buildinKeys = ["_cache", "constructor", "dispatch", "rootState", "state", "moduleName", "initialState"] as const;
 type BuildinActionKeys = {
     readonly [K in keyof typeof buildinKeys]: typeof buildinKeys[K];
 }[number];
@@ -36,5 +36,22 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
 }
 
 function getPrototypeOfExceptBuildinKeys(object: object): string[] {
-    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
+    const result = Object.getOwnPropertyNames(mergeAncestors(object, 3)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
+    return result;
+}
+
+function mergeAncestors(object: Object, depth: number) {
+    if (depth === 0) {
+        return object;
+    }
+
+    const proto = Object.getPrototypeOf(object);
+    if (!proto) {
+        return object;
+    }
+
+    const parentObject: object = mergeAncestors(proto, depth - 1);
+
+    // Merge parent and child properties, child properties override parent properties
+    return {...parentObject, ...object};
 }

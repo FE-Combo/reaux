@@ -4,7 +4,7 @@ import Detail from "./component/Detail";
 import {AllState} from "../../utils/state";
 import {State} from "./type";
 
-const initState: State = {
+const initialState: State = {
     name: "home",
 };
 
@@ -23,6 +23,6 @@ class ActionHandler extends Model<State, AllState> {
     }
 }
 
-export const {actions, View, proxyLifeCycle} = register(new ActionHandler("home", initState), Main);
+export const {actions, View, proxyLifeCycle} = register(new ActionHandler("home", initialState), Main);
 
 export const View2 = proxyLifeCycle(Detail);

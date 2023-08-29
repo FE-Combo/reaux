@@ -1,6 +1,6 @@
 import {State, App, ModelProperty, ModelLifeCycle} from "../type";
 import {AnyAction} from "redux";
-import {setModuleAction, resetModuleAction} from "./shared";
+import {setModuleAction, resetModuleAction, filterObject} from "./shared";
 
 /**
  * Proxy store
@@ -9,7 +9,7 @@ import {setModuleAction, resetModuleAction} from "./shared";
 export function createModel(appCache: App | (() => App)) {
     const cache = typeof appCache === "function" ? appCache() : appCache;
     return class Model<S extends {}, R extends State = State> extends ModelProperty<S> implements ModelLifeCycle<any> {
-        public constructor(readonly moduleName: string, readonly initState: S) {
+        public constructor(readonly moduleName: string, readonly initialState: S) {
             super();
         }
 
@@ -47,10 +47,6 @@ export function createModel(appCache: App | (() => App)) {
             return cache.store.getState()[this.moduleName];
         }
 
-        get initialState(): Readonly<S> {
-            return this.initState;
-        }
-
         get rootState(): Readonly<R> {
             return cache.store.getState();
         }
@@ -59,8 +55,13 @@ export function createModel(appCache: App | (() => App)) {
             cache.store.dispatch(setModuleAction(this.moduleName, newState));
         }
 
-        resetState() {
-            cache.store.dispatch(resetModuleAction(this.moduleName, this.initState));
+        resetState(key?: (keyof S)[] | keyof S) {
+            if (key) {
+                const nextState = filterObject(this.initialState, key);
+                cache.store.dispatch(setModuleAction(this.moduleName, nextState));
+            } else {
+                cache.store.dispatch(resetModuleAction(this.moduleName, this.initialState));
+            }
         }
 
         dispatch(action: AnyAction) {

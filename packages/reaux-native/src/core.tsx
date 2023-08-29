@@ -72,7 +72,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     }
 
     // register reducer and init module state
-    const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initState);
+    const currentModuleReducer = createModuleReducer(handler.moduleName, handler.initialState);
     app.asyncReducers[handler.moduleName] = currentModuleReducer;
     app.store.replaceReducer(createReducer(app.asyncReducers));
 

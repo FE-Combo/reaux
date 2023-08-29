@@ -9,8 +9,7 @@ export function createModuleReducer(namespace: string, initialState: Record<stri
 
         switch (action.type) {
             case actionType: {
-                const nextState = {...state, ...action.payload};
-                return nextState;
+                return {...state, ...action.payload};
             }
             case resetActionType: {
                 return action.payload;

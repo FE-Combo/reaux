@@ -25,11 +25,10 @@ test("Generate Base On Model ", () => {
     const model = new PromiseModel("main", {a: 1, b: "2"});
     const promise = async () => {};
     const p = promise();
-    expect(model.initState).toEqual({a: 1, b: "2"});
+    expect(model.initialState).toEqual({a: 1, b: "2"});
     model.setState({a: 2, b: "b"});
     expect(model.moduleName).toEqual("main");
     expect(model.state).toEqual({a: 2, b: "b"});
-    expect(model.initState).toEqual({a: 1, b: "2"});
     expect(model.initialState).toEqual({a: 1, b: "2"});
     expect(model.rootState).toEqual({main: {a: 2, b: "b"}, main2: {}, "@loading": {}, "@error": {}});
     expect(JSON.stringify(model.onReady)).toEqual(JSON.stringify(promise));
