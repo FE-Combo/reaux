@@ -1,5 +1,7 @@
 import {ActionHandlers, ActionCreators} from "../type";
 
+const injectKeys = ["push", "setState", "resetState"];
+
 const buildinKeys = ["_cache", "constructor", "dispatch", "rootState", "state", "moduleName", "initialState"] as const;
 type BuildinActionKeys = {
     readonly [K in keyof typeof buildinKeys]: typeof buildinKeys[K];
@@ -15,7 +17,7 @@ function createActionHandlerType(moduleName: string, ActionHandlerType: string) 
  */
 export function createAction<H extends object & {moduleName: string}>(handler: H) {
     const moduleName = handler.moduleName;
-    const keys = getPrototypeOfExceptBuildinKeys(handler);
+    const keys = [...getPrototypeOfExceptBuildinKeys(handler), ...injectKeys];
     const actions = {} as Omit<ActionCreators<H>, BuildinActionKeys>;
     const actionHandlers = {} as ActionHandlers;
     keys.forEach((actionType) => {
@@ -35,23 +37,7 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
     return {actions, actionHandlers};
 }
 
+// Only the data on the prototype can be obtained but not all the data on the prototype chain, so use `injectKeys` to inject the necessary keys in the prototype chain
 function getPrototypeOfExceptBuildinKeys(object: object): string[] {
-    const result = Object.getOwnPropertyNames(mergeAncestors(object, 3)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
-    return result;
-}
-
-function mergeAncestors(object: Object, depth: number) {
-    if (depth === 0) {
-        return object;
-    }
-
-    const proto = Object.getPrototypeOf(object);
-    if (!proto) {
-        return object;
-    }
-
-    const parentObject: object = mergeAncestors(proto, depth - 1);
-
-    // Merge parent and child properties, child properties override parent properties
-    return {...parentObject, ...object};
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
 }
