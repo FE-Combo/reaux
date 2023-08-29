@@ -19,8 +19,6 @@
     "@types/react-native": "~0.70.6",
     "@types/react-navigation": "~3.4.0",
     "react-native": "~0.70.3",
-    "react-native-intersection-observer": "^0.0.9",
-    "reaux": "^2.2.1",
-    "tslib": "~2.4.0"
+    "react-native-intersection-observer": "^0.0.9"
   }
 }
