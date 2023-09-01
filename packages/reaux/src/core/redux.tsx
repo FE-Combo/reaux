@@ -50,7 +50,7 @@ export function connect<TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, T
         const {actions, View, proxyLifeCycle} = handler;
         return {
             actions,
-            View: reactReduxConnect(mapStateToProps, mapDispatchToProps, mergeProps!, options)(View as ConnectedComponent<React.ComponentType<InferableComponentEnhancer<P>>, any>) as unknown as React.ComponentType<P>,
+            View: reactReduxConnect(mapStateToProps!, mapDispatchToProps!, mergeProps!, options!)(View as ConnectedComponent<React.ComponentType<InferableComponentEnhancer<P>>, any>) as unknown as React.ComponentType<P>,
             proxyLifeCycle,
         };
     };
