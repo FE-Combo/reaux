@@ -1,10 +1,11 @@
 import {ActionHandlers, ActionCreators} from "../type";
 
-const injectKeys = ["push", "setState", "resetState"];
+const extraBuildinKeys = ["setState", "resetState"];
 
-const buildinKeys = ["_cache", "constructor", "dispatch", "rootState", "state", "moduleName", "initialState"] as const;
-type BuildinActionKeys = {
-    readonly [K in keyof typeof buildinKeys]: typeof buildinKeys[K];
+// Component does not allow direct use of the following properties
+const omitBuildinKeys = ["constructor", "dispatch", "rootState", "state", "moduleName", "initialState"] as const;
+type OmitBuildinActionKeys = {
+    readonly [K in keyof typeof omitBuildinKeys]: typeof omitBuildinKeys[K];
 }[number];
 
 function createActionHandlerType(moduleName: string, ActionHandlerType: string) {
@@ -17,8 +18,8 @@ function createActionHandlerType(moduleName: string, ActionHandlerType: string) 
  */
 export function createAction<H extends object & {moduleName: string}>(handler: H) {
     const moduleName = handler.moduleName;
-    const keys = [...getPrototypeOfExceptBuildinKeys(handler), ...injectKeys];
-    const actions = {} as Omit<ActionCreators<H>, BuildinActionKeys>;
+    const keys = [...getPrototypeOfExceptBuildinKeys(handler), ...extraBuildinKeys];
+    const actions = {} as Omit<ActionCreators<H>, OmitBuildinActionKeys>;
     const actionHandlers = {} as ActionHandlers;
     keys.forEach((actionType) => {
         const method = handler[actionType] as (...args: any[]) => any;
@@ -39,5 +40,5 @@ export function createAction<H extends object & {moduleName: string}>(handler: H
 
 // Only the data on the prototype can be obtained but not all the data on the prototype chain, so use `injectKeys` to inject the necessary keys in the prototype chain
 function getPrototypeOfExceptBuildinKeys(object: object): string[] {
-    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter((key) => !buildinKeys.includes(key as BuildinActionKeys));
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(object)).filter((key) => !omitBuildinKeys.includes(key as OmitBuildinActionKeys));
 }

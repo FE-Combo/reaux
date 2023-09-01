@@ -12,7 +12,7 @@ export * from "./src/core/createReducer";
 
 export * from "./src/core/createView";
 
-export * from "./src/core/reduxMiddleware";
+export * from "./src/core/redux";
 
 export * from "./src/core/shared";
 

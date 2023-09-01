@@ -6,14 +6,17 @@ import {connect, DispatchProp} from "react-redux";
 interface StateProps {
     name: string;
 }
-interface Props extends StateProps, DispatchProp {}
+interface Props extends StateProps, DispatchProp {
+    test?: string;
+}
 
 class Main extends React.PureComponent<Props> {
     render() {
         return (
             <div>
                 {this.props.name}
-                <button onClick={() => this.props.dispatch(actions.test())}>change</button>
+                <button onClick={() => this.props.dispatch(actions.test())}>push</button>
+                <button onClick={() => this.props.dispatch(actions.setState({name: "new about"}))}>reset name</button>
                 <button onClick={() => this.props.dispatch(actions.resetState(["name"]))}>reset name</button>
             </div>
         );
@@ -26,4 +29,6 @@ const mapStateToProps = (state: AllState): StateProps => {
     };
 };
 
-export default connect(mapStateToProps)(Main);
+const Index = connect(mapStateToProps)(Main);
+
+export default Index;

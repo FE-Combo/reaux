@@ -1,6 +1,5 @@
 import Main from "./component/Main";
-import {register, Model} from "reaux-dom";
-import {connect} from "react-redux";
+import {register, Model, connect} from "reaux-dom";
 import {State} from "./type";
 import {AllState} from "utils/state";
 import {ObserverInstanceCallback} from "react-intersection-observer";
@@ -23,8 +22,8 @@ class ActionHandler extends Model<State, AllState> {
         console.log("about onHide", entry);
     }
 
-    onUpdate(): void {
-        console.log("about onUpdate");
+    onUpdate(...args: any[]): void {
+        console.log("about onUpdate", args);
     }
 
     onUnload(): void {
@@ -32,12 +31,10 @@ class ActionHandler extends Model<State, AllState> {
     }
 
     async test() {
-        this.setState({name: "new about" + new Date().getTime(), test: "test"});
+        this.router.push("/home");
     }
 }
 
-const {actions, View: PreView} = register(new ActionHandler("about", initialState), Main);
-
-const View = connect((state: AllState) => ({about: state.about}))(PreView);
+const {actions, View} = connect((state: AllState) => ({name: state.about.name}))(register(new ActionHandler("about", initialState), Main));
 
 export {actions, View};

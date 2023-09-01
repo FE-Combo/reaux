@@ -66,7 +66,7 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param Component
  */
-export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel, P>(handler: H, Component: ComponentType<P>) {
     if (["@error", "@loading"].includes(handler.moduleName)) {
         throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
     }
@@ -81,7 +81,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
     // register view, attach lifecycle and viewport observer
-    let View;
+    let View: ComponentType<P>;
     if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
         View = withIntersectionObserver(
             createView(handler, Component),
@@ -100,9 +100,9 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     return {
         View,
         actions,
-        proxyLifeCycle: (View: ComponentType) => {
+        proxyLifeCycle: function <PP>(View: ComponentType<PP>) {
             // register next view
-            const NextView = createView(handler, View);
+            const NextView = createView(handler, View) as ComponentType<PP>;
             return NextView;
         },
     };
@@ -138,7 +138,7 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     return composeEnhancers(enhancer);
 }
 
-export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: () => ActionType<any[]>, onHide: () => ActionType<any[]>) {
+export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: () => ActionType<any[]>, onHide: () => ActionType<any[]>): ComponentType<T> {
     return class View extends React.PureComponent<T> {
         constructor(props: T) {
             super(props);

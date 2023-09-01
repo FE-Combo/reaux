@@ -15,8 +15,8 @@ class Main extends React.PureComponent {
                     <Link to="/about">About</Link>
                 </div>
                 <Switch>
-                    <Route exact path="/home" render={(props) => <HomeView {...props} />} />
-                    <Route exact path="/home/detail" render={(props) => <HomeDetailView {...props} />} />
+                    <Route exact path="/home" render={() => <HomeView />} />
+                    <Route exact path="/home/detail" render={() => <HomeDetailView />} />
                     <Route exact path="/about" render={() => <AboutView />} />
                 </Switch>
             </>

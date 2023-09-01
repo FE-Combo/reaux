@@ -13,13 +13,17 @@ class ActionHandler extends Model<State, AllState> {
         console.info("home onReady");
     }
 
+    onLoad(): void {
+        console.log("home onLoad");
+    }
+
     @helper.interval(3)
     onTick() {
         console.log("home onTick");
     }
 
     test() {
-        this.setState({name: "new Name"});
+        this.router.push("/home/detail");
     }
 }
 

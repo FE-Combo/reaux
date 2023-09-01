@@ -80,7 +80,7 @@ export function start(options: RenderOptions): void {
  * @param handler
  * @param view
  */
-export function register<H extends BaseModel>(handler: H, Component: ComponentType<any>) {
+export function register<H extends BaseModel, P>(handler: H, Component: ComponentType<P>) {
     if (["@error", "@loading", "router"].includes(handler.moduleName)) {
         throw new Error(`The module is a common module and cannot be overwritten, please rename it, module=${handler.moduleName}`);
     }
@@ -96,7 +96,7 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     app.actionHandlers = {...app.actionHandlers, ...actionHandlers};
 
     // register view, attach lifecycle and viewport observer
-    let View;
+    let View: ComponentType<P>;
     if (hasOwnLifecycle(handler, "onShow") || hasOwnLifecycle(handler, "onHide")) {
         View = withIntersectionObserver(
             createView(handler, Component),
@@ -115,9 +115,9 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
     return {
         actions,
         View,
-        proxyLifeCycle: (View: ComponentType<any>) => {
+        proxyLifeCycle: function <PP>(View: ComponentType<PP>) {
             // register next view
-            const NextView = createView(handler, View);
+            const NextView = createView(handler, View) as ComponentType<PP>;
             return NextView;
         },
     };
@@ -127,13 +127,16 @@ export function register<H extends BaseModel>(handler: H, Component: ComponentTy
  * Module extends Model
  */
 export class Model<State extends {} = {}, R extends ReauxState = StateView> extends createModel(app)<State, R> {
-    // todo: remove push
-    push(path: LocationDescriptorObject<unknown> | string, state?: unknown) {
-        if (typeof path === "string") {
-            app.store.dispatch(push(path, state));
-        } else {
-            app.store.dispatch(push(path));
-        }
+    protected get router() {
+        return {
+            push(path: LocationDescriptorObject<unknown> | string, state?: unknown) {
+                if (typeof path === "string") {
+                    app.store.dispatch(push(path, state));
+                } else {
+                    app.store.dispatch(push(path));
+                }
+            },
+        };
     }
 }
 
@@ -163,7 +166,7 @@ function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     return enhancer;
 }
 
-export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>) {
+export function withIntersectionObserver<T>(Component: ComponentType<T>, onShow: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>, onHide: (entry: Parameters<ObserverInstanceCallback>[1]) => ActionType<any[]>): ComponentType<T> {
     return class View extends React.PureComponent<T> {
         constructor(props: T) {
             super(props);
