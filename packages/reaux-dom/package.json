@@ -1,6 +1,6 @@
 {
   "name": "reaux-dom",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Front-End web framework",
   "main": "index.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
     "react-dom": "~18.2.0",
     "react-intersection-observer": "^9.4.4",
     "react-router-dom": "~5.3.4",
-    "reaux": "^2.3.0",
+    "reaux": "^2.3.1",
     "tslib": "~2.4.0"
   },
   "peerDependencies": {
