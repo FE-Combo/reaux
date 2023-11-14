@@ -51,11 +51,12 @@ export class Helper {
                 that.put({
                     type: createActionType("@error"),
                     payload: {
-                        name: error.name,
+                        type: "loading-error",
                         message: error.message,
                         stack: error.stack,
                     },
                 });
+                console.error("loading error:", error);
             } finally {
                 const nextLoadingState = that.appCache.store.getState()["@loading"];
                 nextLoadingState[identifier] = nextLoadingState[identifier] - 1 || 0;

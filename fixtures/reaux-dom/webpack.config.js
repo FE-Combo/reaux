@@ -34,7 +34,7 @@ const config = {
     new HTMLPlugin({
       template: `./src/index.html`
     }),
-    new ReactRefreshWebpackPlugin(),
+    new ReactRefreshWebpackPlugin({overlay: false}),
     new webpack.ProgressPlugin()
   ]
 };

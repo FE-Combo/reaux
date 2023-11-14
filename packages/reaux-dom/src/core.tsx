@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
 import {LocationDescriptorObject, createBrowserHistory} from "history";
 import {InView, ObserverInstanceCallback} from "react-intersection-observer";
-import {State as ReauxState, createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware, hasOwnLifecycle, ActionType} from "reaux";
+import {State as ReauxState, createReducer, ErrorBoundary, createView, createAction, setModuleAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware, hasOwnLifecycle, ActionType} from "reaux";
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
@@ -22,7 +22,7 @@ function generateApp(): App {
     const routerReducer = connectRouter(history);
     const asyncReducer = {router: routerReducer};
     const historyMiddleware = routerMiddleware(history);
-    const reducer: Reducer<StateView> = createReducer(asyncReducer) as any;
+    const reducer = createReducer(asyncReducer) as unknown as Reducer<StateView>;
     const store: Store<StateView> = createStore(
         reducer,
         devtools(
@@ -43,9 +43,13 @@ function generateApp(): App {
  * @param options
  */
 export function start(options: RenderOptions): void {
-    const {name = "app", Component, onError, container} = options;
+    const {name = "app", Component, onError, onUnhandledRejection, container, fallback} = options;
     if (typeof onError === "function") {
         app.exceptionHandler.onError = onError.bind(app);
+    }
+
+    if (typeof onUnhandledRejection === "function") {
+        app.exceptionHandler.onUnhandledRejection = onUnhandledRejection.bind(app);
     }
 
     listenGlobalError();
@@ -60,13 +64,15 @@ export function start(options: RenderOptions): void {
     const root = createRoot(rootElement);
     root.render(
         <Provider store={app.store}>
-            <ErrorBoundary onError={setErrorAction}>
+            <ErrorBoundary fallback={fallback}>
                 <ConnectedRouter history={history}>
                     <Component />
                 </ConnectedRouter>
             </ErrorBoundary>
         </Provider>
     );
+
+    console.info(`【${name}】 mounted`);
 
     window.addEventListener("unmount", function () {
         console.info(`【${name}】 unmounted`);
@@ -144,13 +150,43 @@ export class Model<State extends {} = {}, R extends ReauxState = StateView> exte
  * Listen global error
  */
 function listenGlobalError() {
-    window.onerror = (message: string | Event, source?: string, line?: number, column?: number, error?: Error): void => {
-        console.error("Window Global Error");
-        if (!error) {
-            error = new Error(message.toString());
-        }
-        app.store.dispatch(setErrorAction(error));
-    };
+    window.addEventListener(
+        "error",
+        (event) => {
+            if (app.exceptionHandler.onError) {
+                app.exceptionHandler.onError(event.error);
+            } else {
+                console.error("window error:", event.error);
+                app.store.dispatch(
+                    setModuleAction("@error", {
+                        type: event.type,
+                        message: event.error.message,
+                        stack: event.error.stack,
+                    })
+                );
+            }
+        },
+        true
+    );
+
+    window.addEventListener(
+        "unhandledrejection",
+        (event) => {
+            if (app.exceptionHandler.onUnhandledRejection) {
+                app.exceptionHandler.onUnhandledRejection(event.reason);
+            } else {
+                console.error("window unhandled promise rejection:", event.reason);
+                app.store.dispatch(
+                    setModuleAction("@error", {
+                        type: event.type,
+                        message: event.reason.message,
+                        stack: event.reason.stack,
+                    })
+                );
+            }
+        },
+        true
+    );
 }
 
 /**

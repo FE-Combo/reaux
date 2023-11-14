@@ -27,10 +27,3 @@ export class NetworkConnectionException extends Exception {
         super(`failed to connect to ${requestURL}`);
     }
 }
-
-export interface ErrorListener {
-    onError: (error: Exception) => any;
-}
-
-// return Generator or Promise
-export type ErrorHandler = (error: Exception) => any;

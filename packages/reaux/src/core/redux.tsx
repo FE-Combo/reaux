@@ -15,12 +15,12 @@ export function middleware(callback: () => ActionHandlers): Middleware {
                 api.dispatch({
                     type: createActionType("@error"),
                     payload: {
-                        name: error.name,
+                        type: "redux-action",
                         message: error.message,
                         stack: error.stack,
                     },
                 });
-                console.error(error);
+                console.error("redux error:", error);
             }
         }
         next(actions);

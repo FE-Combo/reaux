@@ -10,10 +10,7 @@ function devServer(compiler) {
     compress: true,
     headers: {"Access-Control-Allow-Origin": "*"},
     client: {
-      overlay: {
-        warnings: true,
-        errors: true
-      },
+      overlay: false,
     },
   });
 }

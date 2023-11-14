@@ -1,7 +1,7 @@
 import React from "react";
 import {RouteProps} from "react-router";
 import {Redirect, Route as ReactRoute} from "react-router-dom";
-import {ErrorBoundary, setErrorAction} from "reaux";
+import {ErrorBoundary, ErrorBoundaryProps} from "reaux";
 
 type PickOptional<T> = Pick<T, {[K in keyof T]-?: {} extends {[P in K]: T[K]} ? K : never}[keyof T]>;
 
@@ -9,6 +9,7 @@ interface OwnProps {
     withErrorBoundary?: boolean;
     accessCondition?: boolean;
     unauthorizedRedirectTo?: string;
+    errorBoundaryFallback?: ErrorBoundaryProps["fallback"];
 }
 
 type Props = OwnProps & RouteProps;
@@ -16,13 +17,13 @@ type Props = OwnProps & RouteProps;
 export class Route extends React.PureComponent<Props> {
     public static defaultProps: PickOptional<Props> = {
         exact: true,
-        withErrorBoundary: true,
+        withErrorBoundary: false,
         accessCondition: true,
         unauthorizedRedirectTo: "/",
     };
 
     render() {
-        const {component, withErrorBoundary, accessCondition, unauthorizedRedirectTo, ...restProps} = this.props;
+        const {component, withErrorBoundary, accessCondition, unauthorizedRedirectTo, errorBoundaryFallback, ...restProps} = this.props;
         const TargetComponent = component!;
         const routeNode = (
             <ReactRoute
@@ -32,6 +33,6 @@ export class Route extends React.PureComponent<Props> {
                 }}
             />
         );
-        return withErrorBoundary ? <ErrorBoundary onError={setErrorAction}>{routeNode}</ErrorBoundary> : routeNode;
+        return withErrorBoundary ? <ErrorBoundary fallback={errorBoundaryFallback}>{routeNode}</ErrorBoundary> : routeNode;
     }
 }

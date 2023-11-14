@@ -1,7 +1,5 @@
 import {ActionType, BaseModel} from "../type";
 
-const ERROR_ACTION_TYPE = "@@framework/error";
-
 export function createActionType(namespace: string): string {
     return `@@framework/actionType/${namespace}`;
 }
@@ -25,13 +23,6 @@ export function resetModuleAction<State extends {}>(namespace: string, state: Pa
     return {
         type: createResetActionType(namespace),
         payload: state,
-    };
-}
-
-export function setErrorAction<Error>(error: Error): ActionType<Error> {
-    return {
-        type: ERROR_ACTION_TYPE,
-        payload: error,
     };
 }
 

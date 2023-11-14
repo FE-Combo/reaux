@@ -1,4 +1,4 @@
-import {setModuleAction, createActionType, setErrorAction} from "../../src/core/shared";
+import {setModuleAction, createActionType} from "../../src/core/shared";
 
 test("Create Action Type", () => {
     expect(createActionType("name")).toEqual("@@framework/actionType/name");
@@ -15,10 +15,4 @@ test("Set Module Action", () => {
         type: createActionType("moduleName2"),
         payload: {name: "name2", age: 22},
     });
-});
-
-test("Set Error Action", () => {
-    expect(setErrorAction(new Error())).toEqual({type: "@@framework/error", payload: new Error()});
-
-    expect(setErrorAction("error")).toEqual({type: "@@framework/error", payload: "error"});
 });

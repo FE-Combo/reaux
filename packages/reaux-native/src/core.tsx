@@ -2,7 +2,7 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
-import {createReducer, ErrorBoundary, setErrorAction, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, Exception, createModuleReducer, hasOwnLifecycle, ActionType} from "reaux";
+import {createReducer, ErrorBoundary, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, createModuleReducer, hasOwnLifecycle, ActionType, setModuleAction} from "reaux";
 import {RenderOptions} from "./type";
 import {IOScrollView, InView} from "react-native-intersection-observer";
 
@@ -26,7 +26,11 @@ function generateApp(): App {
  * @param options
  */
 export function start(options: RenderOptions): void {
-    const {name, Component, onError, onInitialized} = options;
+    const {name, Component, onError, onInitialized, fallback} = options;
+
+    if (typeof onError === "function") {
+        app.exceptionHandler.onError = onError!.bind(app);
+    }
     class WrappedAppComponent extends React.PureComponent<{}, {initialized: boolean}> {
         constructor(props: {}) {
             super(props);
@@ -45,7 +49,7 @@ export function start(options: RenderOptions): void {
                 this.state.initialized && (
                     <IOScrollView>
                         <Provider store={app.store}>
-                            <ErrorBoundary onError={setErrorAction}>
+                            <ErrorBoundary fallback={fallback}>
                                 <Component />
                             </ErrorBoundary>
                         </Provider>
@@ -55,9 +59,8 @@ export function start(options: RenderOptions): void {
         }
     }
     AppRegistry.registerComponent(name, () => WrappedAppComponent);
-    if (typeof onError === "function") {
-        listenGlobalError(onError);
-    }
+
+    listenGlobalError();
 }
 
 /**
@@ -113,15 +116,26 @@ export function register<H extends BaseModel, P>(handler: H, Component: Componen
  */
 export class Model<State extends {} = {}> extends createModel(app)<State> {}
 
-function listenGlobalError(onError: (error: Exception) => any) {
-    // 对客户端错误行为进行处理(超时/4**)
+function listenGlobalError() {
+    // 全局错误处理
     ErrorUtils.setGlobalHandler((error, isFatal) => {
         if (isFatal) {
+            // 致命错误，需要重启应用
             console.info("***** Fatal Error *****");
         }
-        app.store.dispatch(setErrorAction(error));
+        if (app.exceptionHandler.onError) {
+            app.exceptionHandler.onError(error);
+        } else {
+            console.error("window error:", error);
+            app.store.dispatch(
+                setModuleAction("@error", {
+                    type: "global-error",
+                    message: error.message,
+                    stack: error.stack,
+                })
+            );
+        }
     });
-    app.exceptionHandler.onError = onError.bind(app);
 }
 
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {

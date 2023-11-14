@@ -1,9 +1,9 @@
 import {ComponentType} from "react";
-import {Exception} from "reaux";
+import {ErrorBoundaryProps, ExceptionHandler} from "reaux";
 
-export interface RenderOptions {
+export interface RenderOptions extends ExceptionHandler {
     name: string;
     Component: ComponentType<any>;
-    onError?: (error: Exception) => any;
     onInitialized?: () => Promise<any>;
+    fallback?: ErrorBoundaryProps["fallback"];
 }

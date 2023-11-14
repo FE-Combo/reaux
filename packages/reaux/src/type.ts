@@ -57,11 +57,12 @@ export abstract class ModelLifeCycle<R = any> {
 }
 
 export abstract class Exception {
-    protected constructor(public message: string) {}
+    protected constructor(public message: string, public stack?: string) {}
 }
 
 export interface ExceptionHandler {
     onError?: (error: Exception) => any;
+    onUnhandledRejection?: (error: Exception) => any;
 }
 
 type ActionCreator<H> = H extends (...args: infer P) => any ? (...args: P) => ActionType<P> : never;

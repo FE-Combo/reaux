@@ -36,7 +36,8 @@ FE lightweight framework base on react + redux, strict in TypeScript.
 ## Core API
 - start：launch application
     - Component：entrance component
-    - onError：exception catching
+    - onError：Customize the onerror event. The framework outputs error by default and stores error.stack in redux.
+    - onUnhandledRejection：Customize the onunhandledrejection event. The framework outputs error by default and stores error.reason in redux.(only supported in reaux-dom)
 
 - register：register module
     - handler：model instance
