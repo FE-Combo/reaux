@@ -14,7 +14,7 @@
     "eslint": "eslint . --fix",
     "build": "node scripts/build.js",
     "jest": "jest --config config/jest.json --coverage",
-    "format": "prettier --config config/prettier.json --write \"packages/**/*.{ts,tsx}\"",
+    "prettier": "prettier --config config/prettier.json --write \"packages/**/*.{ts,tsx}\"",
     "v": "lerna version --conventional-commits --yes"
   },
   "husky": {
