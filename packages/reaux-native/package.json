@@ -1,6 +1,6 @@
 {
   "name": "reaux-native",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Front-End app framework",
   "main": "index.js",
   "module": "index.js",
@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/react-navigation": "~3.4.0",
     "react-native-intersection-observer": "^0.0.9",
-    "reaux": "^2.3.1"
+    "reaux": "^2.4.0"
   },
   "peerDependencies": {
     "react-native": ">=0.60.0"
