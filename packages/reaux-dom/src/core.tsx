@@ -160,8 +160,8 @@ function listenGlobalError() {
                 app.store.dispatch(
                     setModuleAction("@error", {
                         type: event.type,
-                        message: event.error.message,
-                        stack: event.error.stack,
+                        message: event?.error?.message,
+                        stack: event?.error?.stack,
                     })
                 );
             }
@@ -179,8 +179,8 @@ function listenGlobalError() {
                 app.store.dispatch(
                     setModuleAction("@error", {
                         type: event.type,
-                        message: event.reason.message,
-                        stack: event.reason.stack,
+                        message: event?.reason?.message,
+                        stack: event?.reason?.stack,
                     })
                 );
             }

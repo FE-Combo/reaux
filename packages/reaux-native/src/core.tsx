@@ -130,8 +130,8 @@ function listenGlobalError() {
             app.store.dispatch(
                 setModuleAction("@error", {
                     type: "global-error",
-                    message: error.message,
-                    stack: error.stack,
+                    message: error?.message,
+                    stack: error?.stack,
                 })
             );
         }
