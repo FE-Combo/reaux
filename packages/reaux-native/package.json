@@ -1,6 +1,6 @@
 {
   "name": "reaux-native",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Front-End app framework",
   "main": "index.js",
   "module": "index.js",
