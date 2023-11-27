@@ -2,7 +2,7 @@ import React, {ComponentType} from "react";
 import {AppRegistry} from "react-native";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
-import {createReducer, ErrorBoundary, createView, createAction, createApp, State, BaseModel, middleware as reduxMiddleware, createModel, App, createModuleReducer, hasOwnLifecycle, ActionType, setModuleAction} from "reaux";
+import {createReducer, ErrorBoundary, createView, createAction, createApp, State, BaseModel, promiseMiddleware, createModel, App, createModuleReducer, hasOwnLifecycle, ActionType, setModuleAction} from "reaux";
 import {RenderOptions} from "./type";
 import {IOScrollView, InView} from "react-native-intersection-observer";
 
@@ -15,7 +15,7 @@ const app = generateApp();
  */
 function generateApp(): App {
     const reducer: Reducer<State> = createReducer();
-    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(reduxMiddleware(() => app.actionHandlers))));
+    const store: Store<State> = createStore(reducer, devtools(applyMiddleware(promiseMiddleware(() => app.actionHandlers))));
     const app = createApp(store);
     return app;
 }

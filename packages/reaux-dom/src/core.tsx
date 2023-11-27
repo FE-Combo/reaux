@@ -4,13 +4,12 @@ import {createRoot} from "react-dom/client";
 import {Reducer, compose, StoreEnhancer, Store, applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {connectRouter, routerMiddleware, ConnectedRouter, push} from "connected-react-router";
-import {LocationDescriptorObject, createBrowserHistory} from "history";
+import {LocationDescriptorObject, createBrowserHistory, History} from "history";
 import {InView, ObserverInstanceCallback} from "react-intersection-observer";
-import {State as ReauxState, createReducer, ErrorBoundary, createView, createAction, setModuleAction, createApp, BaseModel, createModel, App, createModuleReducer, middleware as reduxMiddleware, hasOwnLifecycle, ActionType} from "reaux";
+import {State as ReauxState, createReducer, ErrorBoundary, createView, createAction, setModuleAction, createApp, BaseModel, createModel, App, createModuleReducer, promiseMiddleware, hasOwnLifecycle, ActionType, dynamicMiddleware, dynamicAddMiddleware} from "reaux";
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
-const history = createBrowserHistory();
 const app = generateApp();
 
 export const helper = new Helper(app);
@@ -19,19 +18,18 @@ export const helper = new Helper(app);
  * Create history, reducer, middleware, store, app cache
  */
 function generateApp(): App {
-    const routerReducer = connectRouter(history);
-    const asyncReducer = {router: routerReducer};
-    const historyMiddleware = routerMiddleware(history);
+    const asyncReducer = {};
     const reducer = createReducer(asyncReducer) as unknown as Reducer<StateView>;
     const store: Store<StateView> = createStore(
         reducer,
         devtools(
             applyMiddleware(
-                historyMiddleware,
-                reduxMiddleware(() => app.actionHandlers)
+                promiseMiddleware(() => app.actionHandlers),
+                dynamicMiddleware
             )
         )
     );
+
     const app = createApp(store);
     app.asyncReducers = {...app.asyncReducers, ...asyncReducer};
     return app;
@@ -43,7 +41,8 @@ function generateApp(): App {
  * @param options
  */
 export function start(options: RenderOptions): void {
-    const {name = "app", Component, onError, onUnhandledRejection, container, fallback} = options;
+    const {name = "app", Component, onError, onUnhandledRejection, container, historyMode = {type: "browserHistory"}, fallback} = options;
+
     if (typeof onError === "function") {
         app.exceptionHandler.onError = onError.bind(app);
     }
@@ -53,6 +52,17 @@ export function start(options: RenderOptions): void {
     }
 
     listenGlobalError();
+
+    let history: History<unknown> | null = null;
+    // create browser history
+    if (historyMode?.type === "browserHistory") {
+        history = createBrowserHistory(historyMode.options);
+        const routerReducer = connectRouter(history);
+        app.asyncReducers.router = routerReducer;
+        app.store.replaceReducer(createReducer(app.asyncReducers));
+        const historyMiddleware = routerMiddleware(history);
+        dynamicAddMiddleware(historyMiddleware);
+    }
 
     let rootElement: Element | DocumentFragment | undefined = container;
     if (!rootElement) {
@@ -65,17 +75,21 @@ export function start(options: RenderOptions): void {
     root.render(
         <Provider store={app.store}>
             <ErrorBoundary fallback={fallback}>
-                <ConnectedRouter history={history}>
+                {history ? (
+                    <ConnectedRouter history={history}>
+                        <Component />
+                    </ConnectedRouter>
+                ) : (
                     <Component />
-                </ConnectedRouter>
+                )}
             </ErrorBoundary>
         </Provider>
     );
 
-    console.info(`【${name}】 mounted`);
+    console.info(`【${name}】mounted`);
 
     window.addEventListener("unmount", function () {
-        console.info(`【${name}】 unmounted`);
+        console.info(`【${name}】unmounted`);
         root.unmount();
     });
 }

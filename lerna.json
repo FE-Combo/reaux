@@ -4,9 +4,7 @@
   "useWorkspaces": true,
   "packages": ["packages/*"],
   "command": {
-    "version": {
-      "message": "chore(release): %s"
-    },
+    "version": {},
     "publish": {
       "npmClient": "npm",
       "allowBranch": ["master"],
