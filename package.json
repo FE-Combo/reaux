@@ -15,7 +15,7 @@
     "build": "node scripts/build.js",
     "jest": "jest --config config/jest.json --coverage",
     "format": "prettier --config config/prettier.json --write \"packages/**/*.{ts,tsx}\"",
-    "v": "lerna version --conventional-commits --yes"
+    "v": "lerna version --exact --conventional-commits --yes"
   },
   "husky": {
     "hooks": {

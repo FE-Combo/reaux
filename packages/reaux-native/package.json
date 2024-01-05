@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/react-navigation": "~3.4.0",
     "react-native-intersection-observer": "^0.0.9",
-    "reaux": "^2.5.1"
+    "reaux": "~2.5.1"
   },
   "peerDependencies": {
     "react-native": ">=0.60.0"
