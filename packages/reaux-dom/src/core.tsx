@@ -10,6 +10,12 @@ import {State as ReauxState, createReducer, ErrorBoundary, createView, createAct
 import {Helper} from "./helper";
 import {StateView, RenderOptions} from "./type";
 
+declare global {
+    interface Window {
+        __REDUX__STORE__: any;
+    }
+}
+
 const app = generateApp();
 
 export const helper = new Helper(app);
@@ -30,6 +36,8 @@ function generateApp(): App {
         )
     );
 
+    window.__REDUX__STORE__ = store;
+
     const app = createApp(store);
     app.asyncReducers = {...app.asyncReducers, ...asyncReducer};
     return app;
@@ -41,7 +49,7 @@ function generateApp(): App {
  * @param options
  */
 export function start(options: RenderOptions): void {
-    const {name = "app", Component, onError, onUnhandledRejection, container, historyMode = {type: "browserHistory"}, fallback} = options;
+    const {name, Component, onError, onUnhandledRejection, container = true, historyMode = {type: "browserHistory"}, fallback} = options;
 
     if (typeof onError === "function") {
         app.exceptionHandler.onError = onError.bind(app);
@@ -64,11 +72,18 @@ export function start(options: RenderOptions): void {
         dynamicAddMiddleware(historyMiddleware);
     }
 
-    let rootElement: Element | DocumentFragment | undefined = container;
-    if (!rootElement) {
-        rootElement = document.createElement("div");
-        rootElement.id = "framework-app-root";
-        document.body.appendChild(rootElement);
+    let rootElement: Element | DocumentFragment | undefined;
+
+    if (typeof container === "object") {
+        rootElement = container;
+    } else {
+        if (container) {
+            rootElement = document.createElement("div");
+            rootElement.id = "framework-app-root";
+            document.body.appendChild(rootElement);
+        } else {
+            throw new Error("Missing container parameter");
+        }
     }
 
     const root = createRoot(rootElement);
@@ -86,10 +101,16 @@ export function start(options: RenderOptions): void {
         </Provider>
     );
 
-    console.info(`【${name}】mounted`);
+    if (name) {
+        const mountedStyle = "color: green; font-weight: bold;";
+        console.info(`%c[${name}] has been mounted`, mountedStyle);
+    }
 
     window.addEventListener("unmount", function () {
-        console.info(`【${name}】unmounted`);
+        if (name) {
+            const unmountedStyle = "color: red; font-weight: bold;";
+            console.info(`%c[${name}] has been unmounted`, unmountedStyle);
+        }
         root.unmount();
     });
 }
@@ -211,7 +232,14 @@ function listenGlobalError() {
 function devtools(enhancer: StoreEnhancer): StoreEnhancer {
     const extension = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
     if (extension) {
-        return compose(enhancer, extension({}));
+        return compose(
+            enhancer,
+            extension({
+                serialize: {
+                    replacer: (_key: string, value: any) => (typeof value === "bigint" ? value.toString() : value),
+                },
+            })
+        );
     }
     return enhancer;
 }
