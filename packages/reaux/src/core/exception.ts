@@ -16,7 +16,7 @@ export class RuntimeException extends Exception {
 
 // ErrorBoundary
 export class ReactLifecycleException extends Exception {
-    constructor(public message: string, public componentStack: string) {
+    constructor(public message: string, public componentStack?: string | null) {
         super(message);
     }
 }

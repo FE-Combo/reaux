@@ -10,7 +10,7 @@ import {BaseModel} from "../type";
  */
 export function createView<H extends BaseModel<{}, any>, P>(handler: H, Component: React.ComponentType<P>) {
     return class View<PP extends P, S extends {} = {}> extends React.PureComponent<P, S> {
-        timer: NodeJS.Timer | null = null;
+        timer: NodeJS.Timeout | null = null;
         async componentDidMount() {
             if (hasOwnLifecycle(handler, "onLoad")) {
                 await handler.onLoad();
