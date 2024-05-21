@@ -18,7 +18,7 @@ interface RenderOptionsHistoryMode {
 export interface RenderOptions extends ExceptionHandler {
     name?: string;
     Component: ComponentType<any>;
-    container: Element | DocumentFragment | boolean;
+    container?: Element | DocumentFragment | boolean;
     fallback?: ErrorBoundaryProps["fallback"];
     historyMode?: RenderOptionsHistoryMode | null;
 }
