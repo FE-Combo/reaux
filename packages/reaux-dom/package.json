@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
-  "author": "vocoWone",
+  "author": "Zed",
   "license": "MIT",
   "dependencies": {
     "@types/history": "~4.7.11",
@@ -15,7 +15,7 @@
     "history": "~4.7.2",
     "react-intersection-observer": "^9.4.4",
     "react-router-dom": "~5.3.4",
-    "reaux": "~2.5.1"
+    "reaux": "workspace:^"
   },
   "peerDependencies": {
     "react-dom": ">=16.8.0"

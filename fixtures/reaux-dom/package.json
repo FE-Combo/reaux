@@ -3,11 +3,18 @@
   "private": true,
   "description": "Demo for reaux-dom",
   "scripts": {
-    "reinstall": "rm -rf node_modules && rm -rf yarn.lock && yarn install",
+    "reinstall": "rm -rf node_modules && rm -rf pnpm-lock.yaml && pnpm install",
     "dev": "node start.js"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "reaux-dom": "workspace:^"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "html-webpack-plugin": "^4.5.2",
     "react-refresh": "^0.14.0",
     "react-refresh-typescript": "^2.0.9",

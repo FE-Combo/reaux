@@ -1,50 +1,44 @@
 {
   "private": true,
-  "name": "core-react",
-  "workspaces": [
-    "packages/*"
-  ],
+  "name": "reaux",
   "description": "Front-End application framework base on react an redux",
   "scripts": {
-    "reinstall": "rm -rf node_modules && rm -rf yarn.lock && yarn install && yarn clean && yarn bootstrap",
-    "update": "yarn install && yarn clean && yarn bootstrap",
-    "lerna": "lerna",
-    "bootstrap": "lerna bootstrap",
-    "clean": "lerna clean --yes",
+    "reinstall": "rm -rf node_modules && rm -rf pnpm-lock.yaml && pnpm install",
+    "start:dom": "pnpm --filter dom dev",
+    "start:ios": "pnpm --filter native ios",
+    "start:android": "pnpm --filter native android",
+    "clean": "pnpm -r exec rm -rf node_modules",
     "eslint": "eslint . --fix",
     "build": "node scripts/build.js",
     "jest": "jest --config config/jest.json --coverage",
     "format": "prettier --config config/prettier.json --write \"packages/**/*.{ts,tsx}\"",
-    "v": "lerna version --exact --conventional-commits --yes"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn run build"
-    }
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.@(tsx|ts)": [
-      "yarn eslint",
-      "yarn format",
-      "git add"
+      "pnpm eslint",
+      "pnpm format"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vocoWone/reaux.git"
+    "url": "git+https://github.com/FE-Combo/reaux.git"
   },
   "keywords": [
     "javascript",
     "typescript"
   ],
-  "author": "vocoWone",
+  "author": "Zed",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vocoWone/reaux/issues"
+    "url": "https://github.com/FE-Combo/reaux/issues"
   },
-  "homepage": "https://github.com/vocoWone/reaux#readme",
+  "homepage": "https://github.com/FE-Combo/reaux#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
     "@types/jest": "~29.2.0",
     "@types/node": "~18.11.2",
     "@types/react-test-renderer": "~18.0.0",
@@ -58,10 +52,9 @@
     "eslint-plugin-react": "~7.31.10",
     "eslint-plugin-react-hooks": "~4.6.0",
     "fs-extra": "~10.1.0",
-    "husky": "~4.3.8",
+    "husky": "~9.1.7",
     "jest": "~29.2.1",
-    "lerna": "~6.0.1",
-    "lint-staged": "^12.3.4",
+    "lint-staged": "^16.2.7",
     "prettier": "~2.7.1",
     "react-test-renderer": "~18.2.0",
     "ts-jest": "~29.0.3",

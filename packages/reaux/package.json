@@ -2,7 +2,7 @@
   "name": "reaux",
   "version": "2.5.1",
   "description": "Core framework base on redux and common component",
-  "author": "vocoWone",
+  "author": "Zed",
   "license": "MIT",
   "main": "index.js",
   "module": "index.js",

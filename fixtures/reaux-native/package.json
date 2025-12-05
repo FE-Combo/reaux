@@ -1,22 +1,23 @@
 {
-  "name": "AwesomeTSProject",
+  "name": "native",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "node update.js && react-native start",
+    "start": "react-native start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@types/react": "../../node_modules/@types/react",
-    "@types/react-native": "../../node_modules/@types/react-native",
-    "@types/react-redux": "../../node_modules/@types/react-redux",
-    "react": "../../node_modules/react",
-    "react-native": "../../node_modules/react-native",
-    "react-native-intersection-observer": "../../node_modules/react-native-intersection-observer",
-    "react-redux": "../../node_modules/react-redux",
-    "redux": "../../node_modules/redux"
+    "@types/react": "~18.2.0",
+    "@types/react-native": "~0.70.6",
+    "@types/react-redux": "~7.1.24",
+    "react": "18.2.0",
+    "react-native": "0.70.15",
+    "react-native-intersection-observer": "^0.0.9",
+    "react-redux": "~8.0.4",
+    "redux": "~4.2.0",
+    "reaux-native": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -24,8 +25,8 @@
     "@babel/runtime": "^7.19.4",
     "@react-native-community/eslint-config": "^3.1.0",
     "@tsconfig/react-native": "^2.0.2",
-    "@typescript-eslint/parser": "../../node_modules/@typescript-eslint/parser",
+    "@typescript-eslint/parser": "~5.40.1",
     "metro-react-native-babel-preset": "0.72.3",
-    "typescript": "../../node_modules/typescript"
+    "typescript": "~4.8.4"
   }
 }

@@ -1,0 +1,71 @@
+# Cursor Rules for Reaux Project
+
+## Project Overview
+This is a monorepo project named `reaux`, managed with **pnpm Workspaces** and **Changesets**. It contains a custom frontend framework and its implementations for DOM and Native environments.
+
+### Packages
+- `reaux`: Core framework package (Redux-based state management, common utils).
+- `reaux-dom`: Web implementation (React Router integration).
+- `reaux-native`: React Native implementation (Navigation integration).
+
+## Tech Stack
+- **Languages**: TypeScript, JavaScript
+- **Frameworks**: React, Redux (via `reaux` abstraction), React Native
+- **Testing**: Jest
+- **Formatting**: Prettier
+- **Build**: pnpm, Webpack (for web), Metro (for native)
+
+## Code Conventions & Patterns
+
+### 1. State Management (Reaux Framework)
+Do NOT use vanilla Redux boilerplate (reducers, action types, switch statements). Use the `reaux` framework abstractions:
+- **Models**: Create models using `createModel`. Models are classes that define state and actions.
+  - Extend the `Model` class from the platform-specific package (`reaux-dom` or `reaux-native`) to inherit platform capabilities (e.g., routing).
+  - Implement `ModelLifeCycle` methods (`onLoad`, `onReady`, `onUpdate`, etc.) if needed.
+  - **State Updates**: Use `this.setState(partialState)` or `this.resetState()` within model methods.
+  - **Actions**: Public methods on the Model class are automatically converted to Redux actions and action creators.
+- **Views**: Connect React components to Models using `createView`.
+  - `createView(handler, Component)` wraps the component and binds lifecycle methods.
+
+### 2. File Structure (Module Pattern)
+Organize features into modules under `src/module/`. Each module typically contains:
+- `index.ts`: Entry point, exports the Model and View.
+- `type.ts`: TypeScript interfaces for the module's State.
+- `component/`: Directory containing React components (e.g., `Main.tsx`).
+
+Example:
+```
+src/module/home/
+  ├── index.ts        # Exports HomeHandler (Model) and HomeMain (View)
+  ├── type.ts         # Defines HomeState
+  └── component/
+      └── Main.tsx    # React Component
+```
+
+### 3. Coding Style
+- **TypeScript**: Use strict typing. Define interfaces for State and Props.
+- **Components**: Prefer Functional Components with Hooks for standard React code, but `createView` may wrap them in a Higher-Order Component (HOC) structure as defined by the framework.
+- **Async Operations**: Use `async/await` in Model methods. The framework handles async actions automatically.
+
+### 4. Testing
+- Use **Jest** for testing.
+- Test files should be located in `__test__` directories or co-located with source files ending in `.test.ts` or `.test.tsx`.
+- Use `pnpm jest` to run tests.
+
+### 5. Package Management
+- Use **pnpm** for dependency management.
+- Use **pnpm -r** for running scripts across packages.
+- Use **Changesets** for versioning and publishing.
+- Root commands:
+  - `pnpm build`: Build all packages.
+  - `pnpm jest`: Run tests.
+  - `pnpm format`: Run Prettier.
+  - `pnpm changeset`: Create a new changeset.
+  - `pnpm version-packages`: Version packages.
+  - `pnpm release`: Publish packages.
+
+## General Guidelines
+- **Imports**: Use relative imports within packages.
+- **Linter**: Respect `.eslintrc` and `prettier.config.js`. Fix linter errors before finishing tasks.
+- **No Manual Redux**: Avoid manually creating reducers or action creators unless modifying the core `reaux` package itself.
+

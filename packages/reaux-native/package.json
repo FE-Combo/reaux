@@ -5,12 +5,12 @@
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
-  "author": "vocoWone",
+  "author": "Zed",
   "license": "MIT",
   "dependencies": {
     "@types/react-navigation": "~3.4.0",
     "react-native-intersection-observer": "^0.0.9",
-    "reaux": "~2.5.1"
+    "reaux": "workspace:^"
   },
   "peerDependencies": {
     "react-native": ">=0.60.0"
