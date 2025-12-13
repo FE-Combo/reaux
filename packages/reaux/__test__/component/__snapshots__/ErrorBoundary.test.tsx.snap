@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorBoundary should render children when no error 1`] = `
+<div>
+  Content
+</div>
+`;
+
+exports[`ErrorBoundary should render fallback when error occurs 1`] = `
+<div>
+  Error!
+</div>
+`;

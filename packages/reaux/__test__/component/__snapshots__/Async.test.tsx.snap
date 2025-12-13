@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Async should render component after resolve: loaded 1`] = `
+<div>
+  Loaded
+</div>
+`;
+
+exports[`Async should render component after resolve: loading 1`] = `
+<div>
+  Loading
+</div>
+`;

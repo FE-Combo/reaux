@@ -11,7 +11,8 @@ export function promiseMiddleware(callback: () => ActionHandlers): Middleware {
         if (actionHandlers[actions.type]) {
             try {
                 await actionHandlers[actions.type](...actions.payload);
-            } catch (error) {
+            } catch (e) {
+                const error = e as Error;
                 api.dispatch({
                     type: createActionType("@error"),
                     payload: {
@@ -91,8 +92,8 @@ export const createDynamicMiddleware = (): DynamicMiddleware => {
             return;
         }
 
-        allDynamicMiddlewares = allDynamicMiddlewares.filter((_, index) => index !== index);
-        allApplyedDynamicMiddlewares = allApplyedDynamicMiddlewares.filter((_, index) => index !== index);
+        allDynamicMiddlewares = allDynamicMiddlewares.filter((_, idx) => idx !== index);
+        allApplyedDynamicMiddlewares = allApplyedDynamicMiddlewares.filter((_, idx) => idx !== index);
     };
 
     const resetMiddlewares: DynamicMiddleware["resetMiddlewares"] = () => {
